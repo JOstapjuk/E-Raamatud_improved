@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="E_Raamatud.CartPage"
+             x:Name="CartPageRef"
+             Title="Ostukorv">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#549082" Offset="0.0" />
+            <GradientStop Color="#406780" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="20">
+
+            <Label Text="Sinu ostukorv"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   FontFamily="TimesNewRoman" />
+
+            <CollectionView ItemsSource="{Binding CartItems}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="White"
+                               BackgroundColor="White"
+                               CornerRadius="10"
+                               Padding="10"
+                               Margin="5">
+                            <HorizontalStackLayout Spacing="10">
+                                <Image Source="{Binding BookImage}"
+                                       WidthRequest="80"
+                                       HeightRequest="120"
+                                       Aspect="AspectFill"
+                                       VerticalOptions="Start" />
+
+                                <VerticalStackLayout Spacing="5" VerticalOptions="CenterAndExpand">
+                                    <Label Text="{Binding BookTitle}"
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="Black" />
+                                    <Label Text="{Binding BookPrice, StringFormat='Hind: €{0:F2}'}"
+                                           TextColor="Black" />
+                                    <Button Text="Eemalda"
+                                            Command="{Binding BindingContext.RemoveCommand, Source={x:Reference Name=CartPageRef}}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="Red"
+                                            TextColor="White"
+                                            CornerRadius="10"
+                                            FontAttributes="Bold"
+                                            WidthRequest="100" />
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="{Binding TotalPrice, StringFormat='Kokku: €{0:F2}'}"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="End"
+                   Margin="10,0" />
+
+            <Button Text="Osta kõik raamatud"
+                    Command="{Binding BuyCommand}"
+                    BackgroundColor="#549082"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontFamily="TimesNewRoman"
+                    CornerRadius="10"
+                    Margin="10,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

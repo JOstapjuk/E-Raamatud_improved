@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="E_Raamatud.MainPage"
+             x:Name="MainPageRef">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#549082" Offset="0.0" />
+            <GradientStop Color="#406780" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="20">
+
+            <HorizontalStackLayout VerticalOptions="Center" Spacing="10">
+                <Label Text="Kodu" FontSize="30" FontAttributes="Bold" TextColor="White" FontFamily="TimesNewRoman" />
+                <HorizontalStackLayout Spacing="15" HorizontalOptions="EndAndExpand">
+                    <Image Source="user_icon.png" HeightRequest="24">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnUserTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image Source="heart_icon.png" HeightRequest="24">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnLibraryTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Image Source="cart_icon.png"
+                            HeightRequest="24">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCartTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </HorizontalStackLayout>
+            </HorizontalStackLayout>
+
+            <Grid ColumnDefinitions="*, Auto">
+                <Entry Grid.Column="0"
+                       Placeholder="otsi raamatut"
+                       BackgroundColor="White"
+                       FontSize="22"
+                       TextColor="Black"
+                       PlaceholderColor="#999999"
+                       FontFamily="TimesNewRoman"
+                       Text="{Binding SearchText}" />
+                <Button Grid.Column="1"
+                        Text="Otsi"
+                        Command="{Binding SearchCommand}"
+                        CommandParameter="{Binding SearchText}"
+                        BackgroundColor="#549082"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        Margin="5,0,0,0"/>
+            </Grid>
+
+            <CollectionView ItemsSource="{Binding Genres}"
+                            ItemsLayout="HorizontalList"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedGenre}"
+                            BackgroundColor="#145459"
+                            HeightRequest="50"
+                            HorizontalScrollBarVisibility="Never">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10"
+                               BackgroundColor="#145459"
+                               BorderColor="White"
+                               CornerRadius="10"
+                               Margin="5">
+                            <Label Text="{Binding Nimetus}"
+                                   TextColor="White"
+                                   FontAttributes="Bold">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding BindingContext.SelectGenreCommand, Source={x:Reference Name=MainPageRef}}"
+                                        CommandParameter="{Binding .}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="Raamatud"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   FontFamily="TimesNewRoman" />
+
+            <CollectionView ItemsSource="{Binding Books}"
+                SelectionMode="Single"
+                SelectionChanged="OnBookSelected">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="2" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Padding="5">
+                            <Frame HasShadow="True"
+                                   CornerRadius="8"
+                                   Padding="0"
+                                   BackgroundColor="Transparent">
+                                <Image Source="{Binding Pilt}"
+                                       HeightRequest="180"
+                                       WidthRequest="120"
+                                       Aspect="AspectFill" />
+                            </Frame>
+                            <Label Text="{Binding Hind, StringFormat='€ {0:F2}'}"
+                                   FontAttributes="Bold"
+                                   TextColor="Black" />
+                            <Label Text="{Binding Pealkiri}" TextColor="Black" />
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:E_Raamatud.ViewModel"
+             x:Class="E_Raamatud.View.AddBookPage"
+             Title="Lisa Raamat">
+
+    <ContentPage.BindingContext>
+        <vm:AvaldajaViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#549082" Offset="0.0" />
+            <GradientStop Color="#406780" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Lisa uus raamat"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center" />
+
+            <Entry Placeholder="Pealkiri"
+                   Text="{Binding Pealkiri}"
+                   FontSize="18"
+                   BackgroundColor="White"
+                   TextColor="Black" />
+
+            <Editor Placeholder="Kirjeldus"
+                    Text="{Binding Kirjeldus}"
+                    HeightRequest="100"
+                    FontSize="16"
+                    BackgroundColor="White"
+                    TextColor="Black" />
+
+            <Entry Placeholder="Hind"
+                   Text="{Binding Hind}"
+                   Keyboard="Numeric"
+                   FontSize="18"
+                   BackgroundColor="White"
+                   TextColor="Black" />
+
+            <Picker Title="Vali žanr"
+                    ItemsSource="{Binding Genres}"
+                    ItemDisplayBinding="{Binding Nimetus}"
+                    SelectedItem="{Binding SelectedGenre}"
+                    FontSize="18"
+                    BackgroundColor="White"
+                    TextColor="Black" />
+
+            <HorizontalStackLayout Spacing="10">
+                <Entry Placeholder="Vali pilt"
+                       Text="{Binding Pilt}"
+                       IsReadOnly="True"
+                       FontSize="16"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       HorizontalOptions="FillAndExpand" />
+                <Button Text="Vali"
+                        Clicked="OnPickImageClicked"
+                        BackgroundColor="#145459"
+                        TextColor="White" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Spacing="10">
+                <Entry Placeholder="Vali tekstifail"
+                       Text="{Binding Tekstifail}"
+                       IsReadOnly="True"
+                       FontSize="16"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       HorizontalOptions="FillAndExpand" />
+                <Button Text="Vali"
+                        Clicked="OnPickTextFileClicked"
+                        BackgroundColor="#145459"
+                        TextColor="White" />
+            </HorizontalStackLayout>
+
+            <Button Text="Lisa raamat"
+                    Command="{Binding AddBookCommand}"
+                    FontAttributes="Bold"
+                    BackgroundColor="#145459"
+                    TextColor="White" />
+
+            <Label Text="{Binding StatusMessage}"
+                   TextColor="LightGreen"
+                   FontSize="16"
+                   HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

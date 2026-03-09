@@ -1,0 +1,37 @@
+[
+  {
+    "Zanr_ID": 1,
+    "Nimetus": "romaan",
+    "Kirjeldus": "Romaanid ja ilukirjandus"
+  },
+  {
+    "Zanr_ID": 2,
+    "Nimetus": "fantaasia",
+    "Kirjeldus": "Fantaasiakirjandus"
+  },
+  {
+    "Zanr_ID": 3,
+    "Nimetus": "klassika",
+    "Kirjeldus": "Klassikalised teosed"
+  },
+  {
+    "Zanr_ID": 4,
+    "Nimetus": "ajalugu",
+    "Kirjeldus": "Ajaloolised raamatud"
+  },
+  {
+    "Zanr_ID": 5,
+    "Nimetus": "ulme",
+    "Kirjeldus": "Ulmekirjandus"
+  },
+  {
+    "Zanr_ID": 6,
+    "Nimetus": "noorteraamat",
+    "Kirjeldus": "Noortekirjandus"
+  },
+  {
+    "Zanr_ID": 7,
+    "Nimetus": "seiklus",
+    "Kirjeldus": "Seikluslood"
+  }
+]

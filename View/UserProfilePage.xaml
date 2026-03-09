@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="E_Raamatud.UserProfilePage"
+             Title="Kasutaja profiil">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#406780" Offset="0.0" />
+            <GradientStop Color="#549082" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
+                <Image Source="user_icon.png" HeightRequest="60" WidthRequest="60" />
+                <VerticalStackLayout>
+                    <Label Text="{Binding CurrentUser.Username}" 
+                           FontAttributes="Bold" 
+                           FontSize="22" 
+                           TextColor="White"/>
+                    <Label Text="{Binding CurrentUser.Role}" 
+                           FontSize="16" 
+                           TextColor="White"/>
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
+
+            <VerticalStackLayout Spacing="10">
+                <Button Text="Uuendused" BackgroundColor="#9CC5A1" TextColor="Black" Clicked="OnUpdatesClicked"/>
+                <Button Text="Raamatud" BackgroundColor="#9CC5A1" TextColor="Black" Clicked="OnBooksClicked"/>
+                <Button Text="Konto seaded" BackgroundColor="#9CC5A1" TextColor="Black" Clicked="OnAccountSettingsClicked"/>
+                <Button Text="Ostude haldamine" BackgroundColor="#9CC5A1" TextColor="Black" Clicked="OnPurchaseHistoryClicked"/>
+                <Button Text="Logi välja" BackgroundColor="#406780" TextColor="White" Clicked="OnLogoutClicked"/>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

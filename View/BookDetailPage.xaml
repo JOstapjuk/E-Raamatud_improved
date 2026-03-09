@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="E_Raamatud.BookDetailPage">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#549082" Offset="0.0" />
+            <GradientStop Color="#406780" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="{Binding Pealkiri}" 
+                   FontSize="30" 
+                   FontAttributes="Bold" 
+                   TextColor="White"
+                   FontFamily="TimesNewRoman" />
+
+            <Label Text="{Binding Zanr_Nimi}"
+                   FontSize="18"
+                   TextColor="#d0d0d0"
+                   FontFamily="TimesNewRoman" />
+
+            <Frame HasShadow="True" 
+                   BackgroundColor="Transparent" 
+                   CornerRadius="10"
+                   HorizontalOptions="Center"
+                   Padding="0"
+                   Margin="0,10,0,10">
+                <Image Source="{Binding Pilt}" 
+                       HeightRequest="300" 
+                       WidthRequest="200" 
+                       Aspect="AspectFill" />
+            </Frame>
+
+            <Label Text="{Binding Hind, StringFormat='€ {0:F2}'}"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   FontFamily="TimesNewRoman" />
+
+            <Label Text="{Binding Kirjeldus}" 
+                   FontSize="16" 
+                   TextColor="White"
+                   FontFamily="TimesNewRoman" />
+
+            <Button Text="Lisa ostukorvi"
+                Command="{Binding AddToBasketCommand}"
+                BackgroundColor="#3E7C68"
+                TextColor="White"
+                FontAttributes="Bold"
+                FontSize="20"
+                CornerRadius="12"
+                HeightRequest="50"
+                Margin="0,20,0,0"
+                Padding="20,10" />
+
+            <Label Text="{Binding StatusMessage}"
+                TextColor="LightCoral"
+                FontAttributes="Italic"
+                FontFamily="TimesNewRoman" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

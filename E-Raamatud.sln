@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E-Raamatud", "E-Raamatud.csproj", "{88689BAE-2E73-4F79-A7B7-2BE79F7F5A14}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{88689BAE-2E73-4F79-A7B7-2BE79F7F5A14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88689BAE-2E73-4F79-A7B7-2BE79F7F5A14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88689BAE-2E73-4F79-A7B7-2BE79F7F5A14}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{88689BAE-2E73-4F79-A7B7-2BE79F7F5A14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88689BAE-2E73-4F79-A7B7-2BE79F7F5A14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88689BAE-2E73-4F79-A7B7-2BE79F7F5A14}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9658AEE0-F49B-4198-8530-21504012AED4}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="E_Raamatud.View.AccountSettingsPage"
+             Title="Konto seaded">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#406780" Offset="0.0" />
+            <GradientStop Color="#549082" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Konto seaded"
+                   FontSize="24"
+                   TextColor="White"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Kasutajanimi:" TextColor="White" />
+            <Entry Text="{Binding Username}" Placeholder="Kasutajanimi" />
+
+            <Label Text="Praegune parool:" TextColor="White" />
+            <Entry Text="{Binding CurrentPassword}" IsPassword="True" Placeholder="Sisesta praegune parool" />
+
+            <Label Text="Uus parool:" TextColor="White" />
+            <Entry Text="{Binding NewPassword}" IsPassword="True" Placeholder="Sisesta uus parool" />
+
+            <Label Text="Kinnita uus parool:" TextColor="White" />
+            <Entry Text="{Binding ConfirmPassword}" IsPassword="True" Placeholder="Kinnita uus parool" />
+
+            <Button Text="Salvesta muudatused"
+                    BackgroundColor="#9CC5A1"
+                    TextColor="Black"
+                    Command="{Binding SaveCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

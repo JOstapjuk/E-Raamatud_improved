@@ -1,0 +1,75 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:E_Raamatud.ViewModel"
+             x:Class="E_Raamatud.LoginPage">
+
+    <ContentPage.BindingContext>
+        <viewModel:UserViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#549082" Offset="0.0" />
+            <GradientStop Color="#406780" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
+
+            <Label Text="Logi sisse" 
+                   FontSize="30" 
+                   FontAttributes="Bold" 
+                   TextColor="White" 
+                   HorizontalOptions="Center"
+                   FontFamily="TimesNewRoman" />
+
+            <Entry Placeholder="Kasutajanimi"
+                   Text="{Binding Username}"
+                   FontSize="18"
+                   TextColor="White"
+                   PlaceholderColor="#cce5d0"
+                   BackgroundColor="#406780"
+                   FontFamily="TimesNewRoman"
+                   HeightRequest="40"
+                   Margin="0,10,0,0"
+                   />
+
+            <Entry Placeholder="Parool"
+                   IsPassword="True"
+                   Text="{Binding Password}"
+                   FontSize="18"
+                   TextColor="White"
+                   PlaceholderColor="#cce5d0"
+                   BackgroundColor="#406780"
+                   FontFamily="TimesNewRoman"
+                   HeightRequest="40" />
+
+            <Label Text="{Binding LoginStatus}" 
+                   TextColor="LightCoral"
+                   FontFamily="TimesNewRoman" />
+
+            <Button Text="Logi sisse"
+                Command="{Binding LoginCommand}"
+                Clicked="Login_Clicked"
+                BackgroundColor="#317A4E"
+                TextColor="White"
+                FontAttributes="Bold"
+                FontSize="22"
+                CornerRadius="12"
+                HeightRequest="55"
+                Padding="15,10"
+                Margin="0,10,0,0" />
+
+            <Button Text="Registreeru"
+                Clicked="GoToRegister_Clicked"
+                BackgroundColor="#2B6B44"
+                TextColor="White"
+                FontAttributes="Bold"
+                FontSize="22"
+                CornerRadius="12"
+                HeightRequest="55"
+                Padding="15,10" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

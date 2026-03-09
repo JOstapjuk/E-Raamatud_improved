@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="E_Raamatud.Pages.AcceptancePage"
+             x:Name="AcceptancePageRoot"
+             Title="Avaldajate kinnitused">
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <Label Text="Avaldajate kinnitamised" FontSize="20" FontAttributes="Bold" Margin="0,0,0,10"/>
+
+            <CollectionView x:Name="PendingUsersView" ItemsSource="{Binding PendingUsers}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="Gray" Margin="5">
+                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                <Label Text="{Binding Username}" VerticalOptions="Center"/>
+                                <Button Text="Kinnita"
+                                        Clicked="OnAcceptClicked"
+                                        CommandParameter="{Binding}"/>
+                                <Button Text="Keeldu"
+                                        Clicked="OnDeclineClicked"
+                                        CommandParameter="{Binding}"/>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

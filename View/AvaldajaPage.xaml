@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="E_Raamatud.Views.AvaldajaPage"
+             Title="Avaldaja Avaleht">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#549082" Offset="0.0" />
+            <GradientStop Color="#406780" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
+
+            <Label Text="Tere tulemast, Avaldaja!"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center" />
+
+            <Button Text="Lisa uus raamat"
+                    Clicked="OnAddBookClicked"
+                    BackgroundColor="#145459"
+                    TextColor="White"
+                    FontAttributes="Bold" />
+
+            <Button Text="Uuendused"
+                    Clicked="OnUpdatesClicked"
+                    BackgroundColor="#145459"
+                    TextColor="White"
+                    FontAttributes="Bold" />
+
+            <Button Text="Seaded"
+                    Clicked="OnSettingsClicked"
+                    BackgroundColor="#145459"
+                    TextColor="White"
+                    FontAttributes="Bold" />
+
+            <Button Text="Müügiaruanded"
+                    Clicked="OnViewReportsClicked"
+                    BackgroundColor="#145459"
+                    TextColor="White"
+                    FontAttributes="Bold" />
+
+            <Button Text="Logi välja"
+                    Clicked="OnLogoutClicked"
+                    BackgroundColor="#902B2B"
+                    TextColor="White"
+                    FontAttributes="Bold" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

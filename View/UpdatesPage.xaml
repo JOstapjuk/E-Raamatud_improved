@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="E_Raamatud.View.UpdatesPage"
+             Title="Uuendused">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#406780" Offset="0.0" />
+            <GradientStop Color="#549082" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Viimased uuendused" 
+                   FontAttributes="Bold" 
+                   FontSize="24" 
+                   TextColor="White" 
+                   HorizontalOptions="Center"/>
+
+            <Frame BackgroundColor="#9CC5A1" CornerRadius="15" Padding="15" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="✅ Sessioonihaldus lisatud (SessionService)" FontSize="16" TextColor="Black"/>
+                    <Label Text="✅ Navigatsioon uuendatud ilma Shell kasutamiseta" FontSize="16" TextColor="Black"/>
+                    <Label Text="✅ Kasutaja profiili leht lisatud koos nuppudega (Raamatud, Audioraamatud, jne)" FontSize="16" TextColor="Black"/>
+                    <Label Text="✅ Logi välja puhastab sessiooni ja suunab tagasi sisselogimise lehele" FontSize="16" TextColor="Black"/>
+                    <Label Text="✅ Taustastiil ja kujundus ühtlustatud lehtedel" FontSize="16" TextColor="Black"/>
+                    <Label Text="✅ Admin-lehel kohene andmete eemaldamine ObservableCollection abil (ei vaja uuesti käivitamist)" FontSize="16" TextColor="Black"/>
+                    <Label Text="✅ Kustutamiskäsud optimeeritud: eemaldamine toimib koheselt ja korrektselt" FontSize="16" TextColor="Black"/>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

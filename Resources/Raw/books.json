@@ -1,0 +1,56 @@
+[
+  {
+    "Raamat_ID": 1,
+    "Pealkiri": "Sipsik",
+    "Kirjeldus": "Laste raamat pehme mänguasjast nimega Sipsik.",
+    "Hind": 5.99,
+    "Zanr_ID": 3,
+    "Pilt": "sipsik.jpg",
+    "Tekstifail": "sipsik.txt"
+  },
+  {
+    "Raamat_ID": 2,
+    "Pealkiri": "The Hunger Games",
+    "Kirjeldus": "Noorteraamat düstoopilises ühiskonnas peetavatest ellujäämismängudest.",
+    "Hind": 9.99,
+    "Zanr_ID": 6,
+    "Pilt": "hungergames.jpg",
+    "Tekstifail": "hungergames.txt"
+  },
+  {
+    "Raamat_ID": 3,
+    "Pealkiri": "Dune",
+    "Kirjeldus": "Ulmeromaan kõrbemaailmast ja poliitilisest võitlusest.",
+    "Hind": 12.99,
+    "Zanr_ID": 5,
+    "Pilt": "dune.jpg",
+    "Tekstifail": "dune.txt"
+  },
+  {
+    "Raamat_ID": 4,
+    "Pealkiri": "1984",
+    "Kirjeldus": "Klassikaline düstoopiline romaan George Orwellilt.",
+    "Hind": 8.49,
+    "Zanr_ID": 3,
+    "Pilt": "book_1984.jpg",
+    "Tekstifail": "book_1984.txt"
+  },
+  {
+    "Raamat_ID": 5,
+    "Pealkiri": "Harry Potter ja Tarkade Kivi",
+    "Kirjeldus": "Fantaasiaseiklus noore võluri koolielust.",
+    "Hind": 10.99,
+    "Zanr_ID": 2,
+    "Pilt": "harry_potter.jpg",
+    "Tekstifail": "harry_potter.txt"
+  },
+  {
+    "Raamat_ID": 6,
+    "Pealkiri": "Sõrmuste Isand: Sõrmuse Vennaskond",
+    "Kirjeldus": "J.R.R. Tolkieni eepiline fantaasiaseiklus, mis viib lugeja Keskmaale.",
+    "Hind": 13.75,
+    "Zanr_ID": 4,
+    "Pilt": "lotr_fellowship.jpg",
+    "Tekstifail": "lotr_fellowship.txt"
+  }
+]
