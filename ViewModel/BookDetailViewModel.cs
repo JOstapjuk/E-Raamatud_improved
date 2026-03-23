@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using E_Raamatud.Model;
+using E_Raamatud.Services;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using E_Raamatud.Model;
-using Microsoft.Maui.Controls;
-using SQLite;
 
 namespace E_Raamatud.ViewModel
 {
     class BookDetailViewModel : INotifyPropertyChanged
     {
-        private SQLiteAsyncConnection _database;
-
         public string Pealkiri => Raamat?.Pealkiri ?? "Unknown";
         public string Kirjeldus => Raamat?.Kirjeldus ?? "No description available";
         public decimal Hind => Raamat?.Hind ?? 0;
@@ -37,38 +30,9 @@ namespace E_Raamatud.ViewModel
 
         public BookDetailViewModel(Raamat selectedBook, string zanrNimi)
         {
-            if (selectedBook == null)
-                throw new ArgumentNullException(nameof(selectedBook));
-
-            Raamat = selectedBook;
+            Raamat = selectedBook ?? throw new ArgumentNullException(nameof(selectedBook));
             Zanr_Nimi = zanrNimi ?? "Unknown";
-
-            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "Books.db");
-            _database = new SQLiteAsyncConnection(dbPath);
-
             AddToBasketCommand = new Command(async () => await AddToBasket());
-
-            Task.Run(async () =>
-            {
-                try
-                {
-                    await InitializeDatabaseAsync();
-                }
-                catch (Exception ex)
-                {
-                    StatusMessage = $"Database initialization error: {ex.Message}";
-                    Debug.WriteLine($"Database initialization error: {ex.Message}");
-                }
-            });
-        }
-
-
-        private async Task InitializeDatabaseAsync()
-        {
-            if (_database != null)
-            {
-                await _database.CreateTableAsync<PurchaseBasket>().ConfigureAwait(false);
-            }
         }
 
         private async Task AddToBasket()
@@ -79,20 +43,8 @@ namespace E_Raamatud.ViewModel
 
                 if (userId <= 0)
                 {
-                    StatusMessage = "User not logged in!";
-                    await Application.Current.MainPage.DisplayAlert("Error", "You must be logged in to add items to the basket.", "OK");
-                    return;
-                }
-
-                if (_database == null)
-                {
-                    StatusMessage = "Database connection not established";
-                    return;
-                }
-
-                if (Raamat == null)
-                {
-                    StatusMessage = "Raamat on null! Ei saa lisada ostukorvi.";
+                    StatusMessage = "Kasutaja pole sisse logitud!";
+                    await Application.Current.MainPage.DisplayAlert("Viga", "Ostukorvi lisamiseks pead olema sisse logitud.", "OK");
                     return;
                 }
 
@@ -111,7 +63,7 @@ namespace E_Raamatud.ViewModel
                     Lõppu_hind = Raamat.Hind
                 };
 
-                await _database.InsertAsync(newItem);
+                await DatabaseService.Instance.InsertBasketItemAsync(newItem);
                 StatusMessage = "Raamat lisati ostukorvi";
                 await Application.Current.MainPage.DisplayAlert("Lisatud", "Raamat lisati ostukorvi!", "OK");
             }

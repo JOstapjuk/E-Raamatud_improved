@@ -1,19 +1,14 @@
 ﻿using E_Raamatud.Model;
-using SQLite;
-using System;
-using System.Collections.Generic;
+using E_Raamatud.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Diagnostics;
 
 namespace E_Raamatud.ViewModel
 {
     public class UserViewModel : INotifyPropertyChanged
     {
-        private SQLiteAsyncConnection _database = null!;
         public ObservableCollection<UserRole> Roles { get; set; }
         public Func<Task> OnLoginSuccess { get; set; }
         private string _username = string.Empty;
@@ -62,78 +57,88 @@ namespace E_Raamatud.ViewModel
                 .Cast<UserRole>()
                 .Where(role => role != UserRole.Admin));
 
-            _ = InitAsync();
+            _ = EnsureAdminExists();
         }
 
-        private async Task InitAsync()
+        private async Task EnsureAdminExists()
         {
-            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "Books.db");
-            Console.WriteLine($"Database Path: {dbPath}");
-            _database = new SQLiteAsyncConnection(dbPath);
-            await _database.CreateTableAsync<User>();
-
-            var admin = await _database.Table<User>().FirstOrDefaultAsync(u => u.Role == UserRole.Admin);
+            var users = await DatabaseService.Instance.GetUsersAsync();
+            var admin = users.FirstOrDefault(u => u.Role == UserRole.Admin);
             if (admin == null)
             {
-                await _database.InsertAsync(new User
+                await DatabaseService.Instance.InsertUserAsync(new User
                 {
                     Username = "admin",
                     Password = "admin123",
-                    Role = UserRole.Admin
+                    Role = UserRole.Admin,
+                    IsApproved = true
                 });
-            }
-
-            var users = await _database.Table<User>().ToListAsync();
-            foreach (var u in users)
-            {
-                Console.WriteLine($"User ID: {u.Id}, Username: {u.Username} - {u.Password} - {u.Role}");
             }
         }
 
         public async Task<User?> LoginAsync()
         {
-            await InitAsync();
-
-            var user = await _database.Table<User>()
-                .FirstOrDefaultAsync(u => u.Username == Username && u.Password == Password);
-
-            if (user != null)
+            try
             {
-                if (user.Role == UserRole.Avaldaja && !user.IsApproved)
+                Debug.WriteLine($"=== LOGIN ATTEMPT ===");
+                Debug.WriteLine($"Username entered: '{Username}'");
+                Debug.WriteLine($"Password entered: '{Password}'");
+
+                var allUsers = await DatabaseService.Instance.GetUsersAsync();
+
+                Debug.WriteLine($"Total users in DB: {allUsers.Count}");
+
+                foreach (var u in allUsers)
                 {
-                    LoginStatus = "Sinu konto ootab administraatori kinnitust.";
-                    return null;
+                    Debug.WriteLine($"DB User: '{u.Username}' | Password: '{u.Password}' | Role: '{u.RoleString}' | IsApproved: {u.IsApproved}");
                 }
 
-                SessionService.SetCurrentUser(user);
-                LoginStatus = $"Sisselogimise edu kui {user.Role}";
-                Console.WriteLine($"Login successful - User ID: {user.Id}, Role: {user.Role}");
+                var user = allUsers.FirstOrDefault(u =>
+                    u.Username.ToLower() == Username.ToLower() && u.Password == Password);
 
-                if (OnLoginSuccess != null)
-                    await OnLoginSuccess();
+                Debug.WriteLine($"Match found: {user != null}");
 
-                return user;
+                if (user != null)
+                {
+                    if (user.Role == UserRole.Avaldaja && !user.IsApproved)
+                    {
+                        LoginStatus = "Sinu konto ootab administraatori kinnitust.";
+                        return null;
+                    }
+
+                    SessionService.SetCurrentUser(user);
+                    LoginStatus = $"Tere tulemast, {user.Username}!";
+
+                    if (OnLoginSuccess != null)
+                        await OnLoginSuccess();
+
+                    return user;
+                }
+                else
+                {
+                    LoginStatus = "Vale kasutajanimi või salasõna";
+                    return null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                LoginStatus = "Vale kasutajanimi või salasõna";
+                Debug.WriteLine($"LOGIN ERROR: {ex.Message}");
+                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                LoginStatus = "Sisselogimisel tekkis viga.";
                 return null;
             }
         }
 
-
         private async Task RegisterAsync()
         {
-            await InitAsync();
-
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
             {
                 LoginStatus = "Palun täida kõik väljad.";
                 return;
             }
 
-            var existing = await _database.Table<User>()
-                .FirstOrDefaultAsync(u => u.Username == Username);
+            var users = await DatabaseService.Instance.GetUsersAsync();
+            var existing = users.FirstOrDefault(u => u.Username == Username);
 
             if (existing != null)
             {
@@ -149,7 +154,7 @@ namespace E_Raamatud.ViewModel
                 IsApproved = SelectedRole != UserRole.Avaldaja
             };
 
-            await _database.InsertAsync(user);
+            await DatabaseService.Instance.InsertUserAsync(user);
 
             LoginStatus = SelectedRole == UserRole.Avaldaja
                 ? "Avaldaja konto ootab kinnitamist."

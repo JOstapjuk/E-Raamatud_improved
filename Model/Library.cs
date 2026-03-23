@@ -1,18 +1,18 @@
-﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Postgrest.Attributes;
+using Postgrest.Models;
 
 namespace E_Raamatud.Model
 {
-    public class Library
+    [Table("Library")]
+    public class Library : BaseModel
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey("Library_ID", false)]
         public int Library_ID { get; set; }
 
+        [Column("Kasutaja_ID")]
         public int Kasutaja_ID { get; set; }
+
+        [Column("Raamat_ID")]
         public int Raamat_ID { get; set; }
     }
 }

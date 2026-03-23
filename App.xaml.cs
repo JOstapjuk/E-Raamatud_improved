@@ -1,12 +1,19 @@
-﻿namespace E_Raamatud
-{
-    public partial class App : Application
-    {
-        public App()
-        {
-            InitializeComponent();
+﻿using E_Raamatud.Services;
 
-            MainPage = new NavigationPage(new LoginPage());
-        }
+namespace E_Raamatud;
+
+public partial class App : Application
+{
+    public App()
+    {
+        InitializeComponent();
+        MainPage = new NavigationPage(new LoginPage());
+
+        _ = InitializeAsync();
+    }
+
+    private async Task InitializeAsync()
+    {
+        await DatabaseService.Instance.InitializeAsync();
     }
 }

@@ -1,16 +1,13 @@
 ﻿using E_Raamatud.Model;
-using SQLite;
+using E_Raamatud.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace E_Raamatud.ViewModel
 {
     public class AccountSettingsViewModel : INotifyPropertyChanged
     {
-        private SQLiteAsyncConnection _database;
-
         private string _username;
         private string _currentPassword;
         private string _newPassword;
@@ -44,66 +41,45 @@ namespace E_Raamatud.ViewModel
 
         public AccountSettingsViewModel()
         {
-            // Initialize DB connection
-            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "Books.db");
-            _database = new SQLiteAsyncConnection(dbPath);
-
-            // Load current user data
             if (SessionService.CurrentUser != null)
-            {
                 Username = SessionService.CurrentUser.Username;
-            }
 
             SaveCommand = new Command(async () => await SaveChanges());
         }
 
         private async Task SaveChanges()
         {
-            if (SessionService.CurrentUser == null)
-                return;
+            if (SessionService.CurrentUser == null) return;
 
-            // Validate username is not empty
             if (string.IsNullOrWhiteSpace(Username))
             {
                 await Application.Current.MainPage.DisplayAlert("Viga", "Kasutajanimi ei tohi olla tühi.", "OK");
                 return;
             }
 
-            // If password fields are filled, validate and change password
-            if (!string.IsNullOrEmpty(CurrentPassword) ||
-                !string.IsNullOrEmpty(NewPassword) ||
-                !string.IsNullOrEmpty(ConfirmPassword))
+            if (!string.IsNullOrEmpty(CurrentPassword) || !string.IsNullOrEmpty(NewPassword) || !string.IsNullOrEmpty(ConfirmPassword))
             {
-                // Check current password matches
                 if (SessionService.CurrentUser.Password != CurrentPassword)
                 {
                     await Application.Current.MainPage.DisplayAlert("Viga", "Praegune parool on vale.", "OK");
                     return;
                 }
 
-                // Validate new password and confirmation match
                 if (NewPassword != ConfirmPassword)
                 {
                     await Application.Current.MainPage.DisplayAlert("Viga", "Uued paroolid ei kattu.", "OK");
                     return;
                 }
 
-                // Optional: add password strength validation here
-
                 SessionService.CurrentUser.Password = NewPassword;
             }
 
-            // Update username
             SessionService.CurrentUser.Username = Username;
 
             try
             {
-                // Update user record in database
-                await _database.UpdateAsync(SessionService.CurrentUser);
-
+                await DatabaseService.Instance.UpdateUserAsync(SessionService.CurrentUser);
                 await Application.Current.MainPage.DisplayAlert("Seaded", "Muudatused on salvestatud.", "OK");
-
-                // Clear password fields after successful change
                 CurrentPassword = NewPassword = ConfirmPassword = string.Empty;
             }
             catch (Exception ex)
@@ -113,11 +89,7 @@ namespace E_Raamatud.ViewModel
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            var handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "") =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

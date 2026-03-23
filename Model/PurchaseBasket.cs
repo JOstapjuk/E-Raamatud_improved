@@ -1,27 +1,30 @@
-﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Postgrest.Attributes;
+using Postgrest.Models;
 
 namespace E_Raamatud.Model
 {
-    public class PurchaseBasket
+    [Table("PurchaseBasket")]
+    public class PurchaseBasket : BaseModel
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey("Ostukorv_ID", false)]
         public int Ostukorv_ID { get; set; }
 
+        [Column("Kasutaja_ID")]
         public int Kasutaja_ID { get; set; }
 
+        [Column("Raamat_ID")]
         public int Raamat_ID { get; set; }
 
+        [Column("Kogus")]
         public int Kogus { get; set; }
 
-        [MaxLength(10)]
+        [Column("Loppu_hind")]
         public decimal Lõppu_hind { get; set; }
 
+        [Column("Status")]
         public string Status { get; set; } = "InCart";
+
+        [Column("PurchaseDate")]
         public DateTime? PurchaseDate { get; set; }
     }
 }

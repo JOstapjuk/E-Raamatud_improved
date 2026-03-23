@@ -1,29 +1,33 @@
-﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Postgrest.Attributes;
+using Postgrest.Models;
 
 namespace E_Raamatud.Model
 {
-    public class Raamat
+    [Table("Raamat")]
+    public class Raamat : BaseModel
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey("Raamat_ID", false)]
         public int Raamat_ID { get; set; }
 
-        [MaxLength(200)]
+        [Column("Pealkiri")]
         public string Pealkiri { get; set; }
 
+        [Column("Kirjeldus")]
         public string Kirjeldus { get; set; }
 
+        [Column("Hind")]
         public decimal Hind { get; set; }
 
+        [Column("Avaldaja_ID")]
         public int Avaldaja_ID { get; set; }
 
+        [Column("Zanr_ID")]
         public int Zanr_ID { get; set; }
 
+        [Column("Pilt")]
         public string Pilt { get; set; }
+
+        [Column("Tekstifail")]
         public string Tekstifail { get; set; }
     }
 }

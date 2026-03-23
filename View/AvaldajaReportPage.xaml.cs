@@ -1,49 +1,39 @@
 using E_Raamatud.Model;
-using SQLite;
+using E_Raamatud.Services;
 using System.Collections.ObjectModel;
 
 namespace E_Raamatud.View;
 
 public partial class AvaldajaReportPage : ContentPage
 {
-    private SQLiteAsyncConnection _db;
-
     public class BookReport
     {
         public string Pealkiri { get; set; }
         public int KokkuMüüdud { get; set; }
         public decimal KokkuTulu { get; set; }
-
         public string MüüdudTekst => $"Müüdud: {KokkuMüüdud} tk";
-        public string TuluTekst => $"Tulu: {KokkuTulu} €";
+        public string TuluTekst => $"Tulu: {KokkuTulu:F2} €";
     }
 
     public AvaldajaReportPage(int avaldajaId)
     {
         InitializeComponent();
-        _db = new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, "Books.db"));
-        LoadReport(avaldajaId);
+        _ = LoadReport(avaldajaId);
     }
 
-    private async void LoadReport(int avaldajaId)
+    private async Task LoadReport(int avaldajaId)
     {
-        await _db.CreateTableAsync<PurchaseBasket>();
-        await _db.CreateTableAsync<Raamat>();
+        var books = await DatabaseService.Instance.GetBooksAsync();
+        var avaldajaBooks = books.Where(b => b.Avaldaja_ID == avaldajaId).ToList();
 
-        var books = await _db.Table<Raamat>()
-            .Where(b => b.Avaldaja_ID == avaldajaId)
-            .ToListAsync();
+        var purchases = await DatabaseService.Instance.GetAllBasketItemsAsync();
+        var purchased = purchases.Where(p => p.Status == "Purchased").ToList();
 
-        var purchases = await _db.Table<PurchaseBasket>()
-            .Where(p => p.Status == "Purchased")
-            .ToListAsync();
-
-        var report = books.Select(book =>
+        var report = avaldajaBooks.Select(book =>
         {
-            var bookPurchases = purchases.Where(p => p.Raamat_ID == book.Raamat_ID);
+            var bookPurchases = purchased.Where(p => p.Raamat_ID == book.Raamat_ID);
             int totalSold = bookPurchases.Sum(p => p.Kogus);
             decimal totalRevenue = bookPurchases.Sum(p => p.Lõppu_hind);
-
             return new BookReport
             {
                 Pealkiri = book.Pealkiri,

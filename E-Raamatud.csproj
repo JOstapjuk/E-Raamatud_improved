@@ -57,12 +57,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <AndroidResource Remove="Services\**" />
-	  <Compile Remove="Services\**" />
-	  <EmbeddedResource Remove="Services\**" />
-	  <MauiCss Remove="Services\**" />
-	  <MauiXaml Remove="Services\**" />
-	  <None Remove="Services\**" />
+	  <AndroidResource Remove="NewFolder1\**" />
+	  <Compile Remove="NewFolder1\**" />
+	  <EmbeddedResource Remove="NewFolder1\**" />
+	  <MauiCss Remove="NewFolder1\**" />
+	  <MauiXaml Remove="NewFolder1\**" />
+	  <None Remove="NewFolder1\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -91,11 +91,8 @@
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+		<PackageReference Include="supabase-csharp" Version="0.16.2" />
 		<PackageReference Include="Syncfusion.Maui.PdfViewer" Version="29.2.7" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="NewFolder1\" />
 	</ItemGroup>
 
 	<ItemGroup>

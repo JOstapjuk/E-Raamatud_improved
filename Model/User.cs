@@ -1,9 +1,6 @@
-﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
+using Postgrest.Attributes;
+using Postgrest.Models;
 
 namespace E_Raamatud.Model
 {
@@ -14,17 +11,29 @@ namespace E_Raamatud.Model
         Admin
     }
 
-    public class User
+    [Table("User")]
+    public class User : BaseModel
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey("Id", false)]
         public int Id { get; set; }
-        [Unique, NotNull]
-        public string Username { get; set; } = string.Empty;
-        [NotNull]
-        public string Password { get; set; } = string.Empty; 
-        [NotNull]
-        public UserRole Role { get; set; }
 
+        [Column("Username")]
+        public string Username { get; set; } = string.Empty;
+
+        [Column("Password")]
+        public string Password { get; set; } = string.Empty;
+
+        [Column("Role")]
+        public string RoleString { get; set; } = "Kasutaja";
+
+        [JsonIgnore]  // Newtonsoft to skip this property
+        public UserRole Role
+        {
+            get => Enum.TryParse(RoleString, out UserRole r) ? r : UserRole.Kasutaja;
+            set => RoleString = value.ToString();
+        }
+
+        [Column("IsApproved")]
         public bool IsApproved { get; set; } = true;
     }
 }

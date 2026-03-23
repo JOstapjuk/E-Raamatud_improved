@@ -1,20 +1,18 @@
-﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Postgrest.Attributes;
+using Postgrest.Models;
 
 namespace E_Raamatud.Model
 {
-    public class Genre
+    [Table("Genre")]
+    public class Genre : BaseModel
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey("Zanr_ID", false)]
         public int Zanr_ID { get; set; }
 
-        [MaxLength(100)]
+        [Column("Nimetus")]
         public string Nimetus { get; set; }
 
+        [Column("Kirjeldus")]
         public string Kirjeldus { get; set; }
     }
 }

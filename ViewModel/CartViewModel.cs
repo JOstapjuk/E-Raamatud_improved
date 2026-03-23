@@ -1,13 +1,9 @@
-﻿using SQLite;
-using System;
+﻿using E_Raamatud.Model;
+using E_Raamatud.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using E_Raamatud.Model;
-using Microsoft.Maui.Controls;
 using System.Diagnostics;
+using System.Windows.Input;
 
 namespace E_Raamatud.ViewModel
 {
@@ -23,8 +19,6 @@ namespace E_Raamatud.ViewModel
 
     public class CartViewModel : INotifyPropertyChanged
     {
-        private SQLiteAsyncConnection _database;
-
         public ObservableCollection<CartItemViewModel> CartItems { get; set; } = new();
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -32,11 +26,7 @@ namespace E_Raamatud.ViewModel
         public decimal TotalPrice
         {
             get => _totalPrice;
-            set
-            {
-                _totalPrice = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalPrice)));
-            }
+            set { _totalPrice = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalPrice))); }
         }
 
         public ICommand BuyCommand { get; }
@@ -44,118 +34,84 @@ namespace E_Raamatud.ViewModel
 
         public CartViewModel()
         {
-            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "Books.db");
-            _database = new SQLiteAsyncConnection(dbPath);
-
-
-            LoadCartItems();
-
             BuyCommand = new Command(async () => await BuyItemsAsync());
             RemoveCommand = new Command<CartItemViewModel>(async (item) => await RemoveItemAsync(item));
-
-            Task.Run(async () => await _database.CreateTableAsync<Library>());
+            _ = LoadCartItems();
         }
 
-        private async void LoadCartItems()
+        private async Task LoadCartItems()
         {
             int userId = SessionService.CurrentUser?.Id ?? 0;
-            if (userId <= 0)
-            {
-                CartItems.Clear();
-                TotalPrice = 0;
-                return;
-            }
+            if (userId == 0) return;
 
-            // Only load items that are still in cart (not purchased)
-            var basketItems = await _database.Table<PurchaseBasket>()
-                                             .Where(p => p.Kasutaja_ID == userId && p.Status == "InCart")
-                                             .ToListAsync();
-
-            var books = await _database.Table<Raamat>().ToListAsync();
+            var basketItems = await DatabaseService.Instance.GetBasketAsync(userId);
+            var inCart = basketItems.Where(p => p.Status == "InCart").ToList();
+            var books = await DatabaseService.Instance.GetBooksAsync();
 
             CartItems.Clear();
-            decimal total = 0;
-
-            foreach (var item in basketItems)
+            foreach (var item in inCart)
             {
                 var book = books.FirstOrDefault(b => b.Raamat_ID == item.Raamat_ID);
-                if (book != null)
+                CartItems.Add(new CartItemViewModel
                 {
-                    CartItems.Add(new CartItemViewModel
-                    {
-                        BasketId = item.Ostukorv_ID,
-                        BookTitle = book.Pealkiri,
-                        BookPrice = book.Hind,
-                        Quantity = item.Kogus,
-                        BookId = item.Raamat_ID,
-                        BookImage = book.Pilt
-                    });
-
-                    total += book.Hind * item.Kogus;
-                }
+                    BasketId = item.Ostukorv_ID,
+                    BookId = item.Raamat_ID,
+                    BookTitle = book?.Pealkiri ?? "Tundmatu",
+                    BookPrice = item.Lõppu_hind,
+                    Quantity = item.Kogus,
+                    BookImage = book?.Pilt ?? ""
+                });
             }
 
-            TotalPrice = total;
+            TotalPrice = CartItems.Sum(i => i.BookPrice * i.Quantity);
         }
 
         private async Task BuyItemsAsync()
         {
             try
             {
-                var userId = SessionService.CurrentUser?.Id ?? 0;
-                if (userId == 0)
-                {
-                    await Application.Current.MainPage.DisplayAlert("Viga", "Palun logi sisse, et osta raamatuid.", "OK");
-                    return;
-                }
+                int userId = SessionService.CurrentUser?.Id ?? 0;
+                if (userId == 0) return;
 
-                // Get only items that are still in cart
-                var basketItems = await _database.Table<PurchaseBasket>()
-                    .Where(p => p.Kasutaja_ID == userId && p.Status == "InCart")
-                    .ToListAsync();
+                var basketItems = await DatabaseService.Instance.GetBasketAsync(userId);
+                var inCart = basketItems.Where(p => p.Status == "InCart").ToList();
 
-                if (basketItems.Count == 0)
+                if (inCart.Count == 0)
                 {
                     await Application.Current.MainPage.DisplayAlert("Info", "Ostukorv on tühi.", "OK");
                     return;
                 }
 
                 int skippedDuplicates = 0;
+                var libraryItems = await DatabaseService.Instance.GetLibraryByUserAsync(userId);
 
-                foreach (var item in basketItems)
+                foreach (var item in inCart)
                 {
-                    var exists = await _database.Table<Library>()
-                        .Where(l => l.Kasutaja_ID == userId && l.Raamat_ID == item.Raamat_ID)
-                        .FirstOrDefaultAsync();
-
+                    var exists = libraryItems.FirstOrDefault(l => l.Raamat_ID == item.Raamat_ID);
                     if (exists != null)
                     {
                         skippedDuplicates++;
                     }
                     else
                     {
-                        var libraryItem = new Library
+                        await DatabaseService.Instance.InsertLibraryItemAsync(new Library
                         {
                             Kasutaja_ID = userId,
                             Raamat_ID = item.Raamat_ID
-                        };
-
-                        await _database.InsertAsync(libraryItem);
+                        });
                     }
 
-                    // Mark item as purchased and set purchase date
                     item.Status = "Purchased";
                     item.PurchaseDate = DateTime.Now;
-                    await _database.UpdateAsync(item);
+                    await DatabaseService.Instance.UpdateBasketItemAsync(item);
                 }
 
-                string resultMessage = skippedDuplicates == 0
+                string msg = skippedDuplicates == 0
                     ? "Raamatud lisatud sinu raamatukogusse!"
-                    : $"Mõned raamatud olid juba raamatukogus ja neid ei lisatud ({skippedDuplicates}).";
+                    : $"Mõned raamatud olid juba raamatukogus ({skippedDuplicates}).";
 
-                await Application.Current.MainPage.DisplayAlert("Õnnestus", resultMessage, "OK");
-
-                LoadCartItems(); // This will now only load items with Status = "InCart"
+                await Application.Current.MainPage.DisplayAlert("Õnnestus", msg, "OK");
+                await LoadCartItems();
             }
             catch (Exception ex)
             {
@@ -166,18 +122,9 @@ namespace E_Raamatud.ViewModel
 
         private async Task RemoveItemAsync(CartItemViewModel item)
         {
-            if (item == null)
-                return;
-
-            var basketItem = await _database.Table<PurchaseBasket>()
-                .Where(p => p.Ostukorv_ID == item.BasketId)
-                .FirstOrDefaultAsync();
-
-            if (basketItem != null)
-            {
-                await _database.DeleteAsync(basketItem);
-                LoadCartItems();
-            }
+            if (item == null) return;
+            await DatabaseService.Instance.DeleteBasketItemAsync(item.BasketId);
+            await LoadCartItems();
         }
     }
 }
