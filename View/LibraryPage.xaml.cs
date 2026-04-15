@@ -3,7 +3,9 @@ using Microsoft.Maui.Controls;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using VersOne.Epub;
 
 namespace E_Raamatud.View
 {
@@ -18,29 +20,36 @@ namespace E_Raamatud.View
         private async void OnItemTapped(object sender, EventArgs e)
         {
             var frame = sender as Frame;
-            var raamat = frame?.BindingContext as Raamat;
+            var book = frame?.BindingContext as BookWithProgress;
 
-            if (raamat == null || string.IsNullOrWhiteSpace(raamat.Tekstifail))
+            if (book == null || string.IsNullOrWhiteSpace(book.Tekstifail))
                 return;
 
             try
             {
-                string content;
+                Stream epubStream;
 
-                if (Path.IsPathRooted(raamat.Tekstifail) && File.Exists(raamat.Tekstifail))
-                {
-                    // File saved in local storage (runtime)
-                    content = await File.ReadAllTextAsync(raamat.Tekstifail);
-                }
+                if (Path.IsPathRooted(book.Tekstifail) && File.Exists(book.Tekstifail))
+                    epubStream = File.OpenRead(book.Tekstifail);
                 else
-                {
-                    // File embedded in Resources/Raw (build-time)
-                    using var stream = await FileSystem.OpenAppPackageFileAsync(raamat.Tekstifail);
-                    using var reader = new StreamReader(stream);
-                    content = await reader.ReadToEndAsync();
-                }
+                    epubStream = await FileSystem.OpenAppPackageFileAsync(book.Tekstifail);
 
-                await Navigation.PushAsync(new BookReaderPage(raamat.Pealkiri, content));
+                var epubBook = await EpubReader.ReadBookAsync(epubStream);
+
+                var chapters = epubBook.ReadingOrder.Select(item => {
+                    var content = item.Content ?? "";
+                    var bodyStart = content.IndexOf("<body", StringComparison.OrdinalIgnoreCase);
+                    var bodyEnd = content.LastIndexOf("</body>", StringComparison.OrdinalIgnoreCase);
+                    if (bodyStart >= 0 && bodyEnd >= 0)
+                    {
+                        var innerStart = content.IndexOf('>', bodyStart) + 1;
+                        return content.Substring(innerStart, bodyEnd - innerStart);
+                    }
+                    return content;
+                });
+
+                var rawHtml = string.Join("<hr/>", chapters);
+                await Navigation.PushAsync(new BookReaderPage(book.Raamat_ID, book.Pealkiri, rawHtml));
             }
             catch (FileNotFoundException)
             {
@@ -54,4 +63,3 @@ namespace E_Raamatud.View
         }
     }
 }
-

@@ -1,21 +1,12 @@
 [
   {
-    "Raamat_ID": 1,
-    "Pealkiri": "Sipsik",
-    "Kirjeldus": "Laste raamat pehme mänguasjast nimega Sipsik.",
-    "Hind": 5.99,
-    "Zanr_ID": 3,
-    "Pilt": "sipsik.jpg",
-    "Tekstifail": "sipsik.txt"
-  },
-  {
     "Raamat_ID": 2,
     "Pealkiri": "The Hunger Games",
     "Kirjeldus": "Noorteraamat düstoopilises ühiskonnas peetavatest ellujäämismängudest.",
     "Hind": 9.99,
     "Zanr_ID": 6,
     "Pilt": "hungergames.jpg",
-    "Tekstifail": "hungergames.txt"
+    "Tekstifail": "hungergames.epub"
   },
   {
     "Raamat_ID": 3,
@@ -24,7 +15,7 @@
     "Hind": 12.99,
     "Zanr_ID": 5,
     "Pilt": "dune.jpg",
-    "Tekstifail": "dune.txt"
+    "Tekstifail": "dune.epub"
   },
   {
     "Raamat_ID": 4,
@@ -33,7 +24,7 @@
     "Hind": 8.49,
     "Zanr_ID": 3,
     "Pilt": "book_1984.jpg",
-    "Tekstifail": "book_1984.txt"
+    "Tekstifail": "book_1984.epub"
   },
   {
     "Raamat_ID": 5,
@@ -42,7 +33,7 @@
     "Hind": 10.99,
     "Zanr_ID": 2,
     "Pilt": "harry_potter.jpg",
-    "Tekstifail": "harry_potter.txt"
+    "Tekstifail": "harry_potter.epub"
   },
   {
     "Raamat_ID": 6,
@@ -51,6 +42,6 @@
     "Hind": 13.75,
     "Zanr_ID": 4,
     "Pilt": "lotr_fellowship.jpg",
-    "Tekstifail": "lotr_fellowship.txt"
+    "Tekstifail": "lotr_fellowship.epub"
   }
 ]

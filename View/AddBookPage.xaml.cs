@@ -3,10 +3,11 @@ using E_Raamatud.ViewModel;
 
 public partial class AddBookPage : ContentPage
 {
-	public AddBookPage()
-	{
-		InitializeComponent();
-	}
+    public AddBookPage()
+    {
+        InitializeComponent();
+    }
+
     private async void OnPickImageClicked(object sender, EventArgs e)
     {
         try
@@ -20,9 +21,7 @@ public partial class AddBookPage : ContentPage
             if (result != null)
             {
                 if (BindingContext is AvaldajaViewModel vm)
-                {
                     vm.Pilt = result.FullPath;
-                }
             }
         }
         catch (Exception ex)
@@ -39,22 +38,23 @@ public partial class AddBookPage : ContentPage
             {
                 FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
                 {
-                    { DevicePlatform.Android, new[] { "text/plain" } }
+                    { DevicePlatform.Android, new[] { "application/epub+zip" } },
+                    { DevicePlatform.iOS, new[] { "org.idpf.epub-container" } },
+                    { DevicePlatform.WinUI, new[] { ".epub" } },
+                    { DevicePlatform.MacCatalyst, new[] { "org.idpf.epub-container" } }
                 }),
-                PickerTitle = "Vali tekstifail"
+                PickerTitle = "Vali EPUB fail"
             });
 
             if (result != null)
             {
                 if (BindingContext is AvaldajaViewModel vm)
-                {
                     vm.Tekstifail = result.FullPath;
-                }
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Viga", $"Tekstifaili valimisel tekkis viga: {ex.Message}", "OK");
+            await DisplayAlert("Viga", $"EPUB faili valimisel tekkis viga: {ex.Message}", "OK");
         }
     }
 }

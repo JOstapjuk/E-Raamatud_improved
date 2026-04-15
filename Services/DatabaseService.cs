@@ -96,5 +96,20 @@ namespace E_Raamatud.Services
 
         public async Task DeleteLibraryEntryAsync(int id)
             => await _client.From<Library>().Where(l => l.Library_ID == id).Delete();
+
+        // Reading Progress
+        public async Task<ReadingProgress?> GetReadingProgressAsync(int userId, int bookId)
+        {
+            var result = await _client.From<ReadingProgress>()
+                .Where(p => p.Kasutaja_ID == userId && p.Raamat_ID == bookId)
+                .Get();
+            return result.Models.FirstOrDefault();
+        }
+
+        public async Task InsertReadingProgressAsync(ReadingProgress progress)
+            => await _client.From<ReadingProgress>().Insert(progress);
+
+        public async Task UpdateReadingProgressAsync(ReadingProgress progress)
+            => await _client.From<ReadingProgress>().Update(progress);
     }
 }

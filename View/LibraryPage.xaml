@@ -28,21 +28,28 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame HasShadow="True"
-                           CornerRadius="8"
-                           Padding="0"
-                           BackgroundColor="Transparent"
-                           Margin="5">
+                       CornerRadius="8"
+                       Padding="0"
+                       BackgroundColor="White"
+                       Margin="5">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnItemTapped" NumberOfTapsRequired="1" />
                         </Frame.GestureRecognizers>
-                        <VerticalStackLayout Padding="5">
+                        <VerticalStackLayout Padding="8" Spacing="5">
                             <Image Source="{Binding Pilt}"
-                                   HeightRequest="180"
-                                   WidthRequest="120"
-                                   Aspect="AspectFill" />
+                       HeightRequest="150"
+                       Aspect="AspectFill" />
                             <Label Text="{Binding Pealkiri}"
-                                   TextColor="Black"
-                                   FontAttributes="Bold" />
+                       TextColor="#1a1a1a"
+                       FontAttributes="Bold"
+                       FontSize="13"
+                       LineBreakMode="TailTruncation" />
+                            <ProgressBar Progress="{Binding ProgressValue}"
+                             ProgressColor="#549082" />
+                            <Label Text="{Binding ProgressText}"
+                       TextColor="#888888"
+                       FontSize="11"
+                       HorizontalOptions="End" />
                         </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>

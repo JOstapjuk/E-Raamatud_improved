@@ -1,33 +1,101 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
-             x:Class="E_Raamatud.View.BookReaderPage"  
-             Title="{Binding Title}">  
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="E_Raamatud.View.BookReaderPage"
+             Title="{Binding Title}">
 
-    <ContentPage.Background>  
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">  
-            <GradientStop Color="#406780" Offset="0.0" />  
-            <GradientStop Color="#549082" Offset="1.0" />  
-        </LinearGradientBrush>  
-    </ContentPage.Background>  
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#406780" Offset="0.0" />
+            <GradientStop Color="#549082" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
 
-    <ScrollView>  
-        <VerticalStackLayout Padding="20" Spacing="15">  
-            <Label Text="{Binding Title}"   
-                   FontSize="24"   
-                   FontAttributes="Bold"   
-                   TextColor="White"   
-                   HorizontalOptions="Center" />  
+    <Grid RowDefinitions="Auto, Auto, *, Auto">
 
-            <Frame BackgroundColor="White"   
-                   CornerRadius="15"   
-                   Padding="20"   
-                   HasShadow="True">  
-                <Label Text="{Binding Content}"   
-                       FontSize="16"   
-                       TextColor="Black"   
-                       LineHeight="1.5" />  
-            </Frame>  
-        </VerticalStackLayout>  
-    </ScrollView>  
+        <Grid.GestureRecognizers>
+            <SwipeGestureRecognizer Direction="Left" Swiped="OnSwipeLeft" />
+            <SwipeGestureRecognizer Direction="Right" Swiped="OnSwipeRight" />
+        </Grid.GestureRecognizers>
+
+        <!-- Title -->
+        <Label Grid.Row="0"
+               Text="{Binding Title}"
+               FontSize="20"
+               FontAttributes="Bold"
+               TextColor="White"
+               HorizontalOptions="Center"
+               Margin="0,10,0,5" />
+
+        <!-- Font size + Dark mode controls -->
+        <Grid Grid.Row="1"
+              ColumnDefinitions="Auto, Auto, *, Auto"
+              Padding="15,5"
+              BackgroundColor="#1e1e1e">
+
+            <Button Grid.Column="0"
+                    Text="A-"
+                    FontSize="16"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    Clicked="OnFontDecrease" />
+
+            <Button Grid.Column="1"
+                    Text="A+"
+                    FontSize="16"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    Clicked="OnFontIncrease" />
+
+            <Label Grid.Column="2"
+                   x:Name="FontSizeLabel"
+                   Text="18px"
+                   TextColor="#aaaaaa"
+                   FontSize="13"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+
+            <Button Grid.Column="3"
+                    x:Name="ThemeButton"
+                    Text="🌙"
+                    FontSize="20"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    Clicked="OnThemeToggle" />
+        </Grid>
+
+        <!-- WebView for book content -->
+        <WebView Grid.Row="2"
+                 x:Name="BookWebView" />
+
+        <!-- Bottom page controls -->
+        <Grid Grid.Row="3"
+              ColumnDefinitions="Auto, *, Auto"
+              Padding="20,10"
+              BackgroundColor="#2a2a2a">
+
+            <Button Grid.Column="0"
+                    Text="◀"
+                    FontSize="22"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    Clicked="OnPreviousPage" />
+
+            <Label Grid.Column="1"
+                   x:Name="PageLabel"
+                   Text="1 / 1"
+                   TextColor="White"
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+
+            <Button Grid.Column="2"
+                    Text="▶"
+                    FontSize="22"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    Clicked="OnNextPage" />
+        </Grid>
+
+    </Grid>
 </ContentPage>

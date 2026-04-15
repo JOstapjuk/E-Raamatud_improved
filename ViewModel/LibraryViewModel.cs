@@ -8,7 +8,7 @@ namespace E_Raamatud.ViewModel
 {
     public class LibraryViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<Raamat> LibraryBooks { get; set; } = new();
+        public ObservableCollection<BookWithProgress> LibraryBooks { get; set; } = new();
         public event PropertyChangedEventHandler PropertyChanged;
 
         public LibraryViewModel()
@@ -30,8 +30,19 @@ namespace E_Raamatud.ViewModel
                 foreach (var entry in libraryEntries)
                 {
                     var book = allBooks.FirstOrDefault(b => b.Raamat_ID == entry.Raamat_ID);
-                    if (book != null)
-                        LibraryBooks.Add(book);
+                    if (book == null) continue;
+
+                    var progress = await DatabaseService.Instance.GetReadingProgressAsync(userId, book.Raamat_ID);
+
+                    LibraryBooks.Add(new BookWithProgress
+                    {
+                        Raamat_ID = book.Raamat_ID,
+                        Pealkiri = book.Pealkiri,
+                        Pilt = book.Pilt,
+                        Tekstifail = book.Tekstifail,
+                        CurrentPage = progress?.CurrentPage ?? 0,
+                        TotalPages = progress?.TotalPages ?? 0
+                    });
                 }
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LibraryBooks)));
