@@ -1,4 +1,5 @@
-﻿using E_Raamatud.Services;
+﻿using CommunityToolkit.Maui;
+using E_Raamatud.Services;
 using Microsoft.Extensions.Logging;
 
 namespace E_Raamatud;
@@ -10,6 +11,8 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkitMediaElement()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

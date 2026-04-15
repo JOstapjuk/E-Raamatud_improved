@@ -1,4 +1,4 @@
-﻿using E_Raamatud.Model;
+using E_Raamatud.Model;
 using E_Raamatud.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -40,6 +40,7 @@ namespace E_Raamatud.ViewModel
                         Pealkiri = book.Pealkiri,
                         Pilt = book.Pilt,
                         Tekstifail = book.Tekstifail,
+                        Audiofail = book.Audiofail,   // NEW
                         CurrentPage = progress?.CurrentPage ?? 0,
                         TotalPages = progress?.TotalPages ?? 0
                     });

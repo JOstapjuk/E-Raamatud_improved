@@ -17,7 +17,7 @@ namespace E_Raamatud.View
             BindingContext = new ViewModel.LibraryViewModel();
         }
 
-        private async void OnItemTapped(object sender, EventArgs e)
+        private async void OnReadTapped(object sender, EventArgs e)
         {
             var frame = sender as Frame;
             var book = frame?.BindingContext as BookWithProgress;
@@ -60,6 +60,17 @@ namespace E_Raamatud.View
                 Debug.WriteLine($"Viga raamatu avamisel: {ex.Message}");
                 await DisplayAlert("Viga", "Raamatu avamisel tekkis probleem.", "OK");
             }
+        }
+
+        private async void OnListenTapped(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            var book = button?.BindingContext as BookWithProgress;
+
+            if (book == null || string.IsNullOrWhiteSpace(book.Audiofail))
+                return;
+
+            await Navigation.PushAsync(new AudioPlayerPage(book.Raamat_ID, book.Pealkiri, book.Audiofail, book.Pilt));
         }
     }
 }

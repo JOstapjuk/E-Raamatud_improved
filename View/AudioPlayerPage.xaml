@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="E_Raamatud.View.AudioPlayerPage"
+             Title="Audioraamat">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#1a2a3a" Offset="0.0" />
+            <GradientStop Color="#406780" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid RowDefinitions="*, Auto">
+
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="20" Spacing="18" VerticalOptions="Center">
+
+                <Frame CornerRadius="16" Padding="0" HasShadow="True"
+                       BackgroundColor="Transparent" HorizontalOptions="Center"
+                       WidthRequest="200" HeightRequest="200">
+                    <Image x:Name="CoverImage" Aspect="AspectFill"
+                           HeightRequest="200" WidthRequest="200" />
+                </Frame>
+
+                <Label x:Name="TitleLabel" FontSize="20" FontAttributes="Bold"
+                       TextColor="White" HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" MaxLines="2"
+                       LineBreakMode="TailTruncation" />
+
+                <Label x:Name="ChapterLabel" FontSize="14" TextColor="#aaccdd"
+                       HorizontalOptions="Center" HorizontalTextAlignment="Center"
+                       MaxLines="2" LineBreakMode="TailTruncation" />
+
+                <Label x:Name="ChapterCountLabel" FontSize="12"
+                       TextColor="#7799aa" HorizontalOptions="Center" />
+
+                <Label x:Name="TimeLabel" Text="0:00 / 0:00"
+                       TextColor="#aaccdd" FontSize="13" HorizontalOptions="Center" />
+
+                <Slider x:Name="SeekBar" Minimum="0" Maximum="1" Value="0"
+                        ThumbColor="White" MinimumTrackColor="#549082"
+                        MaximumTrackColor="#445566" Margin="10,0"
+                        DragCompleted="OnSeekBarDragCompleted"
+                        DragStarted="OnSeekBarDragStarted" />
+
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="12">
+                    <Button Text="⏮" FontSize="20" BackgroundColor="Transparent"
+                            TextColor="White" WidthRequest="48" HeightRequest="48"
+                            Clicked="OnPrevChapter" />
+                    <Button Text="⏪" FontSize="20" BackgroundColor="Transparent"
+                            TextColor="White" WidthRequest="48" HeightRequest="48"
+                            Clicked="OnRewind" />
+                    <Button x:Name="PlayPauseButton" Text="▶" FontSize="26"
+                            BackgroundColor="#549082" TextColor="White"
+                            CornerRadius="30" WidthRequest="60" HeightRequest="60"
+                            Clicked="OnPlayPause" />
+                    <Button Text="⏩" FontSize="20" BackgroundColor="Transparent"
+                            TextColor="White" WidthRequest="48" HeightRequest="48"
+                            Clicked="OnFastForward" />
+                    <Button Text="⏭" FontSize="20" BackgroundColor="Transparent"
+                            TextColor="White" WidthRequest="48" HeightRequest="48"
+                            Clicked="OnNextChapter" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
+                    <Label Text="Kiirus:" TextColor="#aaccdd"
+                           VerticalOptions="Center" FontSize="13" />
+                    <Button x:Name="SpeedBtn075" Text="0.75×" FontSize="12"
+                            BackgroundColor="#2a3a4a" TextColor="#aaccdd"
+                            CornerRadius="12" HeightRequest="32" Padding="8,0"
+                            Clicked="OnSpeedChanged" CommandParameter="0.75" />
+                    <Button x:Name="SpeedBtn100" Text="1×" FontSize="12"
+                            BackgroundColor="#549082" TextColor="White"
+                            CornerRadius="12" HeightRequest="32" Padding="8,0"
+                            Clicked="OnSpeedChanged" CommandParameter="1.0" />
+                    <Button x:Name="SpeedBtn150" Text="1.5×" FontSize="12"
+                            BackgroundColor="#2a3a4a" TextColor="#aaccdd"
+                            CornerRadius="12" HeightRequest="32" Padding="8,0"
+                            Clicked="OnSpeedChanged" CommandParameter="1.5" />
+                    <Button x:Name="SpeedBtn200" Text="2×" FontSize="12"
+                            BackgroundColor="#2a3a4a" TextColor="#aaccdd"
+                            CornerRadius="12" HeightRequest="32" Padding="8,0"
+                            Clicked="OnSpeedChanged" CommandParameter="2.0" />
+                </HorizontalStackLayout>
+
+                <Button Text="📋 Peatükkide nimekiri"
+                        BackgroundColor="#2a3a4a" TextColor="#aaccdd"
+                        CornerRadius="10" FontSize="13" HeightRequest="38"
+                        HorizontalOptions="Center"
+                        Clicked="OnToggleChapterList" />
+
+                <Frame x:Name="ChapterListFrame" IsVisible="False"
+                       BackgroundColor="#1e2e3e" CornerRadius="12"
+                       Padding="8" HasShadow="False">
+                    <CollectionView x:Name="ChapterListView"
+                                    SelectionMode="Single"
+                                    SelectionChanged="OnChapterSelected"
+                                    MaximumHeightRequest="300">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10,8" ColumnDefinitions="36,*">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding Index, StringFormat='{0}.'}"
+                                           TextColor="#7799aa" FontSize="13"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Title}"
+                                           TextColor="White" FontSize="13"
+                                           LineBreakMode="TailTruncation"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Frame>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

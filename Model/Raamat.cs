@@ -1,4 +1,4 @@
-﻿using Postgrest.Attributes;
+using Postgrest.Attributes;
 using Postgrest.Models;
 
 namespace E_Raamatud.Model
@@ -29,5 +29,8 @@ namespace E_Raamatud.Model
 
         [Column("Tekstifail")]
         public string Tekstifail { get; set; }
+
+        [Column("Audiofail")]
+        public string Audiofail { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:E_Raamatud.ViewModel"
+             xmlns:local="clr-namespace:E_Raamatud"
              x:Class="E_Raamatud.View.AddBookPage"
              Title="Lisa Raamat">
 
@@ -20,77 +21,108 @@
         <VerticalStackLayout Padding="20" Spacing="15">
 
             <Label Text="Lisa uus raamat"
-                   FontSize="28"
-                   FontAttributes="Bold"
-                   TextColor="White"
-                   HorizontalOptions="Center" />
+                   FontSize="28" FontAttributes="Bold"
+                   TextColor="White" HorizontalOptions="Center" />
 
-            <Entry Placeholder="Pealkiri"
-                   Text="{Binding Pealkiri}"
-                   FontSize="18"
-                   BackgroundColor="White"
-                   TextColor="Black" />
+            <Entry Placeholder="Pealkiri" Text="{Binding Pealkiri}"
+                   FontSize="18" BackgroundColor="White" TextColor="Black" />
 
-            <Editor Placeholder="Kirjeldus"
-                    Text="{Binding Kirjeldus}"
-                    HeightRequest="100"
-                    FontSize="16"
-                    BackgroundColor="White"
-                    TextColor="Black" />
+            <Editor Placeholder="Kirjeldus" Text="{Binding Kirjeldus}"
+                    HeightRequest="100" FontSize="16"
+                    BackgroundColor="White" TextColor="Black" />
 
-            <Entry Placeholder="Hind"
-                   Text="{Binding Hind}"
-                   Keyboard="Numeric"
-                   FontSize="18"
-                   BackgroundColor="White"
-                   TextColor="Black" />
+            <Entry Placeholder="Hind" Text="{Binding Hind}"
+                   Keyboard="Numeric" FontSize="18"
+                   BackgroundColor="White" TextColor="Black" />
 
             <Picker Title="Vali žanr"
                     ItemsSource="{Binding Genres}"
                     ItemDisplayBinding="{Binding Nimetus}"
                     SelectedItem="{Binding SelectedGenre}"
-                    FontSize="18"
-                    BackgroundColor="White"
-                    TextColor="Black" />
+                    FontSize="18" BackgroundColor="White" TextColor="Black" />
 
+            <!-- Cover image picker -->
             <HorizontalStackLayout Spacing="10">
-                <Entry Placeholder="Vali pilt"
-                       Text="{Binding Pilt}"
-                       IsReadOnly="True"
-                       FontSize="16"
-                       BackgroundColor="White"
-                       TextColor="Black"
+                <Entry Placeholder="Vali pilt" Text="{Binding Pilt}"
+                       IsReadOnly="True" FontSize="16"
+                       BackgroundColor="White" TextColor="Black"
                        HorizontalOptions="FillAndExpand" />
-                <Button Text="Vali"
-                        Clicked="OnPickImageClicked"
-                        BackgroundColor="#145459"
-                        TextColor="White" />
+                <Button Text="Vali" Clicked="OnPickImageClicked"
+                        BackgroundColor="#145459" TextColor="White" />
             </HorizontalStackLayout>
 
+            <!-- EPUB text file picker -->
             <HorizontalStackLayout Spacing="10">
-                <Entry Placeholder="Vali tekstifail"
-                       Text="{Binding Tekstifail}"
-                       IsReadOnly="True"
-                       FontSize="16"
-                       BackgroundColor="White"
-                       TextColor="Black"
+                <Entry Placeholder="Vali tekstifail (EPUB)" Text="{Binding Tekstifail}"
+                       IsReadOnly="True" FontSize="16"
+                       BackgroundColor="White" TextColor="Black"
                        HorizontalOptions="FillAndExpand" />
-                <Button Text="Vali"
-                        Clicked="OnPickTextFileClicked"
-                        BackgroundColor="#145459"
-                        TextColor="White" />
+                <Button Text="Vali" Clicked="OnPickTextFileClicked"
+                        BackgroundColor="#145459" TextColor="White" />
             </HorizontalStackLayout>
+
+            <!-- ── Audio section ── -->
+            <Frame BackgroundColor="#1a3a3a" CornerRadius="12" Padding="14">
+                <VerticalStackLayout Spacing="10">
+
+                    <Label Text="🎧 Audioraamat (valikuline)"
+                           TextColor="White" FontSize="16" FontAttributes="Bold" />
+
+                    <Label Text="{Binding AudioFileSummary}"
+                           TextColor="#aaddcc" FontSize="13" />
+
+                    <!-- Pick multiple audio files -->
+                    <Button Text="+ Lisa audiofailid"
+                            Clicked="OnPickAudioFilesClicked"
+                            BackgroundColor="#549082" TextColor="White"
+                            CornerRadius="8" HeightRequest="40" />
+
+                    <!-- List of picked files with remove button -->
+                    <CollectionView ItemsSource="{Binding AudioFiles}"
+                                    SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*, Auto" Padding="0,4">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding ., Converter={x:Static local:FileNameConverter.Instance}}"
+                                           TextColor="White" FontSize="12"
+                                           LineBreakMode="MiddleTruncation"
+                                           VerticalOptions="Center" />
+                                    <Button Grid.Column="1"
+                                            Text="✕"
+                                            FontSize="12"
+                                            BackgroundColor="Transparent"
+                                            TextColor="#ff7777"
+                                            WidthRequest="36" HeightRequest="36"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AvaldajaViewModel}}, Path=RemoveAudioFileCommand}"
+                                            CommandParameter="{Binding .}" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- Upload progress (visible during upload) -->
+                    <Label Text="{Binding UploadProgress}"
+                           TextColor="#aaddcc" FontSize="13"
+                           IsVisible="{Binding IsUploading}" />
+
+                    <ActivityIndicator IsRunning="{Binding IsUploading}"
+                                       IsVisible="{Binding IsUploading}"
+                                       Color="White" />
+
+                </VerticalStackLayout>
+            </Frame>
 
             <Button Text="Lisa raamat"
                     Command="{Binding AddBookCommand}"
                     FontAttributes="Bold"
-                    BackgroundColor="#145459"
-                    TextColor="White" />
+                    IsEnabled="{Binding IsUploading, Converter={x:Static local:InverseBoolConverter.Instance}}"
+                    BackgroundColor="#145459" TextColor="White" />
 
             <Label Text="{Binding StatusMessage}"
-                   TextColor="LightGreen"
-                   FontSize="16"
+                   TextColor="LightGreen" FontSize="16"
                    HorizontalOptions="Center" />
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

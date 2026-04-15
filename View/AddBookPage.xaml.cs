@@ -18,11 +18,8 @@ public partial class AddBookPage : ContentPage
                 PickerTitle = "Vali pildifail"
             });
 
-            if (result != null)
-            {
-                if (BindingContext is AvaldajaViewModel vm)
-                    vm.Pilt = result.FullPath;
-            }
+            if (result != null && BindingContext is AvaldajaViewModel vm)
+                vm.Pilt = result.FullPath;
         }
         catch (Exception ex)
         {
@@ -46,15 +43,44 @@ public partial class AddBookPage : ContentPage
                 PickerTitle = "Vali EPUB fail"
             });
 
-            if (result != null)
-            {
-                if (BindingContext is AvaldajaViewModel vm)
-                    vm.Tekstifail = result.FullPath;
-            }
+            if (result != null && BindingContext is AvaldajaViewModel vm)
+                vm.Tekstifail = result.FullPath;
         }
         catch (Exception ex)
         {
             await DisplayAlert("Viga", $"EPUB faili valimisel tekkis viga: {ex.Message}", "OK");
+        }
+    }
+
+    // Pick MULTIPLE audio files at once (all 19 chapters in one go)
+    private async void OnPickAudioFilesClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            var audioTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.Android, new[] { "audio/mpeg", "audio/mp4", "audio/ogg", "audio/wav" } },
+                { DevicePlatform.iOS, new[] { "public.audio" } },
+                { DevicePlatform.WinUI, new[] { ".mp3", ".m4a", ".wav", ".ogg", ".aac", ".flac" } },
+                { DevicePlatform.MacCatalyst, new[] { "public.audio" } }
+            });
+
+            // PickMultipleAsync lets the user select all chapters at once
+            var results = await FilePicker.PickMultipleAsync(new PickOptions
+            {
+                FileTypes = audioTypes,
+                PickerTitle = "Vali audiofailid (saad valida mitu korraga)"
+            });
+
+            if (results != null && BindingContext is AvaldajaViewModel vm)
+            {
+                var paths = results.Select(r => r.FullPath);
+                vm.AddAudioFiles(paths);
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Viga", $"Audiofailide valimisel tekkis viga: {ex.Message}", "OK");
         }
     }
 }

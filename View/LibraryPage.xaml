@@ -20,7 +20,7 @@
                HorizontalOptions="Center" />
 
         <CollectionView x:Name="LibraryCollectionView"
-                ItemsSource="{Binding LibraryBooks}">
+                        ItemsSource="{Binding LibraryBooks}">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" Span="2" />
             </CollectionView.ItemsLayout>
@@ -28,28 +28,46 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame HasShadow="True"
-                       CornerRadius="8"
-                       Padding="0"
-                       BackgroundColor="White"
-                       Margin="5">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnItemTapped" NumberOfTapsRequired="1" />
-                        </Frame.GestureRecognizers>
+                           CornerRadius="8"
+                           Padding="0"
+                           BackgroundColor="White"
+                           Margin="5">
                         <VerticalStackLayout Padding="8" Spacing="5">
-                            <Image Source="{Binding Pilt}"
-                       HeightRequest="150"
-                       Aspect="AspectFill" />
+
+                            <!-- Book cover — tap to read -->
+                            <Frame Padding="0" CornerRadius="6" HasShadow="False" BackgroundColor="Transparent">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnReadTapped" NumberOfTapsRequired="1" />
+                                </Frame.GestureRecognizers>
+                                <Image Source="{Binding Pilt}"
+                                       HeightRequest="150"
+                                       Aspect="AspectFill" />
+                            </Frame>
+
                             <Label Text="{Binding Pealkiri}"
-                       TextColor="#1a1a1a"
-                       FontAttributes="Bold"
-                       FontSize="13"
-                       LineBreakMode="TailTruncation" />
+                                   TextColor="#1a1a1a"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   LineBreakMode="TailTruncation" />
+
                             <ProgressBar Progress="{Binding ProgressValue}"
-                             ProgressColor="#549082" />
+                                         ProgressColor="#549082" />
+
                             <Label Text="{Binding ProgressText}"
-                       TextColor="#888888"
-                       FontSize="11"
-                       HorizontalOptions="End" />
+                                   TextColor="#888888"
+                                   FontSize="11"
+                                   HorizontalOptions="End" />
+
+                            <!-- Audiobook button: only visible when HasAudio -->
+                            <Button Text="🎧 Kuula"
+                                    IsVisible="{Binding HasAudio}"
+                                    BackgroundColor="#406780"
+                                    TextColor="White"
+                                    FontSize="13"
+                                    CornerRadius="6"
+                                    HeightRequest="36"
+                                    Clicked="OnListenTapped" />
+
                         </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>
