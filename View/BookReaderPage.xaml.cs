@@ -49,7 +49,8 @@ namespace E_Raamatud.View
                     rawHtml: _htmlContent,
                     publishYear: 0);
 
-                await DisplayAlert($"📋 {_bookTitle}", summary, "Sulge");
+                await DisplayAlert($"📋 {_bookTitle}", summary + "\n\n⚠️ See kokkuvõte on loodud tehisintellekti poolt ja võib sisaldada ebatäpsusi.", "Sulge");
+
             }
             catch (Exception ex)
             {
