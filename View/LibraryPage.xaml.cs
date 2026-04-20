@@ -36,7 +36,8 @@ namespace E_Raamatud.View
 
                 var epubBook = await EpubReader.ReadBookAsync(epubStream);
 
-                var chapters = epubBook.ReadingOrder.Select(item => {
+                var chapters = epubBook.ReadingOrder.Select(item =>
+                {
                     var content = item.Content ?? "";
                     var bodyStart = content.IndexOf("<body", StringComparison.OrdinalIgnoreCase);
                     var bodyEnd = content.LastIndexOf("</body>", StringComparison.OrdinalIgnoreCase);
@@ -49,7 +50,13 @@ namespace E_Raamatud.View
                 });
 
                 var rawHtml = string.Join("<hr/>", chapters);
-                await Navigation.PushAsync(new BookReaderPage(book.Raamat_ID, book.Pealkiri, rawHtml));
+
+                // Pass description so SummarizationService has extra context
+                await Navigation.PushAsync(new BookReaderPage(
+                    raamatId:    book.Raamat_ID,
+                    title:       book.Pealkiri,
+                    htmlContent: rawHtml,
+                    description: book.Kirjeldus ?? ""));
             }
             catch (FileNotFoundException)
             {
@@ -70,7 +77,8 @@ namespace E_Raamatud.View
             if (book == null || string.IsNullOrWhiteSpace(book.Audiofail))
                 return;
 
-            await Navigation.PushAsync(new AudioPlayerPage(book.Raamat_ID, book.Pealkiri, book.Audiofail, book.Pilt));
+            await Navigation.PushAsync(new AudioPlayerPage(
+                book.Raamat_ID, book.Pealkiri, book.Audiofail, book.Pilt));
         }
     }
 }

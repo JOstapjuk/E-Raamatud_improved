@@ -38,9 +38,10 @@ namespace E_Raamatud.ViewModel
                     {
                         Raamat_ID = book.Raamat_ID,
                         Pealkiri = book.Pealkiri,
+                        Kirjeldus = book.Kirjeldus,
                         Pilt = book.Pilt,
                         Tekstifail = book.Tekstifail,
-                        Audiofail = book.Audiofail,   // NEW
+                        Audiofail = book.Audiofail,
                         CurrentPage = progress?.CurrentPage ?? 0,
                         TotalPages = progress?.TotalPages ?? 0
                     });

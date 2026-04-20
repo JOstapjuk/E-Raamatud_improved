@@ -5,6 +5,8 @@ namespace E_Raamatud.Model
         public int Raamat_ID { get; set; }
         public string Pealkiri { get; set; }
         public string Pilt { get; set; }
+
+        public string Kirjeldus { get; set; }
         public string Tekstifail { get; set; }
         public string Audiofail { get; set; }
         public int CurrentPage { get; set; }
