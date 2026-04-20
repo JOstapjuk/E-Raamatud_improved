@@ -51,6 +51,24 @@ namespace E_Raamatud.View
 
                 var rawHtml = string.Join("<hr/>", chapters);
 
+                // Strip img tags
+                rawHtml = System.Text.RegularExpressions.Regex.Replace(
+                    rawHtml, @"<img[^>]*>", "",
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+                // Strip SVG blocks
+                rawHtml = System.Text.RegularExpressions.Regex.Replace(
+                    rawHtml, @"<svg[\s\S]*?</svg>", "",
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+                // Strip style blocks
+                rawHtml = System.Text.RegularExpressions.Regex.Replace(
+                    rawHtml, @"<style[\s\S]*?</style>", "",
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+                Debug.WriteLine($"[EPUB] rawHtml length: {rawHtml.Length}");
+                Debug.WriteLine($"[EPUB] first 200 chars: {rawHtml.Substring(0, Math.Min(200, rawHtml.Length))}");
+
                 // Pass description so SummarizationService has extra context
                 await Navigation.PushAsync(new BookReaderPage(
                     raamatId:    book.Raamat_ID,

@@ -3,16 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="E_Raamatud.View.BookReaderPage"
              Title="{Binding Title}">
-
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#406780" Offset="0.0" />
             <GradientStop Color="#549082" Offset="1.0" />
         </LinearGradientBrush>
     </ContentPage.Background>
-
     <Grid RowDefinitions="Auto, Auto, *, Auto">
-
         <Grid.GestureRecognizers>
             <SwipeGestureRecognizer Direction="Left" Swiped="OnSwipeLeft" />
             <SwipeGestureRecognizer Direction="Right" Swiped="OnSwipeRight" />
@@ -29,51 +26,45 @@
 
         <!-- Font size + Dark mode + Summarize controls -->
         <Grid Grid.Row="1"
-      ColumnDefinitions="Auto, Auto, *, Auto, Auto"
-      Padding="15,5"
-      BackgroundColor="#1e1e1e">
-
+              ColumnDefinitions="Auto, Auto, *, Auto, Auto"
+              Padding="15,5"
+              BackgroundColor="#1e1e1e">
             <Button Grid.Column="0"
-            Text="A-"
-            FontSize="16"
-            BackgroundColor="Transparent"
-            TextColor="White"
-            Clicked="OnFontDecrease" />
-
+                    Text="A-"
+                    FontSize="16"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    Clicked="OnFontDecrease" />
             <Button Grid.Column="1"
-            Text="A+"
-            FontSize="16"
-            BackgroundColor="Transparent"
-            TextColor="White"
-            Clicked="OnFontIncrease" />
-
+                    Text="A+"
+                    FontSize="16"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    Clicked="OnFontIncrease" />
             <Label Grid.Column="2"
-           x:Name="FontSizeLabel"
-           Text="18px"
-           TextColor="#aaaaaa"
-           FontSize="13"
-           HorizontalOptions="Center"
-           VerticalOptions="Center" />
-
-            <!-- Summarize button -->
+                   x:Name="FontSizeLabel"
+                   Text="18px"
+                   TextColor="#aaaaaa"
+                   FontSize="13"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
             <Button Grid.Column="3"
-            x:Name="SummarizeButton"
-            Text="📋"
-            FontSize="20"
-            BackgroundColor="Transparent"
-            TextColor="White"
-            Clicked="OnSummarize" />
-
+                    x:Name="SummarizeButton"
+                    Text="📋"
+                    FontSize="20"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    Clicked="OnSummarize" />
             <Button Grid.Column="4"
-            x:Name="ThemeButton"
-            Text="🌙"
-            FontSize="20"
-            BackgroundColor="Transparent"
-            TextColor="White"
-            Clicked="OnThemeToggle" />
+                    x:Name="ThemeButton"
+                    Text="🌙"
+                    FontSize="20"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    Clicked="OnThemeToggle" />
         </Grid>
 
-        <!-- WebView for book content -->
+        <!-- WebView for book content — page counter rendered inside WebView -->
         <WebView Grid.Row="2"
                  x:Name="BookWebView" />
 
@@ -82,7 +73,6 @@
               ColumnDefinitions="Auto, *, Auto"
               Padding="20,10"
               BackgroundColor="#2a2a2a">
-
             <Button Grid.Column="0"
                     Text="◀"
                     FontSize="22"
@@ -90,13 +80,14 @@
                     TextColor="White"
                     Clicked="OnPreviousPage" />
 
+
             <Label Grid.Column="1"
-                   x:Name="PageLabel"
-                   Text="1 / 1"
-                   TextColor="White"
-                   FontSize="16"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center" />
+                x:Name="PageLabel"
+                Text="1 / 1"
+                TextColor="White"
+                FontSize="16"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" />
 
             <Button Grid.Column="2"
                     Text="▶"
@@ -105,6 +96,5 @@
                     TextColor="White"
                     Clicked="OnNextPage" />
         </Grid>
-
     </Grid>
 </ContentPage>
