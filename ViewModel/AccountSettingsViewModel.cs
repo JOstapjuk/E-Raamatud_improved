@@ -12,6 +12,7 @@ namespace E_Raamatud.ViewModel
         private string _currentPassword;
         private string _newPassword;
         private string _confirmPassword;
+        private string? _profilePictureUrl;
 
         public string Username
         {
@@ -37,14 +38,60 @@ namespace E_Raamatud.ViewModel
             set { if (_confirmPassword != value) { _confirmPassword = value; OnPropertyChanged(); } }
         }
 
+        public string? ProfilePictureUrl
+        {
+            get => _profilePictureUrl;
+            set { if (_profilePictureUrl != value) { _profilePictureUrl = value; OnPropertyChanged(); OnPropertyChanged(nameof(HasProfilePicture)); } }
+        }
+
+        public bool HasProfilePicture => !string.IsNullOrEmpty(ProfilePictureUrl);
+
+        public ICommand PickProfilePictureCommand { get; }
         public ICommand SaveCommand { get; }
 
         public AccountSettingsViewModel()
         {
             if (SessionService.CurrentUser != null)
+            {
                 Username = SessionService.CurrentUser.Username;
+                ProfilePictureUrl = SessionService.CurrentUser.ProfilePicture;
+            }
 
             SaveCommand = new Command(async () => await SaveChanges());
+            PickProfilePictureCommand = new Command(async () => await PickProfilePicture());
+        }
+
+        private async Task PickProfilePicture()
+        {
+            var result = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
+            {
+                Title = "Vali profiilipilt"
+            });
+
+            if (result == null) return;
+
+            using var stream = await result.OpenReadAsync();
+            using var ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+            var bytes = ms.ToArray();
+
+            var user = SessionService.CurrentUser;
+            if (user == null) return;
+
+            var fileName = $"avatar_{DateTime.UtcNow.Ticks}.jpg";
+            var url = await DatabaseService.Instance.UploadProfilePictureAsync(user.Id, bytes, fileName);
+
+            if (url != null)
+            {
+                user.ProfilePicture = url;
+                ProfilePictureUrl = url;
+                await DatabaseService.Instance.UpdateUserAsync(user);
+                await Application.Current.MainPage.DisplayAlert("Valmis", "Profiilipilt on uuendatud.", "OK");
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Viga", "Pildi üleslaadimine ebaõnnestus.", "OK");
+            }
         }
 
         private async Task SaveChanges()

@@ -8,7 +8,17 @@ public partial class AccountSettingsPage : ContentPage
     public AccountSettingsPage()
     {
         InitializeComponent();
-        BindingContext = new AccountSettingsViewModel();
+
+        var vm = new AccountSettingsViewModel();
+
+        // Refresh the avatar image whenever the ViewModel's ProfilePictureUrl changes
+        vm.PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == nameof(AccountSettingsViewModel.ProfilePictureUrl))
+                UpdateProfilePreview();
+        };
+
+        BindingContext = vm;
     }
 
     protected override void OnAppearing()
@@ -20,17 +30,34 @@ public partial class AccountSettingsPage : ContentPage
 
     private void UpdateProfilePreview()
     {
-        if (AvatarInitial == null) return;
-
         var user = SessionService.CurrentUser;
-        if (user != null && !string.IsNullOrWhiteSpace(user.Username))
+        if (user == null) return;
+
+        // Set initials
+        if (AvatarInitial != null)
+            AvatarInitial.Text = !string.IsNullOrWhiteSpace(user.Username)
+                ? user.Username.Substring(0, 1).ToUpper()
+                : "?";
+
+        // Show photo if available, otherwise show initials circle
+        if (!string.IsNullOrEmpty(user.ProfilePicture))
         {
-            AvatarInitial.Text = user.Username.Substring(0, 1).ToUpper();
+            ProfileImage.Source = ImageSource.FromUri(new Uri(user.ProfilePicture));
+            AvatarImageBorder.IsVisible = true;
+            AvatarBorder.IsVisible = false;
         }
         else
         {
-            AvatarInitial.Text = "?";
+            AvatarImageBorder.IsVisible = false;
+            AvatarBorder.IsVisible = true;
         }
+    }
+
+    // Tapping the camera icon triggers the ViewModel's pick command
+    private void OnChangeAvatarTapped(object sender, EventArgs e)
+    {
+        if (BindingContext is AccountSettingsViewModel vm)
+            vm.PickProfilePictureCommand.Execute(null);
     }
 
     private void OnPageSizeChanged(object sender, EventArgs e)
@@ -48,7 +75,7 @@ public partial class AccountSettingsPage : ContentPage
 
         if (width >= 900)
         {
-            // ===== ДЕСКТОП: профиль слева, форма справа =====
+            // Desktop: profile left, form right
             ContentRoot.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(320)));
             ContentRoot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             ContentRoot.RowDefinitions.Add(new RowDefinition(GridLength.Star));
@@ -60,7 +87,7 @@ public partial class AccountSettingsPage : ContentPage
         }
         else
         {
-            // ===== МОБИЛЬНЫЙ: одна колонка, стопкой =====
+            // Mobile: single column, stacked
             ContentRoot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             ContentRoot.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             ContentRoot.RowDefinitions.Add(new RowDefinition(GridLength.Auto));

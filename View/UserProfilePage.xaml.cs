@@ -31,12 +31,9 @@ public partial class UserProfilePage : ContentPage
             EmailLabel.Text = "";
 
         if (AvatarInitial != null)
-        {
-            if (!string.IsNullOrWhiteSpace(user.Username))
-                AvatarInitial.Text = user.Username.Substring(0, 1).ToUpper();
-            else
-                AvatarInitial.Text = "?";
-        }
+            AvatarInitial.Text = !string.IsNullOrWhiteSpace(user.Username)
+                ? user.Username.Substring(0, 1).ToUpper()
+                : "?";
 
         if (RoleLabel != null)
         {
@@ -46,6 +43,19 @@ public partial class UserProfilePage : ContentPage
                 UserRole.Avaldaja => "AVALDAJA",
                 _ => "KASUTAJA"
             };
+        }
+
+        // Show profile picture if one has been set, otherwise show initials circle
+        if (!string.IsNullOrEmpty(user.ProfilePicture))
+        {
+            ProfileImage.Source = ImageSource.FromUri(new Uri(user.ProfilePicture));
+            AvatarImageBorder.IsVisible = true;
+            AvatarBorder.IsVisible = false;
+        }
+        else
+        {
+            AvatarImageBorder.IsVisible = false;
+            AvatarBorder.IsVisible = true;
         }
     }
 
@@ -98,50 +108,26 @@ public partial class UserProfilePage : ContentPage
 
     private async void OnLibraryTapped(object sender, EventArgs e)
     {
-        try
-        {
-            await Navigation.PushAsync(new LibraryPage());
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK");
-        }
+        try { await Navigation.PushAsync(new LibraryPage()); }
+        catch (Exception ex) { await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK"); }
     }
 
     private async void OnPurchaseHistoryTapped(object sender, EventArgs e)
     {
-        try
-        {
-            await Navigation.PushAsync(new E_Raamatud.PurchaseHistoryPage());
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK");
-        }
+        try { await Navigation.PushAsync(new E_Raamatud.PurchaseHistoryPage()); }
+        catch (Exception ex) { await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK"); }
     }
 
     private async void OnUpdatesTapped(object sender, EventArgs e)
     {
-        try
-        {
-            await Navigation.PushAsync(new UpdatesPage());
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK");
-        }
+        try { await Navigation.PushAsync(new UpdatesPage()); }
+        catch (Exception ex) { await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK"); }
     }
 
     private async void OnAccountSettingsTapped(object sender, EventArgs e)
     {
-        try
-        {
-            await Navigation.PushAsync(new AccountSettingsPage());
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK");
-        }
+        try { await Navigation.PushAsync(new AccountSettingsPage()); }
+        catch (Exception ex) { await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK"); }
     }
 
     private async void OnRedeemGiftCardTapped(object sender, EventArgs e)

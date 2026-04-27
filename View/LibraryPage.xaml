@@ -37,11 +37,12 @@
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnBackTapped" />
                         </Border.GestureRecognizers>
-                        <Path Stroke="White" StrokeThickness="2"
-                              Fill="Transparent" Aspect="Uniform"
-                              HeightRequest="16" WidthRequest="16"
-                              HorizontalOptions="Center" VerticalOptions="Center"
-                              Data="M 14,6 L 8,12 L 14,18" />
+                        <Label Text="‹"
+                           TextColor="White"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
                     </Border>
 
                     <VerticalStackLayout Grid.Column="1"
@@ -60,10 +61,9 @@
                                HorizontalOptions="Center" />
                     </VerticalStackLayout>
 
-                    <BoxView Grid.Column="2"
-                             WidthRequest="40"
-                             HeightRequest="40"
-                             Color="Transparent" />
+                    <Label Grid.Column="2"
+                       WidthRequest="40"
+                       HeightRequest="40" />
                 </Grid>
 
                 <ScrollView Orientation="Horizontal"
@@ -160,11 +160,10 @@
                         WidthRequest="120"
                         HeightRequest="120"
                         Padding="0">
-                    <Path Stroke="#0f6e56" StrokeThickness="2.5"
-                          Fill="Transparent" Aspect="Uniform"
-                          HeightRequest="56" WidthRequest="56"
-                          HorizontalOptions="Center" VerticalOptions="Center"
-                          Data="M 4,5 L 4,19 C 4,19 7,18 12,18 C 17,18 20,19 20,19 L 20,5 C 20,5 17,4 12,4 C 7,4 4,5 4,5 Z M 12,4 L 12,18" />
+                    <Label Text="📚"
+                       FontSize="48"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
                 </Border>
 
                 <Label Text="Sinu raamatukogu on tühi"

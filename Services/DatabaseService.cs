@@ -48,6 +48,34 @@ namespace E_Raamatud.Services
         public async Task DeleteUserAsync(int id)
             => await _client.From<User>().Where(u => u.Id == id).Delete();
 
+        public async Task<string?> UploadProfilePictureAsync(int userId, byte[] imageBytes, string fileName)
+        {
+            try
+            {
+                var bucketName = "profile-pictures";
+                var path = $"{userId}/{fileName}";
+
+                await _client.Storage
+                    .From(bucketName)
+                    .Upload(imageBytes, path, new Supabase.Storage.FileOptions
+                    {
+                        Upsert = true,
+                        ContentType = "image/jpeg"
+                    });
+
+                var publicUrl = _client.Storage
+                    .From(bucketName)
+                    .GetPublicUrl(path);
+
+                return publicUrl;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Upload error: {ex.Message}");
+                return null;
+            }
+        }
+
         // Books
         public async Task<List<Raamat>> GetBooksAsync()
             => (await _client.From<Raamat>().Get()).Models;

@@ -103,7 +103,7 @@ namespace E_Raamatud.ViewModel
                     Kirjeldus = Kirjeldus,
                     Hind = Hind,
                     Zanr_ID = SelectedGenre.Zanr_ID,
-                    Avaldaja_ID = SessionService.CurrentUser?.Id ?? 0,
+                    Avaldaja_ID = SessionService.CurrentUser?.Id,
                     Pilt = Pilt,
                     Tekstifail = Tekstifail,
                     Audiofail = audiofailValue

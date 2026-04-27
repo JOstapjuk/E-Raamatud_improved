@@ -51,10 +51,9 @@
                            VerticalOptions="Center"
                            HorizontalOptions="Center" />
 
-                    <BoxView Grid.Column="2"
-                             WidthRequest="40"
-                             HeightRequest="40"
-                             Color="Transparent" />
+                    <Label Grid.Column="2"
+                           WidthRequest="40"
+                           HeightRequest="40" />
                 </Grid>
 
                 <Border StrokeShape="RoundRectangle 14"
@@ -68,22 +67,44 @@
 
                     <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16">
 
-                        <Border Grid.Column="0"
+                        <!-- ===== AVATAR: three-layer stack ===== -->
+                        <Grid Grid.Column="0"
+                              WidthRequest="64"
+                              HeightRequest="64"
+                              VerticalOptions="Center">
+
+                            <!-- Layer 1: Initials fallback -->
+                            <Border x:Name="AvatarBorder"
+                                    StrokeShape="RoundRectangle 32"
+                                    Stroke="Transparent"
+                                    BackgroundColor="#2d6e68"
+                                    WidthRequest="64"
+                                    HeightRequest="64"
+                                    Padding="0">
+                                <Label x:Name="AvatarInitial"
+                                       Text="?"
+                                       FontSize="26"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Border>
+
+                            <!-- Layer 2: Profile picture (visible when set) -->
+                            <Border x:Name="AvatarImageBorder"
                                 StrokeShape="RoundRectangle 32"
                                 Stroke="Transparent"
-                                BackgroundColor="#2d6e68"
                                 WidthRequest="64"
                                 HeightRequest="64"
-                                Padding="0"
-                                VerticalOptions="Center">
-                            <Label x:Name="AvatarInitial"
-                                   Text="?"
-                                   FontSize="26"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center" />
-                        </Border>
+                                IsVisible="False"
+                                Padding="0">
+                                <Image x:Name="ProfileImage"
+                                       Aspect="AspectFill"
+                                       WidthRequest="64"
+                                       HeightRequest="64" />
+                            </Border>
+
+                        </Grid>
 
                         <VerticalStackLayout Grid.Column="1"
                                              Spacing="4"
@@ -238,7 +259,6 @@
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnAccountSettingsTapped" />
                             </Grid.GestureRecognizers>
-
                             <Border Grid.Column="0"
                                     StrokeShape="RoundRectangle 18"
                                     Stroke="Transparent"
@@ -252,7 +272,6 @@
                                       HorizontalOptions="Center" VerticalOptions="Center"
                                       Data="M 12,15 C 13.7,15 15,13.7 15,12 C 15,10.3 13.7,9 12,9 C 10.3,9 9,10.3 9,12 C 9,13.7 10.3,15 12,15 Z" />
                             </Border>
-
                             <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                 <Label Text="Konto seaded"
                                        FontSize="14"
@@ -262,7 +281,6 @@
                                        FontSize="11"
                                        TextColor="#98a8a0" />
                             </VerticalStackLayout>
-
                             <Path Grid.Column="2"
                                   Stroke="#98a8a0" StrokeThickness="2"
                                   Fill="Transparent" Aspect="Uniform"
@@ -277,7 +295,6 @@
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnRedeemGiftCardTapped" />
                             </Grid.GestureRecognizers>
-
                             <Border Grid.Column="0"
                                     StrokeShape="RoundRectangle 18"
                                     Stroke="Transparent"
@@ -291,7 +308,6 @@
                                       HorizontalOptions="Center" VerticalOptions="Center"
                                       Data="M 4,8 L 20,8 L 20,20 L 4,20 Z M 4,12 L 20,12 M 12,8 L 12,20" />
                             </Border>
-
                             <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                 <Label Text="Lunasta kingikaart või kood"
                                        FontSize="14"
@@ -301,7 +317,6 @@
                                        FontSize="11"
                                        TextColor="#98a8a0" />
                             </VerticalStackLayout>
-
                             <Path Grid.Column="2"
                                   Stroke="#98a8a0" StrokeThickness="2"
                                   Fill="Transparent" Aspect="Uniform"
@@ -316,7 +331,6 @@
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnAddAccountTapped" />
                             </Grid.GestureRecognizers>
-
                             <Border Grid.Column="0"
                                     StrokeShape="RoundRectangle 18"
                                     Stroke="Transparent"
@@ -330,7 +344,6 @@
                                       HorizontalOptions="Center" VerticalOptions="Center"
                                       Data="M 12,12 C 14.2,12 16,10.2 16,8 C 16,5.8 14.2,4 12,4 C 9.8,4 8,5.8 8,8 C 8,10.2 9.8,12 12,12 Z M 4,20 C 4,17.3 9.3,16 12,16 M 17,18 L 21,18 M 19,16 L 19,20" />
                             </Border>
-
                             <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                 <Label Text="Lisa veel üks konto"
                                        FontSize="14"
@@ -340,7 +353,6 @@
                                        FontSize="11"
                                        TextColor="#98a8a0" />
                             </VerticalStackLayout>
-
                             <Path Grid.Column="2"
                                   Stroke="#98a8a0" StrokeThickness="2"
                                   Fill="Transparent" Aspect="Uniform"
@@ -362,7 +374,6 @@
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnLogoutTapped" />
                     </Border.GestureRecognizers>
-
                     <HorizontalStackLayout Spacing="10"
                                            HorizontalOptions="Center"
                                            VerticalOptions="Center">

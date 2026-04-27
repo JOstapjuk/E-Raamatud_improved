@@ -1,8 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
-		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
-
+		<TargetFrameworks>net8.0-android;net8.0-windows10.0.19041.0</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>E_Raamatud</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -12,21 +10,22 @@
 		<MauiVersion>8.0.100</MauiVersion>
 		<CheckEolTargetFramework>false</CheckEolTargetFramework>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
-
 		<ApplicationTitle>E-Raamatud</ApplicationTitle>
 		<ApplicationId>com.companyname.eraamatud</ApplicationId>
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
-		<SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
-		<TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+		<!-- Windows-specific settings, only applied for Windows target -->
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 
 		<WindowsPackageType>None</WindowsPackageType>
 		<UseWinUI>true</UseWinUI>
 		<EnableMsixTooling>true</EnableMsixTooling>
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
-		<SelfContained>true</SelfContained>
-		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<SelfContained Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">true</SelfContained>
+		<RuntimeIdentifier Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">win-x64</RuntimeIdentifier>
 		<PublishReadyToRun>false</PublishReadyToRun>
 	</PropertyGroup>
 
@@ -52,7 +51,6 @@
 		<Compile Remove="ViewModel\AdminViewModel.xaml.cs" />
 		<Compile Remove="ViewModel\GenreViewModel.cs" />
 		<Compile Remove="ViewModel\RaamatWithGenre.cs" />
-		<Compile Remove="Platforms\Android\**" />
 		<Compile Remove="Platforms\iOS\**" />
 		<Compile Remove="Platforms\MacCatalyst\**" />
 		<Compile Remove="Platforms\Tizen\**" />
@@ -90,5 +88,4 @@
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</MauiAsset>
 	</ItemGroup>
-
 </Project>

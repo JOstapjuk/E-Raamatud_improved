@@ -52,9 +52,8 @@ namespace E_Raamatud.View
                     rawHtml: _htmlContent,
                     publishYear: 0);
 
-                await DisplayAlert(_bookTitle,
-                    summary + "\n\nSee kokkuvote on loodud tehisintellekti poolt ja voib sisaldada ebatapsusi.",
-                    "Sulge");
+                var popup = new SummaryPopupPage(_bookTitle, summary);
+                await Navigation.PushModalAsync(popup, animated: true);
             }
             catch (Exception ex)
             {

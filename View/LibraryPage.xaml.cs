@@ -71,10 +71,32 @@ namespace E_Raamatud.View
         }
 
         // ===== Фильтры =====
-        private void OnFilterAllTapped(object sender, EventArgs e) => SetActiveFilter(FilterAll);
-        private void OnFilterUnreadTapped(object sender, EventArgs e) => SetActiveFilter(FilterUnread);
-        private void OnFilterReadingTapped(object sender, EventArgs e) => SetActiveFilter(FilterReading);
-        private void OnFilterAudioTapped(object sender, EventArgs e) => SetActiveFilter(FilterAudio);
+        private void OnFilterAllTapped(object sender, EventArgs e)
+        {
+            SetActiveFilter(FilterAll);
+            BooksList.ItemsSource = _vm.LibraryBooks;
+        }
+
+        private void OnFilterUnreadTapped(object sender, EventArgs e)
+        {
+            SetActiveFilter(FilterUnread);
+            BooksList.ItemsSource = _vm.LibraryBooks
+                .Where(b => b.CurrentPage == 0).ToList();
+        }
+
+        private void OnFilterReadingTapped(object sender, EventArgs e)
+        {
+            SetActiveFilter(FilterReading);
+            BooksList.ItemsSource = _vm.LibraryBooks
+                .Where(b => b.CurrentPage > 0 && b.CurrentPage < b.TotalPages).ToList();
+        }
+
+        private void OnFilterAudioTapped(object sender, EventArgs e)
+        {
+            SetActiveFilter(FilterAudio);
+            BooksList.ItemsSource = _vm.LibraryBooks
+                .Where(b => !string.IsNullOrWhiteSpace(b.Audiofail)).ToList();
+        }
 
         private void SetActiveFilter(Border active)
         {

@@ -61,10 +61,9 @@
                 </VerticalStackLayout>
 
                 <!-- Заглушка справа для симметрии -->
-                <BoxView Grid.Column="2"
-                         WidthRequest="40"
-                         HeightRequest="40"
-                         Color="Transparent" />
+                <Label Grid.Column="2"
+                   WidthRequest="40"
+                   HeightRequest="40" />
             </Grid>
         </Border>
 

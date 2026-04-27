@@ -26,7 +26,7 @@ namespace E_Raamatud.Model
         [Column("Role")]
         public string RoleString { get; set; } = "Kasutaja";
 
-        [JsonIgnore]  // Newtonsoft to skip this property
+        [JsonIgnore]
         public UserRole Role
         {
             get => Enum.TryParse(RoleString, out UserRole r) ? r : UserRole.Kasutaja;
@@ -35,5 +35,8 @@ namespace E_Raamatud.Model
 
         [Column("IsApproved")]
         public bool IsApproved { get; set; } = true;
+
+        [Column("ProfilePicture")]
+        public string? ProfilePicture { get; set; }
     }
 }

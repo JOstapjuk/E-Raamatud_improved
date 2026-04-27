@@ -1,9 +1,9 @@
-﻿using E_Raamatud.Model;
-using SQLite;
+﻿// View/PurchaseHistoryPage.xaml.cs
+using E_Raamatud.Model;
+using E_Raamatud.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,12 +11,9 @@ namespace E_Raamatud;
 
 public partial class PurchaseHistoryPage : ContentPage
 {
-    private readonly SQLiteAsyncConnection _db;
-
     public PurchaseHistoryPage()
     {
         InitializeComponent();
-        _db = new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, "Books.db"));
     }
 
     protected override async void OnAppearing()
@@ -35,23 +32,20 @@ public partial class PurchaseHistoryPage : ContentPage
                 return;
             }
 
-            // Создаём таблицы если их нет
-            await _db.CreateTableAsync<PurchaseBasket>();
-            await _db.CreateTableAsync<Raamat>();
+            await DatabaseService.Instance.InitializeAsync();
 
             var userId = SessionService.CurrentUser.Id;
 
-            var purchasedItems = await _db.Table<PurchaseBasket>()
-                                  .Where(pb => pb.Kasutaja_ID == userId && pb.Status == "Purchased")
-                                  .ToListAsync();
+            var allBasketItems = await DatabaseService.Instance.GetBasketAsync(userId);
+            var purchasedItems = allBasketItems.Where(pb => pb.Status == "Purchased").ToList();
+
+            var books = await DatabaseService.Instance.GetBooksAsync();
 
             var displayList = new List<PurchaseDisplay>();
 
             foreach (var basketItem in purchasedItems)
             {
-                var book = await _db.Table<Raamat>()
-                                    .Where(r => r.Raamat_ID == basketItem.Raamat_ID)
-                                    .FirstOrDefaultAsync();
+                var book = books.FirstOrDefault(r => r.Raamat_ID == basketItem.Raamat_ID);
 
                 displayList.Add(new PurchaseDisplay
                 {

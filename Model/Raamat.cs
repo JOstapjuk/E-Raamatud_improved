@@ -19,7 +19,7 @@ namespace E_Raamatud.Model
         public decimal Hind { get; set; }
 
         [Column("Avaldaja_ID")]
-        public int Avaldaja_ID { get; set; }
+        public int? Avaldaja_ID { get; set; }
 
         [Column("Zanr_ID")]
         public int Zanr_ID { get; set; }
