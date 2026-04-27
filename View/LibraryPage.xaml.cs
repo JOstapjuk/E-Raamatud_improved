@@ -1,6 +1,9 @@
 using E_Raamatud.Model;
+using E_Raamatud.ViewModel;
 using Microsoft.Maui.Controls;
 using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -11,19 +14,99 @@ namespace E_Raamatud.View
 {
     public partial class LibraryPage : ContentPage
     {
+        private LibraryViewModel _vm;
+
         public LibraryPage()
         {
             InitializeComponent();
-            BindingContext = new ViewModel.LibraryViewModel();
+            _vm = new LibraryViewModel();
+            BindingContext = _vm;
+
+            // Подписываемся на изменения коллекции, чтобы обновить UI когда книги загрузятся
+            _vm.LibraryBooks.CollectionChanged += LibraryBooks_CollectionChanged;
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            BindBooksCollection();
+        }
+
+        private void LibraryBooks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            // Обновляем UI на главном потоке
+            MainThread.BeginInvokeOnMainThread(BindBooksCollection);
+        }
+
+        private void BindBooksCollection()
+        {
+            if (_vm == null || BooksList == null)
+                return;
+
+            // Привязываем коллекцию (привязка идемпотентна - повторное присваивание не страшно)
+            if (BooksList.ItemsSource != _vm.LibraryBooks)
+                BooksList.ItemsSource = _vm.LibraryBooks;
+
+            int count = _vm.LibraryBooks.Count;
+
+            BooksCountLabel.Text = count switch
+            {
+                0 => "Sinu raamatukogu on tühi",
+                1 => "1 raamat",
+                _ => $"{count} raamatut"
+            };
+
+            EmptyView.IsVisible = count == 0;
+            BooksScroll.IsVisible = count > 0;
+        }
+
+        private void OnPageSizeChanged(object sender, EventArgs e)
+        {
+            // адаптив можно добавить позже
+        }
+
+        private async void OnBackTapped(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
+        }
+
+        // ===== Фильтры =====
+        private void OnFilterAllTapped(object sender, EventArgs e) => SetActiveFilter(FilterAll);
+        private void OnFilterUnreadTapped(object sender, EventArgs e) => SetActiveFilter(FilterUnread);
+        private void OnFilterReadingTapped(object sender, EventArgs e) => SetActiveFilter(FilterReading);
+        private void OnFilterAudioTapped(object sender, EventArgs e) => SetActiveFilter(FilterAudio);
+
+        private void SetActiveFilter(Border active)
+        {
+            var allFilters = new[] { FilterAll, FilterUnread, FilterReading, FilterAudio };
+            foreach (var f in allFilters)
+            {
+                if (f == active)
+                {
+                    f.BackgroundColor = Colors.White;
+                    f.Stroke = Colors.Transparent;
+                    if (f.Content is Label lbl) lbl.TextColor = Color.FromArgb("#2d6e68");
+                }
+                else
+                {
+                    f.BackgroundColor = Colors.Transparent;
+                    f.Stroke = Color.FromArgb("#ffffff60");
+                    if (f.Content is Label lbl) lbl.TextColor = Colors.White;
+                }
+            }
+        }
+
+        // ===== Чтение =====
         private async void OnReadTapped(object sender, EventArgs e)
         {
-            var frame = sender as Frame;
-            var book = frame?.BindingContext as BookWithProgress;
+            var view = sender as BindableObject;
+            var book = view?.BindingContext as BookWithProgress;
 
             if (book == null || string.IsNullOrWhiteSpace(book.Tekstifail))
+            {
+                await DisplayAlert("Viga", "Raamatul puudub tekstifail.", "OK");
                 return;
+            }
 
             try
             {
@@ -51,28 +134,21 @@ namespace E_Raamatud.View
 
                 var rawHtml = string.Join("<hr/>", chapters);
 
-                // Strip img tags
                 rawHtml = System.Text.RegularExpressions.Regex.Replace(
                     rawHtml, @"<img[^>]*>", "",
                     System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
-                // Strip SVG blocks
                 rawHtml = System.Text.RegularExpressions.Regex.Replace(
                     rawHtml, @"<svg[\s\S]*?</svg>", "",
                     System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
-                // Strip style blocks
                 rawHtml = System.Text.RegularExpressions.Regex.Replace(
                     rawHtml, @"<style[\s\S]*?</style>", "",
                     System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
-                Debug.WriteLine($"[EPUB] rawHtml length: {rawHtml.Length}");
-                Debug.WriteLine($"[EPUB] first 200 chars: {rawHtml.Substring(0, Math.Min(200, rawHtml.Length))}");
-
-                // Pass description so SummarizationService has extra context
                 await Navigation.PushAsync(new BookReaderPage(
-                    raamatId:    book.Raamat_ID,
-                    title:       book.Pealkiri,
+                    raamatId: book.Raamat_ID,
+                    title: book.Pealkiri,
                     htmlContent: rawHtml,
                     description: book.Kirjeldus ?? ""));
             }
@@ -87,13 +163,17 @@ namespace E_Raamatud.View
             }
         }
 
+        // ===== Прослушивание =====
         private async void OnListenTapped(object sender, EventArgs e)
         {
-            var button = sender as Button;
-            var book = button?.BindingContext as BookWithProgress;
+            var view = sender as BindableObject;
+            var book = view?.BindingContext as BookWithProgress;
 
             if (book == null || string.IsNullOrWhiteSpace(book.Audiofail))
+            {
+                await DisplayAlert("Audioraamat", "Sellel raamatul pole audiofaili.", "OK");
                 return;
+            }
 
             await Navigation.PushAsync(new AudioPlayerPage(
                 book.Raamat_ID, book.Pealkiri, book.Audiofail, book.Pilt));

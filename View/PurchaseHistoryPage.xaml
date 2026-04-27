@@ -2,73 +2,261 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="E_Raamatud.PurchaseHistoryPage"
-             Title="Ostude Ajalugu">
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#406780" Offset="0.0" />
-            <GradientStop Color="#549082" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
-            <Label Text="Sinu ostude ajalugu"
-                   FontSize="28"
-                   FontAttributes="Bold"
-                   TextColor="Black" />
-            <CollectionView x:Name="PurchaseList" HeightRequest="400">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame BorderColor="White" CornerRadius="10" Padding="15" Margin="0,5">
-                            <Grid ColumnDefinitions="80,*" ColumnSpacing="15">
-                                <Frame Grid.Column="0" 
-                                       CornerRadius="8" 
-                                       Padding="0" 
-                                       HeightRequest="100" 
-                                       WidthRequest="70"
-                                       HasShadow="True">
-                                    <Image Source="{Binding BookImage}" 
-                                           Aspect="AspectFill"
-                                           BackgroundColor="LightGray">
-                                        <Image.Triggers>
-                                            <DataTrigger TargetType="Image" 
-                                                       Binding="{Binding BookImage}" 
-                                                       Value="{x:Null}">
-                                                <Setter Property="Source" Value="book_placeholder.png"/>
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                    </Image>
-                                </Frame>
+             BackgroundColor="#FAF8F3"
+             Shell.NavBarIsVisible="False"
+             Title="Ostude ajalugu">
 
-                                <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
-                                    <Label Text="{Binding BookTitle}" 
-                                           FontSize="18" 
-                                           FontAttributes="Bold" 
-                                           TextColor="Black"
-                                           LineBreakMode="WordWrap"/>
-                                    <Label Text="{Binding Quantity, StringFormat='Kogus: {0}'}" 
-                                           FontSize="14"
-                                           TextColor="Black"/>
-                                    <Label Text="{Binding TotalPrice, StringFormat='Hind kokku: €{0:F2}'}" 
-                                           FontSize="16"
-                                           FontAttributes="Bold"
-                                           TextColor="LightGreen"/>
-                                    <Label Text="{Binding FormattedDate, StringFormat='Ostetud: {0}'}" 
-                                           FontSize="12"
-                                           TextColor="Black"
-                                           FontAttributes="Italic"/>
-                                </VerticalStackLayout>
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+    <Grid RowDefinitions="Auto, *">
 
-            <Label x:Name="EmptyLabel"
-                   Text="Sul pole veel ühtegi ostu tehtud."
-                   FontSize="16"
-                   TextColor="Black"
-                   HorizontalOptions="Center"
-                   IsVisible="False"/>
-        </VerticalStackLayout>
-    </ScrollView>
+        <Border Grid.Row="0"
+                StrokeShape="RoundRectangle 0,0,28,28"
+                Stroke="Transparent"
+                Padding="0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#2d6e68" Offset="0.0" />
+                    <GradientStop Color="#3a7d82" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <Grid Padding="24,50,24,28"
+                  ColumnDefinitions="Auto, *, Auto">
+
+                <Border Grid.Column="0"
+                        StrokeShape="RoundRectangle 20"
+                        Stroke="Transparent"
+                        BackgroundColor="#1f4f4a"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Padding="0"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Path Stroke="White" StrokeThickness="2"
+                          Fill="Transparent" Aspect="Uniform"
+                          HeightRequest="16" WidthRequest="16"
+                          HorizontalOptions="Center" VerticalOptions="Center"
+                          Data="M 14,6 L 8,12 L 14,18" />
+                </Border>
+
+                <VerticalStackLayout Grid.Column="1"
+                                     Spacing="2"
+                                     VerticalOptions="Center"
+                                     HorizontalOptions="Center">
+                    <Label Text="Ostude ajalugu"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center" />
+                    <Label x:Name="OrdersCountLabel"
+                           Text="Sinu tellimused"
+                           FontSize="12"
+                           TextColor="#c8e0dc"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+
+                <BoxView Grid.Column="2"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         Color="Transparent" />
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1">
+
+            <VerticalStackLayout x:Name="EmptyView"
+                                 IsVisible="False"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 Spacing="14"
+                                 Padding="40">
+
+                <Border StrokeShape="RoundRectangle 50"
+                        Stroke="Transparent"
+                        BackgroundColor="#fff5e8"
+                        WidthRequest="120"
+                        HeightRequest="120"
+                        Padding="0">
+                    <Path Stroke="#d97a4a" StrokeThickness="2.5"
+                          Fill="Transparent" Aspect="Uniform"
+                          HeightRequest="56" WidthRequest="56"
+                          HorizontalOptions="Center" VerticalOptions="Center"
+                          Data="M 4,7 L 20,7 L 19,19 L 5,19 Z M 8,7 L 8,4 C 8,3 9,2 10,2 L 14,2 C 15,2 16,3 16,4 L 16,7" />
+                </Border>
+
+                <Label Text="Sul pole veel oste"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#1f2e28"
+                       HorizontalOptions="Center" />
+
+                <Label Text="Koik sinu tehtud ostud kuvatakse siin"
+                       FontSize="13"
+                       TextColor="#5f5e5a"
+                       HorizontalOptions="Center" />
+
+                <Button Text="Sirvi raamatuid"
+                        Clicked="OnBackTapped"
+                        BackgroundColor="#2d6e68"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        CornerRadius="10"
+                        HeightRequest="46"
+                        WidthRequest="200"
+                        Margin="0,8,0,0" />
+            </VerticalStackLayout>
+
+            <ScrollView x:Name="PurchasesScroll" IsVisible="False">
+                <VerticalStackLayout Padding="24,24,24,32" Spacing="14">
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+
+                        <Border Grid.Column="0"
+                                StrokeShape="RoundRectangle 14"
+                                Stroke="Transparent"
+                                BackgroundColor="#e8f0ed"
+                                Padding="18,14">
+                            <VerticalStackLayout Spacing="3">
+                                <Label Text="OSTUD KOKKU"
+                                       FontSize="10"
+                                       TextColor="#0f6e56"
+                                       CharacterSpacing="2"
+                                       FontAttributes="Bold" />
+                                <Label x:Name="TotalOrdersLabel"
+                                       Text="0"
+                                       FontSize="22"
+                                       FontAttributes="Bold"
+                                       TextColor="#1f2e28" />
+                                <Label Text="raamatut"
+                                       FontSize="11"
+                                       TextColor="#5f5e5a" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="1"
+                                StrokeShape="RoundRectangle 14"
+                                Stroke="Transparent"
+                                BackgroundColor="#fff5e8"
+                                Padding="18,14">
+                            <VerticalStackLayout Spacing="3">
+                                <Label Text="KULUTATUD"
+                                       FontSize="10"
+                                       TextColor="#993c1d"
+                                       CharacterSpacing="2"
+                                       FontAttributes="Bold" />
+                                <Label x:Name="TotalSpentLabel"
+                                       Text="0,00"
+                                       FontSize="22"
+                                       FontAttributes="Bold"
+                                       TextColor="#1f2e28" />
+                                <Label Text="kogu aja jooksul"
+                                       FontSize="11"
+                                       TextColor="#5f5e5a" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <CollectionView x:Name="PurchasesList">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+                        </CollectionView.ItemsLayout>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeShape="RoundRectangle 14"
+                                        Stroke="#e5ebe7"
+                                        StrokeThickness="1"
+                                        BackgroundColor="White"
+                                        Padding="16">
+
+                                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
+
+                                        <Border Grid.Column="0"
+                                                StrokeShape="RoundRectangle 8"
+                                                Stroke="Transparent"
+                                                Padding="0"
+                                                WidthRequest="70"
+                                                HeightRequest="100">
+                                            <Image Source="{Binding BookImage}" Aspect="AspectFill" />
+                                        </Border>
+
+                                        <VerticalStackLayout Grid.Column="1"
+                                                             Spacing="4"
+                                                             VerticalOptions="Center">
+
+                                            <Border StrokeShape="RoundRectangle 6"
+                                                    Stroke="Transparent"
+                                                    BackgroundColor="#e8f0ed"
+                                                    Padding="8,3"
+                                                    HorizontalOptions="Start">
+                                                <Label Text="OSTETUD"
+                                                       FontSize="9"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#0f6e56"
+                                                       CharacterSpacing="1.5" />
+                                            </Border>
+
+                                            <Label Text="{Binding BookTitle}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#1f2e28"
+                                                   LineBreakMode="TailTruncation"
+                                                   MaxLines="2" />
+
+                                            <Label Text="{Binding FormattedDate}"
+                                                   FontSize="11"
+                                                   TextColor="#98a8a0" />
+
+                                            <Label Text="{Binding Quantity, StringFormat='Kogus: {0}'}"
+                                                   FontSize="11"
+                                                   TextColor="#5f5e5a" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Column="2"
+                                                             Spacing="4"
+                                                             VerticalOptions="Center"
+                                                             HorizontalOptions="End">
+                                            <Label Text="HIND"
+                                                   FontSize="9"
+                                                   TextColor="#98a8a0"
+                                                   CharacterSpacing="1.5"
+                                                   FontAttributes="Bold"
+                                                   HorizontalOptions="End" />
+                                            <Label Text="{Binding TotalPrice, StringFormat='EUR {0:F2}'}"
+                                                   FontSize="18"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#2d6e68"
+                                                   HorizontalOptions="End" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <VerticalStackLayout x:Name="ErrorView"
+                                 IsVisible="False"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 Spacing="12"
+                                 Padding="40">
+                <Label Text="Viga"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#d97a4a"
+                       HorizontalOptions="Center" />
+                <Label x:Name="ErrorMessage"
+                       Text="Andmete laadimisel tekkis viga"
+                       FontSize="13"
+                       TextColor="#5f5e5a"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
 </ContentPage>

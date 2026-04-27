@@ -1,11 +1,20 @@
 namespace E_Raamatud.View;
+
 using E_Raamatud.ViewModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public partial class AddBookPage : ContentPage
 {
     public AddBookPage()
     {
         InitializeComponent();
+    }
+
+    private async void OnBackTapped(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
     }
 
     private async void OnPickImageClicked(object sender, EventArgs e)
@@ -52,7 +61,6 @@ public partial class AddBookPage : ContentPage
         }
     }
 
-    // Pick MULTIPLE audio files at once (all 19 chapters in one go)
     private async void OnPickAudioFilesClicked(object sender, EventArgs e)
     {
         try
@@ -65,7 +73,6 @@ public partial class AddBookPage : ContentPage
                 { DevicePlatform.MacCatalyst, new[] { "public.audio" } }
             });
 
-            // PickMultipleAsync lets the user select all chapters at once
             var results = await FilePicker.PickMultipleAsync(new PickOptions
             {
                 FileTypes = audioTypes,

@@ -4,7 +4,6 @@ namespace E_Raamatud
 {
     /// <summary>
     /// Extracts just the filename from a full path for display in the audio file list.
-    /// Binding: Text="{Binding ., Converter={x:Static local:FileNameConverter.Instance}}"
     /// </summary>
     public class FileNameConverter : IValueConverter
     {
@@ -19,7 +18,6 @@ namespace E_Raamatud
 
     /// <summary>
     /// Inverts a bool — used to disable the "Lisa raamat" button while uploading.
-    /// Binding: IsEnabled="{Binding IsUploading, Converter={x:Static local:InverseBoolConverter.Instance}}"
     /// </summary>
     public class InverseBoolConverter : IValueConverter
     {
@@ -30,5 +28,18 @@ namespace E_Raamatud
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => value is bool b && !b;
+    }
+
+    public class FirstLetterConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is string s && !string.IsNullOrEmpty(s))
+                return s.Substring(0, 1).ToUpper();
+            return "?";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+            => throw new NotImplementedException();
     }
 }

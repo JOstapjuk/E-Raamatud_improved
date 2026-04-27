@@ -4,125 +4,505 @@
              xmlns:vm="clr-namespace:E_Raamatud.ViewModel"
              xmlns:local="clr-namespace:E_Raamatud"
              x:Class="E_Raamatud.View.AddBookPage"
+             x:Name="AddBookPageRef"
+             BackgroundColor="#FAF8F3"
+             Shell.NavBarIsVisible="False"
              Title="Lisa Raamat">
 
     <ContentPage.BindingContext>
         <vm:AvaldajaViewModel />
     </ContentPage.BindingContext>
 
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-            <GradientStop Color="#549082" Offset="0.0" />
-            <GradientStop Color="#406780" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+    <Grid RowDefinitions="Auto, *">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+        <!-- ============== ШАПКА ============== -->
+        <Border Grid.Row="0"
+                StrokeShape="RoundRectangle 0,0,28,28"
+                Stroke="Transparent"
+                Padding="0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#2d6e68" Offset="0.0" />
+                    <GradientStop Color="#3a7d82" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
 
-            <Label Text="Lisa uus raamat"
-                   FontSize="28" FontAttributes="Bold"
-                   TextColor="White" HorizontalOptions="Center" />
+            <Grid Padding="24,50,24,28"
+                  ColumnDefinitions="Auto, *, Auto">
 
-            <Entry Placeholder="Pealkiri" Text="{Binding Pealkiri}"
-                   FontSize="18" BackgroundColor="White" TextColor="Black" />
+                <Border Grid.Column="0"
+                        StrokeShape="RoundRectangle 20"
+                        Stroke="Transparent"
+                        BackgroundColor="#1f4f4a"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Padding="0"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Path Stroke="White" StrokeThickness="2"
+                          Fill="Transparent" Aspect="Uniform"
+                          HeightRequest="16" WidthRequest="16"
+                          HorizontalOptions="Center" VerticalOptions="Center"
+                          Data="M 14,6 L 8,12 L 14,18" />
+                </Border>
 
-            <Editor Placeholder="Kirjeldus" Text="{Binding Kirjeldus}"
-                    HeightRequest="100" FontSize="16"
-                    BackgroundColor="White" TextColor="Black" />
-
-            <Entry Placeholder="Hind" Text="{Binding Hind}"
-                   Keyboard="Numeric" FontSize="18"
-                   BackgroundColor="White" TextColor="Black" />
-
-            <Picker Title="Vali žanr"
-                    ItemsSource="{Binding Genres}"
-                    ItemDisplayBinding="{Binding Nimetus}"
-                    SelectedItem="{Binding SelectedGenre}"
-                    FontSize="18" BackgroundColor="White" TextColor="Black" />
-
-            <!-- Cover image picker -->
-            <HorizontalStackLayout Spacing="10">
-                <Entry Placeholder="Vali pilt" Text="{Binding Pilt}"
-                       IsReadOnly="True" FontSize="16"
-                       BackgroundColor="White" TextColor="Black"
-                       HorizontalOptions="FillAndExpand" />
-                <Button Text="Vali" Clicked="OnPickImageClicked"
-                        BackgroundColor="#145459" TextColor="White" />
-            </HorizontalStackLayout>
-
-            <!-- EPUB text file picker -->
-            <HorizontalStackLayout Spacing="10">
-                <Entry Placeholder="Vali tekstifail (EPUB)" Text="{Binding Tekstifail}"
-                       IsReadOnly="True" FontSize="16"
-                       BackgroundColor="White" TextColor="Black"
-                       HorizontalOptions="FillAndExpand" />
-                <Button Text="Vali" Clicked="OnPickTextFileClicked"
-                        BackgroundColor="#145459" TextColor="White" />
-            </HorizontalStackLayout>
-
-            <!-- ── Audio section ── -->
-            <Frame BackgroundColor="#1a3a3a" CornerRadius="12" Padding="14">
-                <VerticalStackLayout Spacing="10">
-
-                    <Label Text="🎧 Audioraamat (valikuline)"
-                           TextColor="White" FontSize="16" FontAttributes="Bold" />
-
-                    <Label Text="{Binding AudioFileSummary}"
-                           TextColor="#aaddcc" FontSize="13" />
-
-                    <!-- Pick multiple audio files -->
-                    <Button Text="+ Lisa audiofailid"
-                            Clicked="OnPickAudioFilesClicked"
-                            BackgroundColor="#549082" TextColor="White"
-                            CornerRadius="8" HeightRequest="40" />
-
-                    <!-- List of picked files with remove button -->
-                    <CollectionView ItemsSource="{Binding AudioFiles}"
-                                    SelectionMode="None">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid ColumnDefinitions="*, Auto" Padding="0,4">
-                                    <Label Grid.Column="0"
-                                           Text="{Binding ., Converter={x:Static local:FileNameConverter.Instance}}"
-                                           TextColor="White" FontSize="12"
-                                           LineBreakMode="MiddleTruncation"
-                                           VerticalOptions="Center" />
-                                    <Button Grid.Column="1"
-                                            Text="✕"
-                                            FontSize="12"
-                                            BackgroundColor="Transparent"
-                                            TextColor="#ff7777"
-                                            WidthRequest="36" HeightRequest="36"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AvaldajaViewModel}}, Path=RemoveAudioFileCommand}"
-                                            CommandParameter="{Binding .}" />
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-
-                    <!-- Upload progress (visible during upload) -->
-                    <Label Text="{Binding UploadProgress}"
-                           TextColor="#aaddcc" FontSize="13"
-                           IsVisible="{Binding IsUploading}" />
-
-                    <ActivityIndicator IsRunning="{Binding IsUploading}"
-                                       IsVisible="{Binding IsUploading}"
-                                       Color="White" />
-
+                <VerticalStackLayout Grid.Column="1"
+                                     Spacing="2"
+                                     VerticalOptions="Center"
+                                     HorizontalOptions="Center">
+                    <Label Text="Lisa raamat"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center" />
+                    <Label Text="Loo kataloogi uus pealkiri"
+                           FontSize="12"
+                           TextColor="#c8e0dc"
+                           HorizontalOptions="Center" />
                 </VerticalStackLayout>
-            </Frame>
 
-            <Button Text="Lisa raamat"
-                    Command="{Binding AddBookCommand}"
-                    FontAttributes="Bold"
-                    IsEnabled="{Binding IsUploading, Converter={x:Static local:InverseBoolConverter.Instance}}"
-                    BackgroundColor="#145459" TextColor="White" />
+                <BoxView Grid.Column="2"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         Color="Transparent" />
+            </Grid>
+        </Border>
 
-            <Label Text="{Binding StatusMessage}"
-                   TextColor="LightGreen" FontSize="16"
-                   HorizontalOptions="Center" />
+        <!-- ============== КОНТЕНТ ============== -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="24,28,24,32" Spacing="18">
 
-        </VerticalStackLayout>
-    </ScrollView>
+                <!-- ===== СЕКЦИЯ 1: Базовая информация ===== -->
+                <Border StrokeShape="RoundRectangle 14"
+                        Stroke="#e5ebe7"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="20">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.05" />
+                    </Border.Shadow>
+
+                    <VerticalStackLayout Spacing="16">
+
+                        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                            <Border StrokeShape="RoundRectangle 16"
+                                    Stroke="Transparent"
+                                    BackgroundColor="#e8f0ed"
+                                    WidthRequest="32"
+                                    HeightRequest="32"
+                                    Padding="0">
+                                <Path Stroke="#0f6e56" StrokeThickness="1.7"
+                                      Fill="Transparent" Aspect="Uniform"
+                                      HeightRequest="16" WidthRequest="16"
+                                      HorizontalOptions="Center" VerticalOptions="Center"
+                                      Data="M 4,5 L 4,19 L 20,19 L 20,5 Z M 4,9 L 20,9 M 8,13 L 14,13 M 8,16 L 12,16" />
+                            </Border>
+                            <Label Text="Pohiandmed"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#1f2e28"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <!-- Pealkiri -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="PEALKIRI"
+                                   FontSize="10"
+                                   TextColor="#98a8a0"
+                                   CharacterSpacing="2"
+                                   FontAttributes="Bold" />
+                            <Border StrokeShape="RoundRectangle 10"
+                                    Stroke="#e5ebe7"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#fafbfa"
+                                    Padding="14,0">
+                                <Entry Placeholder="Sisesta raamatu pealkiri"
+                                       Text="{Binding Pealkiri}"
+                                       FontSize="14"
+                                       BackgroundColor="Transparent"
+                                       TextColor="#1f2e28"
+                                       PlaceholderColor="#98a8a0"
+                                       HeightRequest="46" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Kirjeldus -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="KIRJELDUS"
+                                   FontSize="10"
+                                   TextColor="#98a8a0"
+                                   CharacterSpacing="2"
+                                   FontAttributes="Bold" />
+                            <Border StrokeShape="RoundRectangle 10"
+                                    Stroke="#e5ebe7"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#fafbfa"
+                                    Padding="14,8">
+                                <Editor Placeholder="Lisa raamatu lyhiklirjeldus..."
+                                        Text="{Binding Kirjeldus}"
+                                        HeightRequest="100"
+                                        FontSize="14"
+                                        BackgroundColor="Transparent"
+                                        TextColor="#1f2e28"
+                                        PlaceholderColor="#98a8a0" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Hind + Žanr -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+
+                            <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                <Label Text="HIND (EUR)"
+                                       FontSize="10"
+                                       TextColor="#98a8a0"
+                                       CharacterSpacing="2"
+                                       FontAttributes="Bold" />
+                                <Border StrokeShape="RoundRectangle 10"
+                                        Stroke="#e5ebe7"
+                                        StrokeThickness="1"
+                                        BackgroundColor="#fafbfa"
+                                        Padding="14,0">
+                                    <Entry Placeholder="0.00"
+                                           Text="{Binding Hind}"
+                                           Keyboard="Numeric"
+                                           FontSize="14"
+                                           BackgroundColor="Transparent"
+                                           TextColor="#1f2e28"
+                                           PlaceholderColor="#98a8a0"
+                                           HeightRequest="46" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                <Label Text="ZANR"
+                                       FontSize="10"
+                                       TextColor="#98a8a0"
+                                       CharacterSpacing="2"
+                                       FontAttributes="Bold" />
+                                <Border StrokeShape="RoundRectangle 10"
+                                        Stroke="#e5ebe7"
+                                        StrokeThickness="1"
+                                        BackgroundColor="#fafbfa"
+                                        Padding="14,0">
+                                    <Picker Title="Vali"
+                                            TitleColor="#98a8a0"
+                                            ItemsSource="{Binding Genres}"
+                                            ItemDisplayBinding="{Binding Nimetus}"
+                                            SelectedItem="{Binding SelectedGenre}"
+                                            FontSize="14"
+                                            BackgroundColor="Transparent"
+                                            TextColor="#1f2e28"
+                                            HeightRequest="46" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ===== СЕКЦИЯ 2: Kaanepilt ===== -->
+                <Border StrokeShape="RoundRectangle 14"
+                        Stroke="#e5ebe7"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="20">
+
+                    <VerticalStackLayout Spacing="14">
+
+                        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                            <Border StrokeShape="RoundRectangle 16"
+                                    Stroke="Transparent"
+                                    BackgroundColor="#fff5e8"
+                                    WidthRequest="32"
+                                    HeightRequest="32"
+                                    Padding="0">
+                                <Path Stroke="#993c1d" StrokeThickness="1.7"
+                                      Fill="Transparent" Aspect="Uniform"
+                                      HeightRequest="16" WidthRequest="16"
+                                      HorizontalOptions="Center" VerticalOptions="Center"
+                                      Data="M 4,5 L 20,5 L 20,19 L 4,19 Z M 4,15 L 9,11 L 13,15 L 16,12 L 20,16 M 9,9 C 9.5,9 10,8.5 10,8 C 10,7.5 9.5,7 9,7 C 8.5,7 8,7.5 8,8 C 8,8.5 8.5,9 9,9 Z" />
+                            </Border>
+                            <Label Text="Kaanepilt"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#1f2e28"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+
+                            <Border Grid.Column="0"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="#e5ebe7"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#fafbfa"
+                                    Padding="14,0">
+                                <Entry Placeholder="Pilt valimata"
+                                       Text="{Binding Pilt}"
+                                       IsReadOnly="True"
+                                       FontSize="13"
+                                       BackgroundColor="Transparent"
+                                       TextColor="#1f2e28"
+                                       PlaceholderColor="#98a8a0"
+                                       HeightRequest="46" />
+                            </Border>
+
+                            <Border Grid.Column="1"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="Transparent"
+                                    BackgroundColor="#2d6e68"
+                                    HeightRequest="46"
+                                    WidthRequest="100"
+                                    Padding="0">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPickImageClicked" />
+                                </Border.GestureRecognizers>
+                                <HorizontalStackLayout Spacing="6"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center">
+                                    <Path Stroke="White" StrokeThickness="1.8"
+                                          Fill="Transparent" Aspect="Uniform"
+                                          HeightRequest="13" WidthRequest="13"
+                                          VerticalOptions="Center"
+                                          Data="M 12,4 L 12,16 M 6,10 L 12,16 L 18,10 M 4,20 L 20,20" />
+                                    <Label Text="Vali"
+                                           FontSize="13"
+                                           FontAttributes="Bold"
+                                           TextColor="White"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ===== СЕКЦИЯ 3: Tekstifail (EPUB) ===== -->
+                <Border StrokeShape="RoundRectangle 14"
+                        Stroke="#e5ebe7"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="20">
+
+                    <VerticalStackLayout Spacing="14">
+
+                        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                            <Border StrokeShape="RoundRectangle 16"
+                                    Stroke="Transparent"
+                                    BackgroundColor="#f0eaf7"
+                                    WidthRequest="32"
+                                    HeightRequest="32"
+                                    Padding="0">
+                                <Path Stroke="#534ab7" StrokeThickness="1.7"
+                                      Fill="Transparent" Aspect="Uniform"
+                                      HeightRequest="16" WidthRequest="16"
+                                      HorizontalOptions="Center" VerticalOptions="Center"
+                                      Data="M 6,3 L 14,3 L 18,7 L 18,21 L 6,21 Z M 14,3 L 14,7 L 18,7 M 8,12 L 16,12 M 8,16 L 16,16" />
+                            </Border>
+                            <Label Text="Tekstifail (EPUB)"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#1f2e28"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+
+                            <Border Grid.Column="0"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="#e5ebe7"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#fafbfa"
+                                    Padding="14,0">
+                                <Entry Placeholder="EPUB fail valimata"
+                                       Text="{Binding Tekstifail}"
+                                       IsReadOnly="True"
+                                       FontSize="13"
+                                       BackgroundColor="Transparent"
+                                       TextColor="#1f2e28"
+                                       PlaceholderColor="#98a8a0"
+                                       HeightRequest="46" />
+                            </Border>
+
+                            <Border Grid.Column="1"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="Transparent"
+                                    BackgroundColor="#2d6e68"
+                                    HeightRequest="46"
+                                    WidthRequest="100"
+                                    Padding="0">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPickTextFileClicked" />
+                                </Border.GestureRecognizers>
+                                <HorizontalStackLayout Spacing="6"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center">
+                                    <Path Stroke="White" StrokeThickness="1.8"
+                                          Fill="Transparent" Aspect="Uniform"
+                                          HeightRequest="13" WidthRequest="13"
+                                          VerticalOptions="Center"
+                                          Data="M 12,4 L 12,16 M 6,10 L 12,16 L 18,10 M 4,20 L 20,20" />
+                                    <Label Text="Vali"
+                                           FontSize="13"
+                                           FontAttributes="Bold"
+                                           TextColor="White"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ===== СЕКЦИЯ 4: Audioraamat ===== -->
+                <Border StrokeShape="RoundRectangle 14"
+                        Stroke="#e5ebe7"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="20">
+
+                    <VerticalStackLayout Spacing="14">
+
+                        <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="10">
+                            <Border Grid.Column="0"
+                                    StrokeShape="RoundRectangle 16"
+                                    Stroke="Transparent"
+                                    BackgroundColor="#fff5e8"
+                                    WidthRequest="32"
+                                    HeightRequest="32"
+                                    Padding="0">
+                                <Path Stroke="#d97a4a" StrokeThickness="1.7"
+                                      Fill="Transparent" Aspect="Uniform"
+                                      HeightRequest="16" WidthRequest="16"
+                                      HorizontalOptions="Center" VerticalOptions="Center"
+                                      Data="M 12,3 C 7,3 4,7 4,12 L 4,15 L 4,17 L 7,17 L 7,12 M 12,3 C 17,3 20,7 20,12 L 20,15 L 20,17 L 17,17 L 17,12" />
+                            </Border>
+                            <Label Grid.Column="1"
+                                   Text="Audioraamat"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#1f2e28"
+                                   VerticalOptions="Center" />
+                            <Border Grid.Column="2"
+                                    StrokeShape="RoundRectangle 6"
+                                    Stroke="Transparent"
+                                    BackgroundColor="#f0f2f0"
+                                    Padding="8,3"
+                                    VerticalOptions="Center">
+                                <Label Text="VALIKULINE"
+                                       FontSize="9"
+                                       FontAttributes="Bold"
+                                       TextColor="#5f5e5a"
+                                       CharacterSpacing="1.5" />
+                            </Border>
+                        </Grid>
+
+                        <Label Text="{Binding AudioFileSummary}"
+                               FontSize="12"
+                               TextColor="#5f5e5a" />
+
+                        <Border StrokeShape="RoundRectangle 10"
+                                Stroke="#d97a4a"
+                                StrokeThickness="1.5"
+                                BackgroundColor="#fff5e8"
+                                HeightRequest="46"
+                                Padding="0">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPickAudioFilesClicked" />
+                            </Border.GestureRecognizers>
+                            <HorizontalStackLayout Spacing="8"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center">
+                                <Path Stroke="#993c1d" StrokeThickness="2"
+                                      Fill="Transparent" Aspect="Uniform"
+                                      HeightRequest="13" WidthRequest="13"
+                                      VerticalOptions="Center"
+                                      Data="M 12,4 L 12,20 M 4,12 L 20,12" />
+                                <Label Text="Lisa audiofailid"
+                                       FontSize="13"
+                                       FontAttributes="Bold"
+                                       TextColor="#993c1d"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <!-- Список аудиофайлов -->
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding AudioFiles}" Spacing="6">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Border StrokeShape="RoundRectangle 8"
+                                            Stroke="Transparent"
+                                            BackgroundColor="#fafbfa"
+                                            Padding="12,8">
+                                        <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="10">
+                                            <Path Grid.Column="0"
+                                                  Stroke="#d97a4a" StrokeThickness="1.7"
+                                                  Fill="Transparent" Aspect="Uniform"
+                                                  HeightRequest="14" WidthRequest="14"
+                                                  VerticalOptions="Center"
+                                                  Data="M 9,18 V 6 L 21,3 V 15 M 9,18 C 9,19.7 7.7,21 6,21 C 4.3,21 3,19.7 3,18 C 3,16.3 4.3,15 6,15 C 7.7,15 9,16.3 9,18 Z M 21,15 C 21,16.7 19.7,18 18,18 C 16.3,18 15,16.7 15,15 C 15,13.3 16.3,12 18,12 C 19.7,12 21,13.3 21,15 Z" />
+                                            <Label Grid.Column="1"
+                                                   Text="{Binding ., Converter={x:Static local:FileNameConverter.Instance}}"
+                                                   TextColor="#1f2e28"
+                                                   FontSize="12"
+                                                   LineBreakMode="MiddleTruncation"
+                                                   VerticalOptions="Center" />
+                                            <Button Grid.Column="2"
+                                                    Text="X"
+                                                    FontSize="12"
+                                                    FontAttributes="Bold"
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="#d63030"
+                                                    WidthRequest="32" HeightRequest="32"
+                                                    Padding="0"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AvaldajaViewModel}}, Path=RemoveAudioFileCommand}"
+                                                    CommandParameter="{Binding .}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+
+                        <!-- Прогресс загрузки -->
+                        <VerticalStackLayout Spacing="6"
+                                             IsVisible="{Binding IsUploading}">
+                            <Label Text="{Binding UploadProgress}"
+                                   FontSize="12"
+                                   TextColor="#5f5e5a"
+                                   HorizontalOptions="Center" />
+                            <ActivityIndicator IsRunning="{Binding IsUploading}"
+                                               Color="#2d6e68" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ===== Кнопка Salvesta ===== -->
+                <Border StrokeShape="RoundRectangle 14"
+                        Stroke="Transparent"
+                        BackgroundColor="#2d6e68"
+                        HeightRequest="56"
+                        Padding="0"
+                        Margin="0,8,0,0"
+                        IsEnabled="{Binding IsUploading, Converter={x:Static local:InverseBoolConverter.Instance}}">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,4" Radius="12" Opacity="0.18" />
+                    </Border.Shadow>
+                    <Button Text="Lisa raamat kataloogi"
+                            Command="{Binding AddBookCommand}"
+                            FontAttributes="Bold"
+                            FontSize="15"
+                            BackgroundColor="Transparent"
+                            TextColor="White" />
+                </Border>
+
+                <!-- Status -->
+                <Label Text="{Binding StatusMessage}"
+                       TextColor="#0f6e56"
+                       FontAttributes="Bold"
+                       FontSize="13"
+                       HorizontalOptions="Center"
+                       Margin="0,4,0,0" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

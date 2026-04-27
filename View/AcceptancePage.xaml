@@ -4,27 +4,86 @@
              x:Class="E_Raamatud.Pages.AcceptancePage"
              x:Name="AcceptancePageRoot"
              Title="Avaldajate kinnitused">
-    <ContentPage.Content>
-        <StackLayout Padding="10">
-            <Label Text="Avaldajate kinnitamised" FontSize="20" FontAttributes="Bold" Margin="0,0,0,10"/>
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#2d6e68" Offset="0.0" />
+            <GradientStop Color="#3a7d82" Offset="0.5" />
+            <GradientStop Color="#2f5a75" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,40,20,30" Spacing="18">
+
+            <Label Text="✓ Avaldajate kinnitamised"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="White" />
+
+            <Label Text="Ootel avaldajad, kes vajavad heakskiitu"
+                   FontSize="14"
+                   TextColor="#c8e0dc"
+                   Margin="0,-8,0,8" />
 
             <CollectionView x:Name="PendingUsersView" ItemsSource="{Binding PendingUsers}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame BorderColor="Gray" Margin="5">
-                            <StackLayout Orientation="Horizontal" Spacing="10">
-                                <Label Text="{Binding Username}" VerticalOptions="Center"/>
-                                <Button Text="Kinnita"
+                        <Border StrokeShape="RoundRectangle 14"
+                                Stroke="Transparent"
+                                BackgroundColor="White"
+                                Padding="16"
+                                Margin="0,0,0,10">
+                            <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10">
+
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 22"
+                                        Stroke="Transparent"
+                                        BackgroundColor="#e4f2ee"
+                                        WidthRequest="44" HeightRequest="44">
+                                    <Label Text="👤" FontSize="20"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center" />
+                                </Border>
+
+                                <Label Grid.Column="1"
+                                       Text="{Binding Username}"
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       TextColor="#1a1a1a"
+                                       VerticalOptions="Center" />
+
+                                <Button Grid.Column="2"
+                                        Text="✓"
                                         Clicked="OnAcceptClicked"
-                                        CommandParameter="{Binding}"/>
-                                <Button Text="Keeldu"
+                                        CommandParameter="{Binding}"
+                                        BackgroundColor="#2e7a4f"
+                                        TextColor="White"
+                                        FontSize="16"
+                                        FontAttributes="Bold"
+                                        CornerRadius="10"
+                                        WidthRequest="44"
+                                        HeightRequest="40"
+                                        Padding="0" />
+
+                                <Button Grid.Column="3"
+                                        Text="✕"
                                         Clicked="OnDeclineClicked"
-                                        CommandParameter="{Binding}"/>
-                            </StackLayout>
-                        </Frame>
+                                        CommandParameter="{Binding}"
+                                        BackgroundColor="#fdecec"
+                                        TextColor="#d63030"
+                                        FontSize="16"
+                                        FontAttributes="Bold"
+                                        CornerRadius="10"
+                                        WidthRequest="44"
+                                        HeightRequest="40"
+                                        Padding="0" />
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        </StackLayout>
-    </ContentPage.Content>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

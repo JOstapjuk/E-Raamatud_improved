@@ -2,53 +2,324 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="E_Raamatud.Views.AvaldajaPage"
+             x:Name="AvaldajaPageRef"
+             BackgroundColor="#FAF8F3"
+             SizeChanged="OnPageSizeChanged"
+             Shell.NavBarIsVisible="False"
              Title="Avaldaja Avaleht">
 
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-            <GradientStop Color="#549082" Offset="0.0" />
-            <GradientStop Color="#406780" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+    <Grid RowDefinitions="Auto, *">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
+        <!-- ============== ШАПКА ============== -->
+        <Border Grid.Row="0"
+                StrokeShape="RoundRectangle 0,0,28,28"
+                Stroke="Transparent"
+                Padding="0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#2d6e68" Offset="0.0" />
+                    <GradientStop Color="#3a7d82" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
 
-            <Label Text="Tere tulemast, Avaldaja!"
-                   FontSize="28"
-                   FontAttributes="Bold"
-                   TextColor="White"
-                   HorizontalOptions="Center" />
+            <VerticalStackLayout Padding="24,50,24,32" Spacing="22">
 
-            <Button Text="Lisa uus raamat"
-                    Clicked="OnAddBookClicked"
-                    BackgroundColor="#145459"
-                    TextColor="White"
-                    FontAttributes="Bold" />
+                <Grid ColumnDefinitions="Auto, *, Auto">
 
-            <Button Text="Uuendused"
-                    Clicked="OnUpdatesClicked"
-                    BackgroundColor="#145459"
-                    TextColor="White"
-                    FontAttributes="Bold" />
+                    <Border Grid.Column="0"
+                            StrokeShape="RoundRectangle 20"
+                            Stroke="Transparent"
+                            BackgroundColor="#1f4f4a"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Padding="0"
+                            VerticalOptions="Center">
+                        <Path Stroke="White" StrokeThickness="2"
+                              Fill="Transparent" Aspect="Uniform"
+                              HeightRequest="18" WidthRequest="18"
+                              HorizontalOptions="Center" VerticalOptions="Center"
+                              Data="M 4,5 L 4,19 C 4,19 7,18 12,18 C 17,18 20,19 20,19 L 20,5 C 20,5 17,4 12,4 C 7,4 4,5 4,5 Z M 12,4 L 12,18" />
+                    </Border>
 
-            <Button Text="Seaded"
-                    Clicked="OnSettingsClicked"
-                    BackgroundColor="#145459"
-                    TextColor="White"
-                    FontAttributes="Bold" />
+                    <Label Grid.Column="1"
+                           Text="Avaldaja paneel"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
 
-            <Button Text="Müügiaruanded"
-                    Clicked="OnViewReportsClicked"
-                    BackgroundColor="#145459"
-                    TextColor="White"
-                    FontAttributes="Bold" />
+                    <BoxView Grid.Column="2"
+                             WidthRequest="40"
+                             HeightRequest="40"
+                             Color="Transparent" />
+                </Grid>
 
-            <Button Text="Logi välja"
-                    Clicked="OnLogoutClicked"
-                    BackgroundColor="#902B2B"
-                    TextColor="White"
-                    FontAttributes="Bold" />
-        </VerticalStackLayout>
-    </ScrollView>
+                <!-- Карточка приветствия -->
+                <Border StrokeShape="RoundRectangle 14"
+                        Stroke="Transparent"
+                        BackgroundColor="White"
+                        Padding="20"
+                        Margin="0,8,0,0">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,4" Radius="14" Opacity="0.15" />
+                    </Border.Shadow>
+
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16">
+
+                        <Border Grid.Column="0"
+                                StrokeShape="RoundRectangle 32"
+                                Stroke="Transparent"
+                                BackgroundColor="#2d6e68"
+                                WidthRequest="64"
+                                HeightRequest="64"
+                                Padding="0"
+                                VerticalOptions="Center">
+                            <Path Stroke="White" StrokeThickness="1.7"
+                                  Fill="Transparent" Aspect="Uniform"
+                                  HeightRequest="28" WidthRequest="28"
+                                  HorizontalOptions="Center" VerticalOptions="Center"
+                                  Data="M 4,5 L 4,19 C 4,19 7,18 12,18 C 17,18 20,19 20,19 L 20,5 C 20,5 17,4 12,4 C 7,4 4,5 4,5 Z M 12,4 L 12,18" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="4"
+                                             VerticalOptions="Center">
+
+                            <Label Text="Tere tulemast tagasi"
+                                   FontSize="13"
+                                   TextColor="#5f5e5a" />
+
+                            <Label x:Name="UsernameLabel"
+                                   Text="Avaldaja"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#1f2e28" />
+
+                            <Border StrokeShape="RoundRectangle 6"
+                                    Stroke="Transparent"
+                                    BackgroundColor="#e8f0ed"
+                                    Padding="8,3"
+                                    HorizontalOptions="Start"
+                                    Margin="0,2,0,0">
+                                <Label Text="AVALDAJA"
+                                       FontSize="9"
+                                       FontAttributes="Bold"
+                                       TextColor="#0f6e56"
+                                       CharacterSpacing="1.5" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- ============== КОНТЕНТ ============== -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="24,28,24,32" Spacing="20">
+
+                <!-- ===== Главное действие — Lisa uus raamat ===== -->
+                <Border StrokeShape="RoundRectangle 14"
+                        Stroke="Transparent"
+                        BackgroundColor="#2d6e68"
+                        Padding="22">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAddBookTapped" />
+                    </Border.GestureRecognizers>
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,4" Radius="12" Opacity="0.2" />
+                    </Border.Shadow>
+
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="16">
+
+                        <Border Grid.Column="0"
+                                StrokeShape="RoundRectangle 24"
+                                Stroke="Transparent"
+                                BackgroundColor="#1f4f4a"
+                                WidthRequest="48"
+                                HeightRequest="48"
+                                Padding="0"
+                                VerticalOptions="Center">
+                            <Path Stroke="White" StrokeThickness="2.2"
+                                  Fill="Transparent" Aspect="Uniform"
+                                  HeightRequest="20" WidthRequest="20"
+                                  HorizontalOptions="Center" VerticalOptions="Center"
+                                  Data="M 12,4 L 12,20 M 4,12 L 20,12" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="3"
+                                             VerticalOptions="Center">
+                            <Label Text="Lisa uus raamat"
+                                   FontSize="17"
+                                   FontAttributes="Bold"
+                                   TextColor="White" />
+                            <Label Text="Loo kataloogi uus pealkiri"
+                                   FontSize="12"
+                                   TextColor="#c8e0dc" />
+                        </VerticalStackLayout>
+
+                        <Path Grid.Column="2"
+                              Stroke="White" StrokeThickness="2.2"
+                              Fill="Transparent" Aspect="Uniform"
+                              HeightRequest="16" WidthRequest="16"
+                              VerticalOptions="Center"
+                              Data="M 8,6 L 14,12 L 8,18" />
+                    </Grid>
+                </Border>
+
+                <!-- ===== Quick actions — 2 цветных карточки ===== -->
+                <Grid x:Name="QuickActionsGrid"
+                      ColumnDefinitions="*,*"
+                      ColumnSpacing="12">
+
+                    <!-- Müügiaruanded -->
+                    <Border Grid.Column="0"
+                            StrokeShape="RoundRectangle 14"
+                            Stroke="Transparent"
+                            BackgroundColor="#fff5e8"
+                            Padding="18">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnViewReportsTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8">
+                            <Border StrokeShape="RoundRectangle 18"
+                                    Stroke="Transparent"
+                                    BackgroundColor="White"
+                                    WidthRequest="36"
+                                    HeightRequest="36"
+                                    Padding="0"
+                                    HorizontalOptions="Start">
+                                <Path Stroke="#993c1d" StrokeThickness="1.7"
+                                      Fill="Transparent" Aspect="Uniform"
+                                      HeightRequest="18" WidthRequest="18"
+                                      HorizontalOptions="Center" VerticalOptions="Center"
+                                      Data="M 4,20 L 4,4 M 4,20 L 20,20 M 8,16 L 8,12 M 12,16 L 12,8 M 16,16 L 16,10 M 20,16 L 20,6" />
+                            </Border>
+                            <Label Text="Muugiaruanded"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#1f2e28" />
+                            <Label Text="Statistika ja aruanded"
+                                   FontSize="11"
+                                   TextColor="#5f5e5a" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Uuendused -->
+                    <Border Grid.Column="1"
+                            StrokeShape="RoundRectangle 14"
+                            Stroke="Transparent"
+                            BackgroundColor="#f0eaf7"
+                            Padding="18">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnUpdatesTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8">
+                            <Border StrokeShape="RoundRectangle 18"
+                                    Stroke="Transparent"
+                                    BackgroundColor="White"
+                                    WidthRequest="36"
+                                    HeightRequest="36"
+                                    Padding="0"
+                                    HorizontalOptions="Start">
+                                <Path Stroke="#534ab7" StrokeThickness="1.7"
+                                      Fill="Transparent" Aspect="Uniform"
+                                      HeightRequest="18" WidthRequest="18"
+                                      HorizontalOptions="Center" VerticalOptions="Center"
+                                      Data="M 12,3 C 8,3 6,5 6,9 L 6,14 L 4,17 L 20,17 L 18,14 L 18,9 C 18,5 16,3 12,3 Z M 10,20 C 10,21 11,22 12,22 C 13,22 14,21 14,20" />
+                            </Border>
+                            <Label Text="Uuendused"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#1f2e28" />
+                            <Label Text="Teated ja uudised"
+                                   FontSize="11"
+                                   TextColor="#5f5e5a" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- ===== Меню настроек ===== -->
+                <Border StrokeShape="RoundRectangle 14"
+                        Stroke="#e5ebe7"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="0">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.05" />
+                    </Border.Shadow>
+
+                    <VerticalStackLayout>
+
+                        <Grid Padding="20,16" ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnSettingsTapped" />
+                            </Grid.GestureRecognizers>
+
+                            <Border Grid.Column="0"
+                                    StrokeShape="RoundRectangle 18"
+                                    Stroke="Transparent"
+                                    BackgroundColor="#e8f0ed"
+                                    WidthRequest="36"
+                                    HeightRequest="36"
+                                    Padding="0">
+                                <Path Stroke="#0f6e56" StrokeThickness="1.7"
+                                      Fill="Transparent" Aspect="Uniform"
+                                      HeightRequest="16" WidthRequest="16"
+                                      HorizontalOptions="Center" VerticalOptions="Center"
+                                      Data="M 12,15 C 13.7,15 15,13.7 15,12 C 15,10.3 13.7,9 12,9 C 10.3,9 9,10.3 9,12 C 9,13.7 10.3,15 12,15 Z M 19.4,15 L 21,16 L 20,18 L 18,17.4 M 4.6,15 L 3,16 L 4,18 L 6,17.4 M 19.4,9 L 21,8 L 20,6 L 18,6.6 M 4.6,9 L 3,8 L 4,6 L 6,6.6 M 9,4 L 8,2 L 16,2 L 15,4 M 9,20 L 8,22 L 16,22 L 15,20" />
+                            </Border>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <Label Text="Konto seaded"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="#1f2e28" />
+                                <Label Text="Muuda kasutajanime ja parooli"
+                                       FontSize="11"
+                                       TextColor="#98a8a0" />
+                            </VerticalStackLayout>
+
+                            <Path Grid.Column="2"
+                                  Stroke="#98a8a0" StrokeThickness="2"
+                                  Fill="Transparent" Aspect="Uniform"
+                                  HeightRequest="14" WidthRequest="14"
+                                  VerticalOptions="Center"
+                                  Data="M 8,6 L 14,12 L 8,18" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ===== Logi välja ===== -->
+                <Border StrokeShape="RoundRectangle 12"
+                        Stroke="#f4c1c1"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="0"
+                        HeightRequest="54"
+                        Margin="0,8,0,0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnLogoutTapped" />
+                    </Border.GestureRecognizers>
+
+                    <HorizontalStackLayout Spacing="10"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center">
+                        <Path Stroke="#d63030" StrokeThickness="1.8"
+                              Fill="Transparent" Aspect="Uniform"
+                              HeightRequest="16" WidthRequest="16"
+                              VerticalOptions="Center"
+                              Data="M 14,4 L 18,4 L 18,20 L 14,20 M 4,12 L 14,12 M 10,8 L 14,12 L 10,16" />
+                        <Label Text="Logi valja"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#d63030"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

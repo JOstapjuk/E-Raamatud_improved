@@ -33,11 +33,14 @@ namespace E_Raamatud.View
             _ = InitializeAfterLoad();
         }
 
-        // Summarize button handler
+        private async void OnBackTapped(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
+        }
+
         private async void OnSummarize(object sender, EventArgs e)
         {
             SummarizeButton.IsEnabled = false;
-            SummarizeButton.Text = "⏳";
 
             try
             {
@@ -49,18 +52,18 @@ namespace E_Raamatud.View
                     rawHtml: _htmlContent,
                     publishYear: 0);
 
-                await DisplayAlert($"📋 {_bookTitle}", summary + "\n\n⚠️ See kokkuvõte on loodud tehisintellekti poolt ja võib sisaldada ebatäpsusi.", "Sulge");
-
+                await DisplayAlert(_bookTitle,
+                    summary + "\n\nSee kokkuvote on loodud tehisintellekti poolt ja voib sisaldada ebatapsusi.",
+                    "Sulge");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Summarize error: {ex.Message}");
-                await DisplayAlert("Viga", "Kokkuvõtte loomine ebaõnnestus. Kontrolli API võtit ja internetiühendust.", "OK");
+                await DisplayAlert("Viga", "Kokkuvotte loomine ebaonnestus. Kontrolli API votit ja internetiuhendust.", "OK");
             }
             finally
             {
                 SummarizeButton.IsEnabled = true;
-                SummarizeButton.Text = "📋";
             }
         }
 
@@ -116,8 +119,8 @@ namespace E_Raamatud.View
 
         private string BuildHtml(string htmlContent, int fontSize, bool darkMode)
         {
-            var bgColor = darkMode ? "#1a1a1a" : "#f5f0e8";
-            var textColor = darkMode ? "#e0e0e0" : "#1a1a1a";
+            var bgColor = darkMode ? "#1a1a1a" : "#FAF8F3";
+            var textColor = darkMode ? "#e0e0e0" : "#1f2e28";
             var headingColor = darkMode ? "#cccccc" : "#2c2c2c";
 
             return $@"
@@ -135,8 +138,8 @@ namespace E_Raamatud.View
                     position: absolute;
                     left: -9999px;
                     top: 0;
-                    width: calc(100% - 40px);
-                    padding: 20px;
+                    width: calc(100% - 60px);
+                    padding: 30px;
                     font-family: Georgia, serif;
                     font-size: {fontSize}px;
                     line-height: 1.8;
@@ -145,7 +148,7 @@ namespace E_Raamatud.View
                 #page-display {{
                     width: 100%;
                     height: 100vh;
-                    padding: 20px;
+                    padding: 30px;
                     font-family: Georgia, serif;
                     font-size: {fontSize}px;
                     line-height: 1.8;
@@ -177,7 +180,6 @@ namespace E_Raamatud.View
                         pages = [];
                         var currentHtml = '';
 
-                        // Fallback: if no block elements found, use full innerHTML
                         if (elements.length === 0) {{
                             pages.push(hidden.innerHTML);
                             showPage(0);
@@ -189,7 +191,7 @@ namespace E_Raamatud.View
                         tempDiv.style.left       = '-9999px';
                         tempDiv.style.top        = '0';
                         tempDiv.style.width      = display.offsetWidth + 'px';
-                        tempDiv.style.padding    = '20px';
+                        tempDiv.style.padding    = '30px';
                         tempDiv.style.fontSize   = '{fontSize}px';
                         tempDiv.style.lineHeight = '1.8';
                         tempDiv.style.fontFamily = 'Georgia, serif';
@@ -255,8 +257,26 @@ namespace E_Raamatud.View
         private async void OnThemeToggle(object sender, EventArgs e)
         {
             _isDarkMode = !_isDarkMode;
+
+            // Меняем иконку темы (солнце/луна)
             MainThread.BeginInvokeOnMainThread(() =>
-                ThemeButton.Text = _isDarkMode ? "☀️" : "🌙");
+            {
+                if (_isDarkMode)
+                {
+                    // Солнце
+                    ThemeIcon.Data = (Microsoft.Maui.Controls.Shapes.Geometry)
+                        new Microsoft.Maui.Controls.Shapes.PathGeometryConverter()
+                        .ConvertFromInvariantString("M 12,4 L 12,2 M 12,22 L 12,20 M 4,12 L 2,12 M 22,12 L 20,12 M 6,6 L 4.5,4.5 M 19.5,19.5 L 18,18 M 6,18 L 4.5,19.5 M 19.5,4.5 L 18,6 M 12,8 C 9.8,8 8,9.8 8,12 C 8,14.2 9.8,16 12,16 C 14.2,16 16,14.2 16,12 C 16,9.8 14.2,8 12,8 Z");
+                }
+                else
+                {
+                    // Луна
+                    ThemeIcon.Data = (Microsoft.Maui.Controls.Shapes.Geometry)
+                        new Microsoft.Maui.Controls.Shapes.PathGeometryConverter()
+                        .ConvertFromInvariantString("M 21,12.8 C 20.5,17 17,20 13,20 C 8.6,20 5,16.4 5,12 C 5,8 8,4.5 12.2,4 C 11.4,5 11,6.4 11,8 C 11,11.3 13.7,14 17,14 C 18.6,14 20,13.6 21,12.8 Z");
+                }
+            });
+
             await ReloadWithSettings();
         }
 
@@ -307,6 +327,10 @@ namespace E_Raamatud.View
         private void UpdatePageLabel()
         {
             PageLabel.Text = $"{_currentPage + 1} / {_totalPages}";
+
+            double progress = _totalPages > 1 ? (double)_currentPage / (_totalPages - 1) : 0;
+            ReadingProgress.Progress = progress;
+            ProgressPercent.Text = $"{progress * 100:F0}%";
         }
 
         private async Task SaveProgress()

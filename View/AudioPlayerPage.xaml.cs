@@ -2,9 +2,11 @@ using CommunityToolkit.Maui.Views;
 using E_Raamatud.Model;
 using E_Raamatud.Services;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace E_Raamatud.View
@@ -19,6 +21,12 @@ namespace E_Raamatud.View
         private List<AudioChapter> _chapters = new();
         private int _currentChapterIndex = 0;
         private readonly int _raamatId;
+
+        // Иконки для кнопки play/pause
+        private static readonly Geometry PlayIcon = new PathGeometryConverter()
+            .ConvertFromInvariantString("M 7,5 L 7,19 L 19,12 Z") as Geometry;
+        private static readonly Geometry PauseIcon = new PathGeometryConverter()
+            .ConvertFromInvariantString("M 7,5 L 11,5 L 11,19 L 7,19 Z M 13,5 L 17,5 L 17,19 L 13,19 Z") as Geometry;
 
         public AudioPlayerPage(int raamatId, string title, string audiofail, string coverImage)
         {
@@ -37,7 +45,10 @@ namespace E_Raamatud.View
             _ = InitWithSavedProgressAsync();
         }
 
-        // Setup
+        private async void OnBackTapped(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
+        }
 
         private void SetupMediaElement()
         {
@@ -60,8 +71,6 @@ namespace E_Raamatud.View
             _progressTimer.AutoReset = true;
         }
 
-        //Progress Save / Restore
-
         private async Task InitWithSavedProgressAsync()
         {
             if (_chapters.Count == 0) return;
@@ -75,7 +84,6 @@ namespace E_Raamatud.View
                     if (saved != null && (saved.AudioChapter > 0 || saved.AudioPosition > 0))
                     {
                         LoadChapter(saved.AudioChapter, autoPlay: false);
-                        // Short delay to let the media source load before seeking
                         await Task.Delay(800);
                         if (saved.AudioPosition > 0)
                             _mediaElement.SeekTo(TimeSpan.FromSeconds(saved.AudioPosition));
@@ -124,8 +132,6 @@ namespace E_Raamatud.View
             }
         }
 
-        // Chapter Loading
-
         private void LoadChapter(int index, bool autoPlay = false)
         {
             if (index < 0 || index >= _chapters.Count) return;
@@ -134,7 +140,7 @@ namespace E_Raamatud.View
             var chapter = _chapters[index];
 
             ChapterLabel.Text = chapter.Title;
-            ChapterCountLabel.Text = $"Peatükk {index + 1} / {_chapters.Count}";
+            ChapterCountLabel.Text = $"PEATUKK {index + 1} / {_chapters.Count}";
             TimeLabel.Text = "0:00 / 0:00";
             SeekBar.Value = 0;
             ChapterListView.SelectedItem = chapter;
@@ -142,7 +148,7 @@ namespace E_Raamatud.View
             _mediaElement.Stop();
             _isPlaying = false;
             _progressTimer.Stop();
-            PlayPauseButton.Text = "▶";
+            SetPlayPauseIcon(false);
 
             var path = chapter.FilePath;
             if (System.IO.Path.IsPathRooted(path) && System.IO.File.Exists(path))
@@ -153,20 +159,24 @@ namespace E_Raamatud.View
             if (autoPlay)
             {
                 _mediaElement.Play();
-                PlayPauseButton.Text = "⏸";
+                SetPlayPauseIcon(true);
                 _progressTimer.Start();
                 _isPlaying = true;
             }
         }
 
-        // Playback Controls
+        private void SetPlayPauseIcon(bool playing)
+        {
+            if (PlayPauseIcon == null) return;
+            PlayPauseIcon.Data = playing ? PauseIcon : PlayIcon;
+        }
 
         private void OnPlayPause(object sender, EventArgs e)
         {
             if (_isPlaying)
             {
                 _mediaElement.Pause();
-                PlayPauseButton.Text = "▶";
+                SetPlayPauseIcon(false);
                 _progressTimer.Stop();
                 _isPlaying = false;
                 _ = SaveAudioProgressAsync();
@@ -174,7 +184,7 @@ namespace E_Raamatud.View
             else
             {
                 _mediaElement.Play();
-                PlayPauseButton.Text = "⏸";
+                SetPlayPauseIcon(true);
                 _progressTimer.Start();
                 _isPlaying = true;
             }
@@ -222,7 +232,7 @@ namespace E_Raamatud.View
                 }
                 else
                 {
-                    PlayPauseButton.Text = "▶";
+                    SetPlayPauseIcon(false);
                     _progressTimer.Stop();
                     _isPlaying = false;
                     SeekBar.Value = 0;
@@ -231,8 +241,6 @@ namespace E_Raamatud.View
                 }
             });
         }
-
-        // Chapter List
 
         private void OnToggleChapterList(object sender, EventArgs e)
         {
@@ -248,8 +256,6 @@ namespace E_Raamatud.View
             }
         }
 
-        // Seek Bar
-
         private void OnSeekBarDragStarted(object sender, EventArgs e) => _isDragging = true;
 
         private void OnSeekBarDragCompleted(object sender, EventArgs e)
@@ -261,26 +267,33 @@ namespace E_Raamatud.View
             _ = SaveAudioProgressAsync();
         }
 
-        // Speed
+        // Скорость
+        private void OnSpeedTapped075(object sender, EventArgs e) => SetSpeed(0.75, SpeedBtn075);
+        private void OnSpeedTapped100(object sender, EventArgs e) => SetSpeed(1.0, SpeedBtn100);
+        private void OnSpeedTapped150(object sender, EventArgs e) => SetSpeed(1.5, SpeedBtn150);
+        private void OnSpeedTapped200(object sender, EventArgs e) => SetSpeed(2.0, SpeedBtn200);
 
-        private void OnSpeedChanged(object sender, EventArgs e)
+        private void SetSpeed(double speed, Border activeBtn)
         {
-            if (sender is Button btn && double.TryParse(btn.CommandParameter?.ToString(),
-                System.Globalization.NumberStyles.Any,
-                System.Globalization.CultureInfo.InvariantCulture, out double speed))
+            _mediaElement.Speed = speed;
+
+            var allBtns = new[] { SpeedBtn075, SpeedBtn100, SpeedBtn150, SpeedBtn200 };
+            foreach (var b in allBtns)
             {
-                _mediaElement.Speed = speed;
-                foreach (var b in new[] { SpeedBtn075, SpeedBtn100, SpeedBtn150, SpeedBtn200 })
+                if (b == activeBtn)
                 {
-                    b.BackgroundColor = Color.FromArgb("#2a3a4a");
-                    b.TextColor = Color.FromArgb("#aaccdd");
+                    b.BackgroundColor = Color.FromArgb("#2d6e68");
+                    b.Stroke = Colors.Transparent;
+                    if (b.Content is Label lbl) lbl.TextColor = Colors.White;
                 }
-                btn.BackgroundColor = Color.FromArgb("#549082");
-                btn.TextColor = Colors.White;
+                else
+                {
+                    b.BackgroundColor = Colors.White;
+                    b.Stroke = Color.FromArgb("#d5dfd8");
+                    if (b.Content is Label lbl) lbl.TextColor = Color.FromArgb("#3a5c52");
+                }
             }
         }
-
-        // Timer Tick
 
         private void OnTimerTick(object sender, ElapsedEventArgs e)
         {
@@ -300,8 +313,6 @@ namespace E_Raamatud.View
                 catch (Exception ex) { Debug.WriteLine($"Timer error: {ex.Message}"); }
             });
         }
-
-        // Helpers
 
         private static string FormatTime(TimeSpan t) =>
             t.TotalHours >= 1

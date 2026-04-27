@@ -2,99 +2,262 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="E_Raamatud.View.BookReaderPage"
+             x:Name="BookReaderPageRef"
+             BackgroundColor="#FAF8F3"
+             Shell.NavBarIsVisible="False"
              Title="{Binding Title}">
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#406780" Offset="0.0" />
-            <GradientStop Color="#549082" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+
     <Grid RowDefinitions="Auto, Auto, *, Auto">
         <Grid.GestureRecognizers>
             <SwipeGestureRecognizer Direction="Left" Swiped="OnSwipeLeft" />
             <SwipeGestureRecognizer Direction="Right" Swiped="OnSwipeRight" />
         </Grid.GestureRecognizers>
 
-        <!-- Title -->
-        <Label Grid.Row="0"
-               Text="{Binding Title}"
-               FontSize="20"
-               FontAttributes="Bold"
-               TextColor="White"
-               HorizontalOptions="Center"
-               Margin="0,10,0,5" />
+        <!-- ============== ШАПКА (зелёный градиент) ============== -->
+        <Border Grid.Row="0"
+                StrokeShape="RoundRectangle 0,0,28,28"
+                Stroke="Transparent"
+                Padding="0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#2d6e68" Offset="0.0" />
+                    <GradientStop Color="#3a7d82" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
 
-        <!-- Font size + Dark mode + Summarize controls -->
-        <Grid Grid.Row="1"
-              ColumnDefinitions="Auto, Auto, *, Auto, Auto"
-              Padding="15,5"
-              BackgroundColor="#1e1e1e">
-            <Button Grid.Column="0"
-                    Text="A-"
-                    FontSize="16"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    Clicked="OnFontDecrease" />
-            <Button Grid.Column="1"
-                    Text="A+"
-                    FontSize="16"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    Clicked="OnFontIncrease" />
-            <Label Grid.Column="2"
-                   x:Name="FontSizeLabel"
-                   Text="18px"
-                   TextColor="#aaaaaa"
-                   FontSize="13"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center" />
-            <Button Grid.Column="3"
-                    x:Name="SummarizeButton"
-                    Text="📋"
-                    FontSize="20"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    Clicked="OnSummarize" />
-            <Button Grid.Column="4"
-                    x:Name="ThemeButton"
-                    Text="🌙"
-                    FontSize="20"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    Clicked="OnThemeToggle" />
-        </Grid>
+            <Grid Padding="20,46,20,22"
+                  ColumnDefinitions="Auto, *, Auto"
+                  ColumnSpacing="12">
 
-        <!-- WebView for book content — page counter rendered inside WebView -->
-        <WebView Grid.Row="2"
-                 x:Name="BookWebView" />
+                <!-- Назад -->
+                <Border Grid.Column="0"
+                        StrokeShape="RoundRectangle 20"
+                        Stroke="Transparent"
+                        BackgroundColor="#1f4f4a"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Padding="0"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Path Stroke="White" StrokeThickness="2"
+                          Fill="Transparent" Aspect="Uniform"
+                          HeightRequest="16" WidthRequest="16"
+                          HorizontalOptions="Center" VerticalOptions="Center"
+                          Data="M 14,6 L 8,12 L 14,18" />
+                </Border>
 
-        <!-- Bottom page controls -->
-        <Grid Grid.Row="3"
-              ColumnDefinitions="Auto, *, Auto"
-              Padding="20,10"
-              BackgroundColor="#2a2a2a">
-            <Button Grid.Column="0"
-                    Text="◀"
-                    FontSize="22"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    Clicked="OnPreviousPage" />
+                <!-- Название книги -->
+                <VerticalStackLayout Grid.Column="1"
+                                     Spacing="2"
+                                     VerticalOptions="Center">
+                    <Label Text="LOEN PRAEGU"
+                           FontSize="9"
+                           TextColor="#a8d4cf"
+                           CharacterSpacing="2"
+                           FontAttributes="Bold" />
+                    <Label Text="{Binding Title}"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           LineBreakMode="TailTruncation"
+                           MaxLines="1" />
+                </VerticalStackLayout>
 
+                <!-- Кнопка summary (ИИ-краткое содержание) -->
+                <Border Grid.Column="2"
+                        x:Name="SummarizeButton"
+                        StrokeShape="RoundRectangle 20"
+                        Stroke="Transparent"
+                        BackgroundColor="#d97a4a"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Padding="0"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSummarize" />
+                    </Border.GestureRecognizers>
+                    <Path x:Name="SummarizeIcon"
+                          Stroke="White" StrokeThickness="1.7"
+                          Fill="Transparent" Aspect="Uniform"
+                          HeightRequest="16" WidthRequest="16"
+                          HorizontalOptions="Center" VerticalOptions="Center"
+                          Data="M 4,4 L 16,4 L 16,8 L 20,8 L 20,20 L 8,20 L 8,16 L 4,16 Z M 4,4 L 4,16 L 8,16 M 16,4 L 20,8 M 11,11 L 17,11 M 11,15 L 17,15" />
+                </Border>
+            </Grid>
+        </Border>
 
-            <Label Grid.Column="1"
-                x:Name="PageLabel"
-                Text="1 / 1"
-                TextColor="White"
-                FontSize="16"
-                HorizontalOptions="Center"
-                VerticalOptions="Center" />
+        <!-- ============== ПАНЕЛЬ УПРАВЛЕНИЯ ============== -->
+        <Border Grid.Row="1"
+                StrokeShape="RoundRectangle 0"
+                Stroke="Transparent"
+                BackgroundColor="White"
+                Padding="20,12">
+            <Border.Shadow>
+                <Shadow Brush="#000000" Offset="0,2" Radius="6" Opacity="0.06" />
+            </Border.Shadow>
 
-            <Button Grid.Column="2"
-                    Text="▶"
-                    FontSize="22"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    Clicked="OnNextPage" />
-        </Grid>
+            <Grid ColumnDefinitions="Auto, Auto, *, Auto"
+                  ColumnSpacing="8">
+
+                <!-- A- -->
+                <Border Grid.Column="0"
+                        StrokeShape="RoundRectangle 8"
+                        Stroke="#d5dfd8"
+                        StrokeThickness="1"
+                        BackgroundColor="#fafbfa"
+                        WidthRequest="42"
+                        HeightRequest="38"
+                        Padding="0"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnFontDecrease" />
+                    </Border.GestureRecognizers>
+                    <Label Text="A−"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#2d6e68"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <!-- A+ -->
+                <Border Grid.Column="1"
+                        StrokeShape="RoundRectangle 8"
+                        Stroke="#d5dfd8"
+                        StrokeThickness="1"
+                        BackgroundColor="#fafbfa"
+                        WidthRequest="42"
+                        HeightRequest="38"
+                        Padding="0"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnFontIncrease" />
+                    </Border.GestureRecognizers>
+                    <Label Text="A+"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#2d6e68"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <!-- Размер шрифта -->
+                <Label Grid.Column="2"
+                       x:Name="FontSizeLabel"
+                       Text="18px"
+                       TextColor="#5f5e5a"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+
+                <!-- Тёмная/светлая тема -->
+                <Border Grid.Column="3"
+                        x:Name="ThemeButton"
+                        StrokeShape="RoundRectangle 8"
+                        Stroke="#d5dfd8"
+                        StrokeThickness="1"
+                        BackgroundColor="#fafbfa"
+                        WidthRequest="42"
+                        HeightRequest="38"
+                        Padding="0"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnThemeToggle" />
+                    </Border.GestureRecognizers>
+                    <Path x:Name="ThemeIcon"
+                          Stroke="#2d6e68" StrokeThickness="1.7"
+                          Fill="Transparent" Aspect="Uniform"
+                          HeightRequest="16" WidthRequest="16"
+                          HorizontalOptions="Center" VerticalOptions="Center"
+                          Data="M 21,12.8 C 20.5,17 17,20 13,20 C 8.6,20 5,16.4 5,12 C 5,8 8,4.5 12.2,4 C 11.4,5 11,6.4 11,8 C 11,11.3 13.7,14 17,14 C 18.6,14 20,13.6 21,12.8 Z" />
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- ============== СОДЕРЖИМОЕ КНИГИ ============== -->
+        <WebView Grid.Row="2" x:Name="BookWebView" />
+
+        <!-- ============== НИЖНЯЯ НАВИГАЦИЯ ============== -->
+        <Border Grid.Row="3"
+                StrokeShape="RoundRectangle 0"
+                Stroke="Transparent"
+                BackgroundColor="White"
+                Padding="20,14">
+            <Border.Shadow>
+                <Shadow Brush="#000000" Offset="0,-2" Radius="6" Opacity="0.06" />
+            </Border.Shadow>
+
+            <VerticalStackLayout Spacing="10">
+
+                <!-- Прогресс-бар -->
+                <Grid>
+                    <ProgressBar x:Name="ReadingProgress"
+                                 Progress="0"
+                                 ProgressColor="#2d6e68"
+                                 BackgroundColor="#e5ebe7"
+                                 HeightRequest="3" />
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto, *, Auto">
+
+                    <!-- Назад -->
+                    <Border Grid.Column="0"
+                            StrokeShape="RoundRectangle 22"
+                            Stroke="Transparent"
+                            BackgroundColor="#2d6e68"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            Padding="0">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPreviousPage" />
+                        </Border.GestureRecognizers>
+                        <Path Stroke="White" StrokeThickness="2"
+                              Fill="Transparent" Aspect="Uniform"
+                              HeightRequest="14" WidthRequest="14"
+                              HorizontalOptions="Center" VerticalOptions="Center"
+                              Data="M 14,6 L 8,12 L 14,18" />
+                    </Border>
+
+                    <!-- Прогресс текстом -->
+                    <VerticalStackLayout Grid.Column="1"
+                                         Spacing="1"
+                                         VerticalOptions="Center"
+                                         HorizontalOptions="Center">
+                        <Label x:Name="PageLabel"
+                               Text="1 / 1"
+                               TextColor="#1f2e28"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center" />
+                        <Label x:Name="ProgressPercent"
+                               Text="0%"
+                               TextColor="#98a8a0"
+                               FontSize="11"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+
+                    <!-- Вперёд -->
+                    <Border Grid.Column="2"
+                            StrokeShape="RoundRectangle 22"
+                            Stroke="Transparent"
+                            BackgroundColor="#2d6e68"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            Padding="0">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnNextPage" />
+                        </Border.GestureRecognizers>
+                        <Path Stroke="White" StrokeThickness="2"
+                              Fill="Transparent" Aspect="Uniform"
+                              HeightRequest="14" WidthRequest="14"
+                              HorizontalOptions="Center" VerticalOptions="Center"
+                              Data="M 10,6 L 16,12 L 10,18" />
+                    </Border>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
     </Grid>
 </ContentPage>

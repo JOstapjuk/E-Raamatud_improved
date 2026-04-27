@@ -1,6 +1,11 @@
-using E_Raamatud.Model;
+﻿using E_Raamatud.Model;
 using SQLite;
-using System.Collections.ObjectModel;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace E_Raamatud;
 
@@ -22,66 +27,97 @@ public partial class PurchaseHistoryPage : ContentPage
 
     private async Task LoadPurchaseHistoryAsync()
     {
-        if (SessionService.CurrentUser == null)
+        try
         {
-            System.Diagnostics.Debug.WriteLine("ERROR: SessionService.CurrentUser is null!");
-            await DisplayAlert("Viga", "Kasutaja pole sisse logitud.", "OK");
-            return;
-        }
-
-        System.Diagnostics.Debug.WriteLine($"Current User - ID: {SessionService.CurrentUser.Id}, Username: {SessionService.CurrentUser.Username}");
-
-        // Get only PURCHASED items for purchase history
-        var purchasedItems = await _db.Table<PurchaseBasket>()
-                               .Where(pb => pb.Kasutaja_ID == SessionService.CurrentUser.Id && pb.Status == "Purchased")
-                               .ToListAsync();
-
-        System.Diagnostics.Debug.WriteLine($"Purchased items found for user ID {SessionService.CurrentUser.Id}: {purchasedItems.Count}");
-
-        var displayList = new List<PurchaseDisplay>();
-
-        foreach (var basketItem in purchasedItems)
-        {
-            var book = await _db.Table<Raamat>()
-                                .Where(r => r.Raamat_ID == basketItem.Raamat_ID)
-                                .FirstOrDefaultAsync();
-
-            System.Diagnostics.Debug.WriteLine($"BasketItem Raamat_ID={basketItem.Raamat_ID}, Book found: {book?.Pealkiri ?? "null"}");
-
-            if (book != null)
+            if (SessionService.CurrentUser == null)
             {
+                ShowError("Kasutaja pole sisse logitud");
+                return;
+            }
+
+            // Создаём таблицы если их нет
+            await _db.CreateTableAsync<PurchaseBasket>();
+            await _db.CreateTableAsync<Raamat>();
+
+            var userId = SessionService.CurrentUser.Id;
+
+            var purchasedItems = await _db.Table<PurchaseBasket>()
+                                  .Where(pb => pb.Kasutaja_ID == userId && pb.Status == "Purchased")
+                                  .ToListAsync();
+
+            var displayList = new List<PurchaseDisplay>();
+
+            foreach (var basketItem in purchasedItems)
+            {
+                var book = await _db.Table<Raamat>()
+                                    .Where(r => r.Raamat_ID == basketItem.Raamat_ID)
+                                    .FirstOrDefaultAsync();
+
                 displayList.Add(new PurchaseDisplay
                 {
-                    BookTitle = book.Pealkiri,
+                    BookTitle = book?.Pealkiri ?? $"Raamat ID {basketItem.Raamat_ID}",
                     Quantity = basketItem.Kogus,
-                    TotalPrice = basketItem.L�ppu_hind,
+                    TotalPrice = basketItem.Lõppu_hind,
                     PurchaseDate = basketItem.PurchaseDate ?? DateTime.Now,
-                    BookImage = book.Pilt
+                    BookImage = book?.Pilt
                 });
+            }
+
+            displayList = displayList.OrderByDescending(x => x.PurchaseDate).ToList();
+
+            int count = displayList.Count;
+            decimal totalSpent = displayList.Sum(x => x.TotalPrice);
+
+            if (TotalOrdersLabel != null)
+                TotalOrdersLabel.Text = count.ToString();
+
+            if (TotalSpentLabel != null)
+                TotalSpentLabel.Text = $"€ {totalSpent:F2}";
+
+            if (OrdersCountLabel != null)
+            {
+                OrdersCountLabel.Text = count switch
+                {
+                    0 => "Pole veel oste",
+                    1 => "1 ost",
+                    _ => $"{count} ostu"
+                };
+            }
+
+            if (PurchasesList != null)
+                PurchasesList.ItemsSource = displayList;
+
+            if (count == 0)
+            {
+                if (EmptyView != null) EmptyView.IsVisible = true;
+                if (PurchasesScroll != null) PurchasesScroll.IsVisible = false;
+                if (ErrorView != null) ErrorView.IsVisible = false;
             }
             else
             {
-                displayList.Add(new PurchaseDisplay
-                {
-                    BookTitle = $"Raamat ID {basketItem.Raamat_ID} puudub",
-                    Quantity = basketItem.Kogus,
-                    TotalPrice = basketItem.L�ppu_hind,
-                    PurchaseDate = basketItem.PurchaseDate ?? DateTime.Now,
-                    BookImage = null
-                });
+                if (EmptyView != null) EmptyView.IsVisible = false;
+                if (PurchasesScroll != null) PurchasesScroll.IsVisible = true;
+                if (ErrorView != null) ErrorView.IsVisible = false;
             }
         }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"LoadPurchaseHistoryAsync error: {ex.Message}");
+            ShowError($"{ex.GetType().Name}: {ex.Message}");
+        }
+    }
 
-        // Sort by purchase date (newest first)
-        displayList = displayList.OrderByDescending(x => x.PurchaseDate).ToList();
+    private void ShowError(string message)
+    {
+        if (EmptyView != null) EmptyView.IsVisible = false;
+        if (PurchasesScroll != null) PurchasesScroll.IsVisible = false;
+        if (ErrorView != null) ErrorView.IsVisible = true;
+        if (ErrorMessage != null) ErrorMessage.Text = message;
+    }
 
-        PurchaseList.ItemsSource = displayList;
-
-        // Show/hide empty state
-        EmptyLabel.IsVisible = displayList.Count == 0;
-        PurchaseList.IsVisible = displayList.Count > 0;
-
-        System.Diagnostics.Debug.WriteLine($"Display list created with {displayList.Count} items");
+    private async void OnBackTapped(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
     }
 
     public class PurchaseDisplay

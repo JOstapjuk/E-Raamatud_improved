@@ -1,69 +1,332 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="E_Raamatud.BookDetailPage">
+             x:Class="E_Raamatud.BookDetailPage"
+             x:Name="BookDetailPageRef"
+             BackgroundColor="#FAF8F3"
+             SizeChanged="OnPageSizeChanged"
+             Shell.NavBarIsVisible="False">
 
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-            <GradientStop Color="#549082" Offset="0.0" />
-            <GradientStop Color="#406780" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+    <Grid RowDefinitions="Auto, *">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+        <!-- ============== ШАПКА ============== -->
+        <Border Grid.Row="0"
+                StrokeShape="RoundRectangle 0,0,28,28"
+                Stroke="Transparent"
+                Padding="0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#2d6e68" Offset="0.0" />
+                    <GradientStop Color="#3a7d82" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
 
-            <Label Text="{Binding Pealkiri}" 
-                   FontSize="30" 
-                   FontAttributes="Bold" 
-                   TextColor="White"
-                   FontFamily="TimesNewRoman" />
+            <Grid Padding="24,50,24,28"
+                  ColumnDefinitions="Auto, *, Auto">
 
-            <Label Text="{Binding Zanr_Nimi}"
-                   FontSize="18"
-                   TextColor="#d0d0d0"
-                   FontFamily="TimesNewRoman" />
+                <Border Grid.Column="0"
+                        StrokeShape="RoundRectangle 20"
+                        Stroke="Transparent"
+                        BackgroundColor="#1f4f4a"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Padding="0"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Path Stroke="White" StrokeThickness="2"
+                          Fill="Transparent" Aspect="Uniform"
+                          HeightRequest="16" WidthRequest="16"
+                          HorizontalOptions="Center" VerticalOptions="Center"
+                          Data="M 14,6 L 8,12 L 14,18" />
+                </Border>
 
-            <Frame HasShadow="True" 
-                   BackgroundColor="Transparent" 
-                   CornerRadius="10"
-                   HorizontalOptions="Center"
-                   Padding="0"
-                   Margin="0,10,0,10">
-                <Image Source="{Binding Pilt}" 
-                       HeightRequest="300" 
-                       WidthRequest="200" 
-                       Aspect="AspectFill" />
-            </Frame>
+                <Label Grid.Column="1"
+                       Text="Raamatu detailid"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center" />
 
-            <Label Text="{Binding Hind, StringFormat='€ {0:F2}'}"
-                   FontSize="22"
-                   FontAttributes="Bold"
-                   TextColor="White"
-                   FontFamily="TimesNewRoman" />
+                <Border Grid.Column="2"
+                        StrokeShape="RoundRectangle 20"
+                        Stroke="Transparent"
+                        BackgroundColor="#d97a4a"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Padding="0"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCartTapped" />
+                    </Border.GestureRecognizers>
+                    <Path Stroke="White" StrokeThickness="1.7"
+                          Fill="Transparent" Aspect="Uniform"
+                          HeightRequest="18" WidthRequest="18"
+                          HorizontalOptions="Center" VerticalOptions="Center"
+                          Data="M 3,3 L 5,3 L 6,6 M 6,6 L 8,14 L 18,14 L 20,7 L 7,7 M 9,19 C 9,19.6 8.6,20 8,20 C 7.4,20 7,19.6 7,19 C 7,18.4 7.4,18 8,18 C 8.6,18 9,18.4 9,19 Z M 18,19 C 18,19.6 17.6,20 17,20 C 16.4,20 16,19.6 16,19 C 16,18.4 16.4,18 17,18 C 17.6,18 18,18.4 18,19 Z" />
+                </Border>
+            </Grid>
+        </Border>
 
-            <Label Text="{Binding Kirjeldus}" 
-                   FontSize="16" 
-                   TextColor="White"
-                   FontFamily="TimesNewRoman" />
+        <!-- ============== КОНТЕНТ ============== -->
+        <ScrollView Grid.Row="1">
+            <Grid x:Name="ContentRoot"
+                  Padding="32,28,32,32"
+                  RowSpacing="28"
+                  ColumnSpacing="36">
 
-            <Button Text="Lisa ostukorvi"
-                Command="{Binding AddToBasketCommand}"
-                BackgroundColor="#3E7C68"
-                TextColor="White"
-                FontAttributes="Bold"
-                FontSize="20"
-                CornerRadius="12"
-                HeightRequest="50"
-                Margin="0,20,0,0"
-                Padding="20,10" />
+                <!-- ===== ОБЛОЖКА ===== -->
+                <Border x:Name="CoverBorder"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="Transparent"
+                        WidthRequest="320"
+                        HeightRequest="460"
+                        Padding="0"
+                        VerticalOptions="Start"
+                        HorizontalOptions="Start">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,8" Radius="20" Opacity="0.18" />
+                    </Border.Shadow>
+                    <Image Source="{Binding Pilt}"
+                           Aspect="AspectFill" />
+                </Border>
 
-            <Label Text="{Binding StatusMessage}"
-                TextColor="LightCoral"
-                FontAttributes="Italic"
-                FontFamily="TimesNewRoman" />
+                <!-- ===== ИНФОРМАЦИЯ ===== -->
+                <VerticalStackLayout x:Name="InfoPanel"
+                                     Spacing="14"
+                                     VerticalOptions="Start">
 
-        </VerticalStackLayout>
-    </ScrollView>
+                    <!-- Бейдж "куплено" (показывается если IsAlreadyOwned == true) -->
+                    <Border x:Name="OwnedBadge"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="Transparent"
+                            BackgroundColor="#0f6e56"
+                            Padding="14,8"
+                            HorizontalOptions="Start"
+                            IsVisible="False">
+                        <HorizontalStackLayout Spacing="8">
+                            <Path Stroke="White" StrokeThickness="2.2"
+                                  Fill="Transparent" Aspect="Uniform"
+                                  HeightRequest="14" WidthRequest="14"
+                                  VerticalOptions="Center"
+                                  Data="M 4,12 L 9,17 L 20,6" />
+                            <Label Text="Sul on see raamat juba olemas"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
 
+                    <!-- Бейдж жанра -->
+                    <Border StrokeShape="RoundRectangle 6"
+                            Stroke="Transparent"
+                            BackgroundColor="#e8f0ed"
+                            Padding="12,5"
+                            HorizontalOptions="Start">
+                        <Label Text="{Binding Zanr_Nimi}"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#0f6e56"
+                               CharacterSpacing="1.5" />
+                    </Border>
+
+                    <!-- Название -->
+                    <Label x:Name="TitleLabel"
+                           Text="{Binding Pealkiri}"
+                           FontSize="32"
+                           FontAttributes="Bold"
+                           TextColor="#1f2e28"
+                           LineHeight="1.15" />
+
+                    <!-- Рейтинг + статус -->
+                    <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                        <HorizontalStackLayout Spacing="2">
+                            <Label Text="★" TextColor="#d97a4a" FontSize="16" />
+                            <Label Text="★" TextColor="#d97a4a" FontSize="16" />
+                            <Label Text="★" TextColor="#d97a4a" FontSize="16" />
+                            <Label Text="★" TextColor="#d97a4a" FontSize="16" />
+                            <Label Text="★" TextColor="#d97a4a" FontSize="16" />
+                        </HorizontalStackLayout>
+                        <Label Text="5.0"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#1f2e28"
+                               VerticalOptions="Center" />
+                        <Label Text="•"
+                               FontSize="13"
+                               TextColor="#98a8a0"
+                               VerticalOptions="Center" />
+                        <Label Text="Hetkel saadaval"
+                               FontSize="13"
+                               TextColor="#0f6e56"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <BoxView HeightRequest="1"
+                             Color="#e5ebe7"
+                             HorizontalOptions="Fill"
+                             Margin="0,4,0,4" />
+
+                    <!-- ===== БЛОК "Цена + кнопки" (адаптивный) ===== -->
+                    <Grid x:Name="PriceActionGrid"
+                          ColumnDefinitions="Auto, *"
+                          ColumnSpacing="20"
+                          RowSpacing="14"
+                          VerticalOptions="Center">
+
+                        <VerticalStackLayout Grid.Column="0" Grid.Row="0" Spacing="2">
+                            <Label Text="HIND"
+                                   FontSize="10"
+                                   TextColor="#98a8a0"
+                                   CharacterSpacing="2"
+                                   FontAttributes="Bold" />
+                            <Label Text="{Binding Hind, StringFormat='€ {0:F2}'}"
+                                   FontSize="28"
+                                   FontAttributes="Bold"
+                                   TextColor="#2d6e68" />
+                        </VerticalStackLayout>
+
+                        <HorizontalStackLayout x:Name="ActionButtons"
+                                               Grid.Column="1" Grid.Row="0"
+                                               Spacing="10"
+                                               HorizontalOptions="End"
+                                               VerticalOptions="End">
+
+                            <!-- Wishlist (тоггл-кнопка) -->
+                            <Border x:Name="WishlistBorder"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="#d5dfd8"
+                                    StrokeThickness="1"
+                                    BackgroundColor="White"
+                                    WidthRequest="52"
+                                    HeightRequest="52"
+                                    Padding="0">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnWishlistTapped" />
+                                </Border.GestureRecognizers>
+                                <Path x:Name="HeartIcon"
+                                      Stroke="#2d6e68" StrokeThickness="1.8"
+                                      Fill="Transparent" Aspect="Uniform"
+                                      HeightRequest="20" WidthRequest="20"
+                                      HorizontalOptions="Center" VerticalOptions="Center"
+                                      Data="M 12,21 C 12,21 4,14 4,8.5 C 4,6 6,4 8.5,4 C 10.5,4 11.5,5 12,6 C 12.5,5 13.5,4 15.5,4 C 18,4 20,6 20,8.5 C 20,14 12,21 12,21 Z" />
+                            </Border>
+
+                            <Button x:Name="BuyButton"
+                                    Text="Lisa ostukorvi"
+                                    Command="{Binding AddToBasketCommand}"
+                                    BackgroundColor="#2d6e68"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    CornerRadius="10"
+                                    HeightRequest="52"
+                                    MinimumWidthRequest="180" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <!-- Status message -->
+                    <Label Text="{Binding StatusMessage}"
+                           TextColor="#0f6e56"
+                           FontAttributes="Bold"
+                           FontSize="13"
+                           HorizontalOptions="Start" />
+
+                    <BoxView HeightRequest="1"
+                             Color="#e5ebe7"
+                             HorizontalOptions="Fill"
+                             Margin="0,8,0,4" />
+
+                    <!-- Описание -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="KIRJELDUS"
+                               FontSize="10"
+                               TextColor="#98a8a0"
+                               CharacterSpacing="2"
+                               FontAttributes="Bold" />
+                        <Label Text="{Binding Kirjeldus}"
+                               FontSize="14"
+                               TextColor="#3a5c52"
+                               LineHeight="1.55" />
+                    </VerticalStackLayout>
+
+                    <!-- ===== ИНФО-БЛОК (адаптивный) ===== -->
+                    <Grid x:Name="InfoBlocksGrid"
+                          ColumnDefinitions="*,*,*"
+                          ColumnSpacing="10"
+                          RowSpacing="10"
+                          Margin="0,16,0,0">
+
+                        <Border Grid.Column="0" Grid.Row="0"
+                                StrokeShape="RoundRectangle 10"
+                                Stroke="Transparent"
+                                BackgroundColor="#e8f0ed"
+                                Padding="14,12">
+                            <VerticalStackLayout Spacing="4">
+                                <Path Stroke="#0f6e56" StrokeThickness="1.7"
+                                      Fill="Transparent" Aspect="Uniform"
+                                      HeightRequest="20" WidthRequest="20"
+                                      HorizontalOptions="Start"
+                                      Data="M 3,7 L 14,7 L 14,17 L 3,17 Z M 14,10 L 19,10 L 21,13 L 21,17 L 14,17 M 7,17 C 7,18.1 6.1,19 5,19 C 3.9,19 3,18.1 3,17 M 19,17 C 19,18.1 18.1,19 17,19 C 15.9,19 15,18.1 15,17" />
+                                <Label Text="Kohaletoimetamine"
+                                       FontSize="11"
+                                       FontAttributes="Bold"
+                                       TextColor="#1f2e28" />
+                                <Label Text="1-3 tööpäeva"
+                                       FontSize="10"
+                                       TextColor="#5f5e5a" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="1" Grid.Row="0"
+                                StrokeShape="RoundRectangle 10"
+                                Stroke="Transparent"
+                                BackgroundColor="#fff5e8"
+                                Padding="14,12">
+                            <VerticalStackLayout Spacing="4">
+                                <Path Stroke="#993c1d" StrokeThickness="1.7"
+                                      Fill="Transparent" Aspect="Uniform"
+                                      HeightRequest="20" WidthRequest="20"
+                                      HorizontalOptions="Start"
+                                      Data="M 12,3 L 4,6 L 4,12 C 4,16 7,20 12,21 C 17,20 20,16 20,12 L 20,6 Z M 9,12 L 11,14 L 15,10" />
+                                <Label Text="Turvaline ost"
+                                       FontSize="11"
+                                       FontAttributes="Bold"
+                                       TextColor="#1f2e28" />
+                                <Label Text="SSL krüpteering"
+                                       FontSize="10"
+                                       TextColor="#5f5e5a" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="2" Grid.Row="0"
+                                StrokeShape="RoundRectangle 10"
+                                Stroke="Transparent"
+                                BackgroundColor="#f0eaf7"
+                                Padding="14,12">
+                            <VerticalStackLayout Spacing="4">
+                                <Path Stroke="#534ab7" StrokeThickness="1.7"
+                                      Fill="Transparent" Aspect="Uniform"
+                                      HeightRequest="20" WidthRequest="20"
+                                      HorizontalOptions="Start"
+                                      Data="M 4,12 C 4,7.6 7.6,4 12,4 C 14.5,4 16.7,5.2 18,7 M 20,4 L 20,8 L 16,8 M 20,12 C 20,16.4 16.4,20 12,20 C 9.5,20 7.3,18.8 6,17 M 4,20 L 4,16 L 8,16" />
+                                <Label Text="14 päeva tagastus"
+                                       FontSize="11"
+                                       FontAttributes="Bold"
+                                       TextColor="#1f2e28" />
+                                <Label Text="Lihtne ja kiire"
+                                       FontSize="10"
+                                       TextColor="#5f5e5a" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Grid>
+        </ScrollView>
+    </Grid>
 </ContentPage>
