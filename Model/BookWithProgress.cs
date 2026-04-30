@@ -12,6 +12,9 @@ namespace E_Raamatud.Model
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
 
+        public string PiltOrPlaceholder =>
+            string.IsNullOrWhiteSpace(Pilt) ? "placeholder_cover.png" : Pilt;
+
         public double ProgressValue =>
             TotalPages > 1 ? (double)CurrentPage / (TotalPages - 1) : 0;
 

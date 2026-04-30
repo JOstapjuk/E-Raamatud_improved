@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Maui;
 using E_Raamatud.Services;
+using Maui.PDFView;
 using Microsoft.Extensions.Logging;
 
 namespace E_Raamatud;
-
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
@@ -13,6 +13,7 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
             .UseMauiCommunityToolkitMediaElement()
+            .UseMauiPdfView()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -21,9 +22,7 @@ public static class MauiProgram
 
 #if DEBUG
         builder.Logging.AddDebug();
-
 #endif
-
         return builder.Build();
     }
 }

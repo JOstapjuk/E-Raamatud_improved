@@ -2,7 +2,6 @@
 using E_Raamatud.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text.Json;
 using System.Windows.Input;
 
 namespace E_Raamatud.ViewModel
@@ -11,6 +10,7 @@ namespace E_Raamatud.ViewModel
     {
         private Genre _selectedGenre;
         private string _searchText;
+        private string _selectedFileType = "Kõik";
         private List<Raamat> _allBooks = new();
         private List<Genre> _allGenres = new();
 
@@ -19,6 +19,7 @@ namespace E_Raamatud.ViewModel
 
         public ICommand SelectGenreCommand { get; }
         public ICommand SearchCommand { get; }
+        public ICommand SelectFileTypeCommand { get; }
 
         public Genre SelectedGenre
         {
@@ -34,6 +35,17 @@ namespace E_Raamatud.ViewModel
             }
         }
 
+        public string SelectedFileType
+        {
+            get => _selectedFileType;
+            set
+            {
+                _selectedFileType = value;
+                OnPropertyChanged(nameof(SelectedFileType));
+                FilterBooks();
+            }
+        }
+
         public string SearchText
         {
             get => _searchText;
@@ -43,6 +55,7 @@ namespace E_Raamatud.ViewModel
         public BookViewModel()
         {
             SelectGenreCommand = new Command<Genre>(genre => SelectedGenre = genre);
+            SelectFileTypeCommand = new Command<string>(ft => SelectedFileType = ft);
             SearchCommand = new Command<string>(searchTerm =>
             {
                 SearchText = searchTerm;
@@ -54,58 +67,63 @@ namespace E_Raamatud.ViewModel
 
         private async Task InitAsync()
         {
+            int userId = SessionService.CurrentUser?.Id ?? 0;
+            if (userId == 0) return;
+
             Genres.Clear();
-            Genres.Add(new Genre { Zanr_ID = 0, Nimetus = "Kõik raamatud", Kirjeldus = "Kuva kõik raamatud" });
+            Genres.Add(new Genre { Zanr_ID = 0, Nimetus = "Kõik raamatud" });
 
             _allGenres = await DatabaseService.Instance.GetGenresAsync();
-
-            // Seed from JSON if DB is empty
-            if (_allGenres.Count == 0)
-            {
-                await SeedGenresFromJsonAsync();
-                _allGenres = await DatabaseService.Instance.GetGenresAsync();
-            }
-
-            _allBooks = await DatabaseService.Instance.GetBooksAsync();
-
-            if (_allBooks.Count == 0)
-            {
-                await SeedBooksFromJsonAsync();
-                _allBooks = await DatabaseService.Instance.GetBooksAsync();
-            }
-
             foreach (var genre in _allGenres)
                 Genres.Add(genre);
 
-            LoadAllBooks();
+            _allBooks = await DatabaseService.Instance.GetBooksByUserAsync(userId);
+
+            await LoadAllBooksWithProgress(userId);
         }
 
-        private async Task SeedGenresFromJsonAsync()
-        {
-            using var stream = await FileSystem.OpenAppPackageFileAsync("genres.json");
-            using var reader = new StreamReader(stream);
-            var json = await reader.ReadToEndAsync();
-            var genres = JsonSerializer.Deserialize<List<Genre>>(json);
-            if (genres != null)
-                foreach (var g in genres)
-                    await DatabaseService.Instance.InsertGenreAsync(g);
-        }
-
-        private async Task SeedBooksFromJsonAsync()
-        {
-            using var stream = await FileSystem.OpenAppPackageFileAsync("books.json");
-            using var reader = new StreamReader(stream);
-            var json = await reader.ReadToEndAsync();
-            var books = JsonSerializer.Deserialize<List<Raamat>>(json);
-            if (books != null)
-                foreach (var b in books)
-                    await DatabaseService.Instance.InsertBookAsync(b);
-        }
-
-        private void LoadAllBooks()
+        private async Task LoadAllBooksWithProgress(int userId)
         {
             Books.Clear();
             foreach (var b in _allBooks)
+            {
+                var genre = _allGenres.FirstOrDefault(g => g.Zanr_ID == b.Zanr_ID);
+                var progress = await DatabaseService.Instance.GetReadingProgressAsync(userId, b.Raamat_ID);
+                Books.Add(new BookWithGenre
+                {
+                    Raamat_ID = b.Raamat_ID,
+                    Pealkiri = b.Pealkiri,
+                    Kirjeldus = b.Kirjeldus,
+                    Zanr_Nimi = genre?.Nimetus ?? "Tundmatu",
+                    Pilt = b.Pilt,
+                    Tekstifail = b.Tekstifail,
+                    Audiofail = b.Audiofail,
+                    CurrentPage = progress?.CurrentPage ?? 0,
+                    TotalPages = progress?.TotalPages ?? 0
+                });
+            }
+        }
+
+        private void FilterBooks()
+        {
+            var source = _allBooks.AsEnumerable();
+
+            if (SelectedGenre != null && SelectedGenre.Zanr_ID != 0)
+                source = source.Where(b => b.Zanr_ID == SelectedGenre.Zanr_ID);
+
+            source = SelectedFileType switch
+            {
+                "EPUB" => source.Where(b => b.Tekstifail != null &&
+                    b.Tekstifail.ToLower().Contains(".epub")),
+                "PDF" => source.Where(b => b.Tekstifail != null &&
+                    b.Tekstifail.ToLower().Contains(".pdf")),
+                "TXT" => source.Where(b => b.Tekstifail != null &&
+                    b.Tekstifail.ToLower().Contains(".txt")),
+                _ => source
+            };
+
+            Books.Clear();
+            foreach (var b in source)
             {
                 var genre = _allGenres.FirstOrDefault(g => g.Zanr_ID == b.Zanr_ID);
                 Books.Add(new BookWithGenre
@@ -113,32 +131,10 @@ namespace E_Raamatud.ViewModel
                     Raamat_ID = b.Raamat_ID,
                     Pealkiri = b.Pealkiri,
                     Kirjeldus = b.Kirjeldus,
-                    Hind = b.Hind,
                     Zanr_Nimi = genre?.Nimetus ?? "Tundmatu",
-                    Pilt = b.Pilt
-                });
-            }
-        }
-
-        private void FilterBooks()
-        {
-            if (SelectedGenre == null || SelectedGenre.Zanr_ID == 0)
-            {
-                LoadAllBooks();
-                return;
-            }
-
-            Books.Clear();
-            foreach (var b in _allBooks.Where(b => b.Zanr_ID == SelectedGenre.Zanr_ID))
-            {
-                Books.Add(new BookWithGenre
-                {
-                    Raamat_ID = b.Raamat_ID,
-                    Pealkiri = b.Pealkiri,
-                    Kirjeldus = b.Kirjeldus,
-                    Hind = b.Hind,
-                    Zanr_Nimi = SelectedGenre.Nimetus,
-                    Pilt = b.Pilt
+                    Pilt = b.Pilt,
+                    Tekstifail = b.Tekstifail,
+                    Audiofail = b.Audiofail
                 });
             }
         }
@@ -147,9 +143,21 @@ namespace E_Raamatud.ViewModel
         {
             if (string.IsNullOrWhiteSpace(searchTerm)) { FilterBooks(); return; }
 
-            var source = (SelectedGenre != null && SelectedGenre.Zanr_ID != 0)
-                ? _allBooks.Where(b => b.Zanr_ID == SelectedGenre.Zanr_ID)
-                : _allBooks;
+            var source = _allBooks.AsEnumerable();
+
+            if (SelectedGenre != null && SelectedGenre.Zanr_ID != 0)
+                source = source.Where(b => b.Zanr_ID == SelectedGenre.Zanr_ID);
+
+            source = SelectedFileType switch
+            {
+                "EPUB" => source.Where(b => b.Tekstifail != null &&
+                    b.Tekstifail.ToLower().Contains(".epub")),
+                "PDF" => source.Where(b => b.Tekstifail != null &&
+                    b.Tekstifail.ToLower().Contains(".pdf")),
+                "TXT" => source.Where(b => b.Tekstifail != null &&
+                    b.Tekstifail.ToLower().Contains(".txt")),
+                _ => source
+            };
 
             Books.Clear();
             foreach (var b in source)
@@ -160,13 +168,14 @@ namespace E_Raamatud.ViewModel
                     Raamat_ID = b.Raamat_ID,
                     Pealkiri = b.Pealkiri,
                     Kirjeldus = b.Kirjeldus,
-                    Hind = b.Hind,
                     Zanr_Nimi = genre?.Nimetus ?? "Tundmatu",
-                    Pilt = b.Pilt
+                    Pilt = b.Pilt,
+                    Tekstifail = b.Tekstifail,
+                    Audiofail = b.Audiofail
                 };
-                if (bwg.Pealkiri.ToLower().Contains(searchTerm.ToLower()) ||
-                    bwg.Kirjeldus.ToLower().Contains(searchTerm.ToLower()) ||
-                    bwg.Zanr_Nimi.ToLower().Contains(searchTerm.ToLower()))
+                if (bwg.Pealkiri?.ToLower().Contains(searchTerm.ToLower()) == true ||
+                    bwg.Kirjeldus?.ToLower().Contains(searchTerm.ToLower()) == true ||
+                    bwg.Zanr_Nimi?.ToLower().Contains(searchTerm.ToLower()) == true)
                     Books.Add(bwg);
             }
         }

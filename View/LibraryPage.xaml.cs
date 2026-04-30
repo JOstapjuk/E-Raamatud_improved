@@ -1,14 +1,8 @@
 using E_Raamatud.Model;
+using E_Raamatud.Services;
 using E_Raamatud.ViewModel;
 using Microsoft.Maui.Controls;
-using System;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using VersOne.Epub;
 
 namespace E_Raamatud.View
 {
@@ -21,29 +15,38 @@ namespace E_Raamatud.View
             InitializeComponent();
             _vm = new LibraryViewModel();
             BindingContext = _vm;
-
-            // Подписываемся на изменения коллекции, чтобы обновить UI когда книги загрузятся
-            _vm.LibraryBooks.CollectionChanged += LibraryBooks_CollectionChanged;
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            BindBooksCollection();
+
+            _vm.LibraryBooks.CollectionChanged -= LibraryBooks_CollectionChanged;
+
+            _ = ReloadAndBind();
+        }
+
+        private async Task ReloadAndBind()
+        {
+            await _vm.ReloadAsync();
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                BindBooksCollection();
+                _vm.LibraryBooks.CollectionChanged -= LibraryBooks_CollectionChanged;
+                _vm.LibraryBooks.CollectionChanged += LibraryBooks_CollectionChanged;
+            });
         }
 
         private void LibraryBooks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            // Обновляем UI на главном потоке
             MainThread.BeginInvokeOnMainThread(BindBooksCollection);
         }
 
         private void BindBooksCollection()
         {
-            if (_vm == null || BooksList == null)
-                return;
+            if (_vm == null || BooksList == null) return;
 
-            // Привязываем коллекцию (привязка идемпотентна - повторное присваивание не страшно)
             if (BooksList.ItemsSource != _vm.LibraryBooks)
                 BooksList.ItemsSource = _vm.LibraryBooks;
 
@@ -51,7 +54,7 @@ namespace E_Raamatud.View
 
             BooksCountLabel.Text = count switch
             {
-                0 => "Sinu raamatukogu on tühi",
+                0 => "Hetkel ei loe ühtegi raamatut",
                 1 => "1 raamat",
                 _ => $"{count} raamatut"
             };
@@ -60,145 +63,95 @@ namespace E_Raamatud.View
             BooksScroll.IsVisible = count > 0;
         }
 
-        private void OnPageSizeChanged(object sender, EventArgs e)
-        {
-            // адаптив можно добавить позже
-        }
-
         private async void OnBackTapped(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
         }
 
-        // ===== Фильтры =====
-        private void OnFilterAllTapped(object sender, EventArgs e)
-        {
-            SetActiveFilter(FilterAll);
-            BooksList.ItemsSource = _vm.LibraryBooks;
-        }
-
-        private void OnFilterUnreadTapped(object sender, EventArgs e)
-        {
-            SetActiveFilter(FilterUnread);
-            BooksList.ItemsSource = _vm.LibraryBooks
-                .Where(b => b.CurrentPage == 0).ToList();
-        }
-
-        private void OnFilterReadingTapped(object sender, EventArgs e)
-        {
-            SetActiveFilter(FilterReading);
-            BooksList.ItemsSource = _vm.LibraryBooks
-                .Where(b => b.CurrentPage > 0 && b.CurrentPage < b.TotalPages).ToList();
-        }
-
-        private void OnFilterAudioTapped(object sender, EventArgs e)
-        {
-            SetActiveFilter(FilterAudio);
-            BooksList.ItemsSource = _vm.LibraryBooks
-                .Where(b => !string.IsNullOrWhiteSpace(b.Audiofail)).ToList();
-        }
-
-        private void SetActiveFilter(Border active)
-        {
-            var allFilters = new[] { FilterAll, FilterUnread, FilterReading, FilterAudio };
-            foreach (var f in allFilters)
-            {
-                if (f == active)
-                {
-                    f.BackgroundColor = Colors.White;
-                    f.Stroke = Colors.Transparent;
-                    if (f.Content is Label lbl) lbl.TextColor = Color.FromArgb("#2d6e68");
-                }
-                else
-                {
-                    f.BackgroundColor = Colors.Transparent;
-                    f.Stroke = Color.FromArgb("#ffffff60");
-                    if (f.Content is Label lbl) lbl.TextColor = Colors.White;
-                }
-            }
-        }
-
-        // ===== Чтение =====
-        private async void OnReadTapped(object sender, EventArgs e)
+        private async void OnBookTapped(object sender, EventArgs e)
         {
             var view = sender as BindableObject;
             var book = view?.BindingContext as BookWithProgress;
+            if (book == null) return;
 
-            if (book == null || string.IsNullOrWhiteSpace(book.Tekstifail))
+            var raamat = new Raamat
             {
-                await DisplayAlert("Viga", "Raamatul puudub tekstifail.", "OK");
-                return;
-            }
+                Raamat_ID = book.Raamat_ID,
+                Pealkiri = book.Pealkiri,
+                Kirjeldus = book.Kirjeldus,
+                Pilt = book.Pilt,
+                Tekstifail = book.Tekstifail,
+                Audiofail = book.Audiofail
+            };
 
-            try
+            await Navigation.PushAsync(new BookDetailPage(raamat, ""));
+        }
+
+        private async void OnBookMenuTapped(object sender, EventArgs e)
+        {
+            var border = sender as BindableObject;
+            var book = border?.BindingContext as BookWithProgress;
+            if (book == null) return;
+
+            var ext = System.IO.Path.GetExtension(book.Tekstifail)?.ToLowerInvariant();
+            bool isEpub = ext == ".epub" ||
+                          (book.Tekstifail?.ToLower().Contains(".epub") == true);
+
+            var options = new List<string> { "Eemalda lugemisloendist" };
+            if (isEpub) options.Add("Märgi loetuks");
+
+            string action = await DisplayActionSheet(
+                book.Pealkiri, "Tühista", null, options.ToArray());
+
+            if (action == "Eemalda lugemisloendist")
             {
-                Stream epubStream;
+                bool confirm = await DisplayAlert(
+                    "Eemalda",
+                    $"Kas soovid \"{book.Pealkiri}\" lugemisloendist eemaldada?",
+                    "Eemalda", "Tühista");
 
-                if (Path.IsPathRooted(book.Tekstifail) && File.Exists(book.Tekstifail))
-                    epubStream = File.OpenRead(book.Tekstifail);
-                else
-                    epubStream = await FileSystem.OpenAppPackageFileAsync(book.Tekstifail);
-
-                var epubBook = await EpubReader.ReadBookAsync(epubStream);
-
-                var chapters = epubBook.ReadingOrder.Select(item =>
+                if (confirm)
                 {
-                    var content = item.Content ?? "";
-                    var bodyStart = content.IndexOf("<body", StringComparison.OrdinalIgnoreCase);
-                    var bodyEnd = content.LastIndexOf("</body>", StringComparison.OrdinalIgnoreCase);
-                    if (bodyStart >= 0 && bodyEnd >= 0)
+                    int userId = SessionService.CurrentUser?.Id ?? 0;
+                    var progress = await DatabaseService.Instance
+                        .GetReadingProgressAsync(userId, book.Raamat_ID);
+
+                    if (progress != null)
                     {
-                        var innerStart = content.IndexOf('>', bodyStart) + 1;
-                        return content.Substring(innerStart, bodyEnd - innerStart);
+                        progress.CurrentPage = 0;
+                        await DatabaseService.Instance.UpdateReadingProgressAsync(progress);
                     }
-                    return content;
-                });
 
-                var rawHtml = string.Join("<hr/>", chapters);
-
-                rawHtml = System.Text.RegularExpressions.Regex.Replace(
-                    rawHtml, @"<img[^>]*>", "",
-                    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-
-                rawHtml = System.Text.RegularExpressions.Regex.Replace(
-                    rawHtml, @"<svg[\s\S]*?</svg>", "",
-                    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-
-                rawHtml = System.Text.RegularExpressions.Regex.Replace(
-                    rawHtml, @"<style[\s\S]*?</style>", "",
-                    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-
-                await Navigation.PushAsync(new BookReaderPage(
-                    raamatId: book.Raamat_ID,
-                    title: book.Pealkiri,
-                    htmlContent: rawHtml,
-                    description: book.Kirjeldus ?? ""));
+                    _vm.LibraryBooks.Remove(book);
+                    BindBooksCollection();
+                }
             }
-            catch (FileNotFoundException)
+            else if (action == "Märgi loetuks")
             {
-                await DisplayAlert("Viga", "Raamatu tekstifaili ei leitud.", "OK");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Viga raamatu avamisel: {ex.Message}");
-                await DisplayAlert("Viga", "Raamatu avamisel tekkis probleem.", "OK");
-            }
-        }
+                bool confirm = await DisplayAlert(
+                    "Märgi loetuks",
+                    $"Kas soovid märkida \"{book.Pealkiri}\" loetuks?",
+                    "Jah", "Tühista");
 
-        // ===== Прослушивание =====
-        private async void OnListenTapped(object sender, EventArgs e)
-        {
-            var view = sender as BindableObject;
-            var book = view?.BindingContext as BookWithProgress;
+                if (confirm)
+                {
+                    int userId = SessionService.CurrentUser?.Id ?? 0;
+                    var progress = await DatabaseService.Instance
+                        .GetReadingProgressAsync(userId, book.Raamat_ID);
 
-            if (book == null || string.IsNullOrWhiteSpace(book.Audiofail))
-            {
-                await DisplayAlert("Audioraamat", "Sellel raamatul pole audiofaili.", "OK");
-                return;
+                    if (progress != null)
+                    {
+                        progress.CurrentPage = progress.TotalPages;
+                        await DatabaseService.Instance.UpdateReadingProgressAsync(progress);
+                    }
+
+                    _vm.LibraryBooks.Remove(book);
+                    BindBooksCollection();
+
+                    await DisplayAlert("Suurepärane!",
+                        $"\"{book.Pealkiri}\" on märgitud loetuks!", "OK");
+                }
             }
-
-            await Navigation.PushAsync(new AudioPlayerPage(
-                book.Raamat_ID, book.Pealkiri, book.Audiofail, book.Pilt));
         }
     }
 }

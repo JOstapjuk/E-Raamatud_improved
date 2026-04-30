@@ -13,7 +13,11 @@ namespace E_Raamatud.ViewModel
 
         public LibraryViewModel()
         {
-            _ = LoadLibraryBooksAsync();
+        }
+
+        public async Task ReloadAsync()
+        {
+            await LoadLibraryBooksAsync();
         }
 
         private async Task LoadLibraryBooksAsync()
@@ -23,16 +27,20 @@ namespace E_Raamatud.ViewModel
                 int userId = SessionService.CurrentUser?.Id ?? 0;
                 if (userId == 0) return;
 
-                var libraryEntries = await DatabaseService.Instance.GetLibraryByUserAsync(userId);
-                var allBooks = await DatabaseService.Instance.GetBooksAsync();
+                var allBooks = await DatabaseService.Instance.GetBooksByUserAsync(userId);
 
                 LibraryBooks.Clear();
-                foreach (var entry in libraryEntries)
+                foreach (var book in allBooks)
                 {
-                    var book = allBooks.FirstOrDefault(b => b.Raamat_ID == entry.Raamat_ID);
-                    if (book == null) continue;
+                    var progress = await DatabaseService.Instance
+                        .GetReadingProgressAsync(userId, book.Raamat_ID);
 
-                    var progress = await DatabaseService.Instance.GetReadingProgressAsync(userId, book.Raamat_ID);
+                    int currentPage = progress?.CurrentPage ?? 0;
+                    int totalPages = progress?.TotalPages ?? 0;
+
+                    bool isFinished = totalPages > 0 && currentPage >= totalPages;
+                    bool isReading = currentPage > 0 && !isFinished;
+                    if (!isReading) continue;
 
                     LibraryBooks.Add(new BookWithProgress
                     {
@@ -42,8 +50,8 @@ namespace E_Raamatud.ViewModel
                         Pilt = book.Pilt,
                         Tekstifail = book.Tekstifail,
                         Audiofail = book.Audiofail,
-                        CurrentPage = progress?.CurrentPage ?? 0,
-                        TotalPages = progress?.TotalPages ?? 0
+                        CurrentPage = currentPage,
+                        TotalPages = totalPages
                     });
                 }
 

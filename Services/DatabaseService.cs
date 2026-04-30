@@ -1,5 +1,6 @@
-﻿using Supabase;
-using E_Raamatud.Model;
+﻿using E_Raamatud.Model;
+using Supabase;
+using System.Diagnostics;
 
 namespace E_Raamatud.Services
 {
@@ -78,13 +79,73 @@ namespace E_Raamatud.Services
 
         // Books
         public async Task<List<Raamat>> GetBooksAsync()
-            => (await _client.From<Raamat>().Get()).Models;
+    => (await _client.From<Raamat>().Get()).Models;
+
+        public async Task<List<Raamat>> GetBooksByUserAsync(int userId)
+            => (await _client.From<Raamat>().Where(b => b.User_ID == userId).Get()).Models;
 
         public async Task InsertBookAsync(Raamat book)
             => await _client.From<Raamat>().Insert(book);
 
         public async Task DeleteBookAsync(int id)
-            => await _client.From<Raamat>().Where(b => b.Raamat_ID == id).Delete();
+        {
+            var books = await _client.From<Raamat>().Where(b => b.Raamat_ID == id).Get();
+            var book = books.Models.FirstOrDefault();
+
+            if (book != null)
+            {
+                if (!string.IsNullOrWhiteSpace(book.Tekstifail) && book.Tekstifail.StartsWith("http"))
+                {
+                    try
+                    {
+                        var path = ExtractStoragePath(book.Tekstifail, "books");
+                        if (path != null)
+                            await _client.Storage.From("books").Remove(new List<string> { path });
+                    }
+                    catch (Exception ex) { Debug.WriteLine($"Error deleting book file: {ex.Message}"); }
+                }
+
+                if (!string.IsNullOrWhiteSpace(book.Pilt) && book.Pilt.StartsWith("http"))
+                {
+                    try
+                    {
+                        var path = ExtractStoragePath(book.Pilt, "images");
+                        if (path != null)
+                            await _client.Storage.From("images").Remove(new List<string> { path });
+                    }
+                    catch (Exception ex) { Debug.WriteLine($"Error deleting image: {ex.Message}"); }
+                }
+            }
+
+            await _client.From<Raamat>().Where(b => b.Raamat_ID == id).Delete();
+        }
+
+        private string ExtractStoragePath(string publicUrl, string bucketName)
+        {
+            var marker = $"/object/public/{bucketName}/";
+            var idx = publicUrl.IndexOf(marker);
+            if (idx < 0) return null;
+            return publicUrl.Substring(idx + marker.Length);
+        }
+
+        public async Task UploadFileAsync(string storagePath, byte[] bytes, string mimeType)
+        {
+            await _client.Storage
+                .From("books")
+                .Upload(bytes, storagePath, new Supabase.Storage.FileOptions
+                {
+                    ContentType = mimeType,
+                    Upsert = true
+                });
+        }
+
+        public string GetFileUrl(string storagePath)
+        {
+            return _client.Storage.From("books").GetPublicUrl(storagePath);
+        }
+
+        public async Task UpdateBookAsync(Raamat book)
+        => await _client.From<Raamat>().Upsert(book);
 
         // Genres
         public async Task<List<Genre>> GetGenresAsync()
@@ -95,35 +156,6 @@ namespace E_Raamatud.Services
 
         public async Task DeleteGenreAsync(int id)
             => await _client.From<Genre>().Where(g => g.Zanr_ID == id).Delete();
-
-        // Basket
-        public async Task<List<PurchaseBasket>> GetBasketAsync(int userId)
-            => (await _client.From<PurchaseBasket>().Where(b => b.Kasutaja_ID == userId).Get()).Models;
-
-        public async Task<List<PurchaseBasket>> GetAllBasketItemsAsync()
-            => (await _client.From<PurchaseBasket>().Get()).Models;
-
-        public async Task InsertBasketItemAsync(PurchaseBasket item)
-            => await _client.From<PurchaseBasket>().Insert(item);
-
-        public async Task UpdateBasketItemAsync(PurchaseBasket item)
-            => await _client.From<PurchaseBasket>().Update(item);
-
-        public async Task DeleteBasketItemAsync(int id)
-            => await _client.From<PurchaseBasket>().Where(b => b.Ostukorv_ID == id).Delete();
-
-        // Library
-        public async Task<List<Library>> GetLibraryAsync()
-            => (await _client.From<Library>().Get()).Models;
-
-        public async Task<List<Library>> GetLibraryByUserAsync(int userId)
-            => (await _client.From<Library>().Where(l => l.Kasutaja_ID == userId).Get()).Models;
-
-        public async Task InsertLibraryItemAsync(Library item)
-            => await _client.From<Library>().Insert(item);
-
-        public async Task DeleteLibraryEntryAsync(int id)
-            => await _client.From<Library>().Where(l => l.Library_ID == id).Delete();
 
         // Reading Progress
         public async Task<ReadingProgress?> GetReadingProgressAsync(int userId, int bookId)

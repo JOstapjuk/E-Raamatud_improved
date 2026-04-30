@@ -15,14 +15,11 @@ namespace E_Raamatud.Model
         [Column("Kirjeldus")]
         public string Kirjeldus { get; set; }
 
-        [Column("Hind")]
-        public decimal Hind { get; set; }
-
-        [Column("Avaldaja_ID")]
-        public int? Avaldaja_ID { get; set; }
+        [Column("User_ID")]
+        public int? User_ID { get; set; }
 
         [Column("Zanr_ID")]
-        public int Zanr_ID { get; set; }
+        public int? Zanr_ID { get; set; }
 
         [Column("Pilt")]
         public string Pilt { get; set; }

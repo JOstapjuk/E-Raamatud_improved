@@ -1,4 +1,3 @@
-using E_Raamatud.Pages;
 using E_Raamatud.ViewModel;
 using System;
 using System.Windows.Input;
@@ -17,18 +16,6 @@ public partial class AdminPage : ContentPage
 
         vm.Navigation = Navigation;
         _ = vm.LoadDataAsync();
-    }
-
-    private async void OnAcceptanceButtonClicked(object sender, EventArgs e)
-    {
-        try
-        {
-            await Navigation.PushAsync(new AcceptancePage());
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK");
-        }
     }
 
     private void OnLogoutTapped(object sender, EventArgs e)
@@ -51,16 +38,6 @@ public partial class AdminPage : ContentPage
     private void OnDeleteBookTapped(object sender, TappedEventArgs e)
     {
         ExecuteCommand(vm.DeleteBookCommand, e.Parameter ?? GetParam(sender));
-    }
-
-    private void OnDeleteLibraryTapped(object sender, TappedEventArgs e)
-    {
-        ExecuteCommand(vm.DeleteLibraryEntryCommand, e.Parameter ?? GetParam(sender));
-    }
-
-    private void OnDeleteBasketTapped(object sender, TappedEventArgs e)
-    {
-        ExecuteCommand(vm.DeletePurchaseBasketEntryCommand, e.Parameter ?? GetParam(sender));
     }
 
     private static object GetParam(object sender)

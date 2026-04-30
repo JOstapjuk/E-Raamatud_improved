@@ -2,13 +2,15 @@ using E_Raamatud.Model;
 using E_Raamatud.Services;
 using E_Raamatud.ViewModel;
 using System.Diagnostics;
+using E_Raamatud.View;
+using System.Net.Http;
+using System.Linq;
 
 namespace E_Raamatud;
 
 public partial class BookDetailPage : ContentPage
 {
     private readonly Raamat _book;
-    private bool _isWishlisted = false;
 
     public BookDetailPage(Raamat selectedBook, string zanrNimi)
     {
@@ -19,6 +21,12 @@ public partial class BookDetailPage : ContentPage
 
         _book = selectedBook;
         BindingContext = new BookDetailViewModel(selectedBook, zanrNimi);
+
+        ListenButton.IsVisible = !string.IsNullOrWhiteSpace(selectedBook.Audiofail);
+
+        AudioAvailableLabel.Text = !string.IsNullOrWhiteSpace(selectedBook.Audiofail)
+        ? "Saadaval"
+        : "Pole saadaval";
     }
 
     protected override void OnAppearing()
@@ -27,7 +35,6 @@ public partial class BookDetailPage : ContentPage
         ApplyResponsiveLayout(this.Width);
     }
 
-    // ===== Адаптивный layout =====
     private void OnPageSizeChanged(object sender, EventArgs e)
     {
         ApplyResponsiveLayout(this.Width);
@@ -43,7 +50,6 @@ public partial class BookDetailPage : ContentPage
 
         if (width >= 900)
         {
-            // ===== ДЕСКТОП =====
             ContentRoot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             ContentRoot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             ContentRoot.RowDefinitions.Add(new RowDefinition(GridLength.Star));
@@ -57,21 +63,10 @@ public partial class BookDetailPage : ContentPage
             CoverBorder.HeightRequest = 460;
             CoverBorder.HorizontalOptions = LayoutOptions.Start;
 
-            PriceActionGrid.ColumnDefinitions.Clear();
-            PriceActionGrid.RowDefinitions.Clear();
-            PriceActionGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-            PriceActionGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-            PriceActionGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-
-            Grid.SetColumn(ActionButtons, 1);
-            Grid.SetRow(ActionButtons, 0);
-            ActionButtons.HorizontalOptions = LayoutOptions.End;
-
             SetInfoBlocksColumns(3);
         }
         else
         {
-            // ===== МОБИЛЬНЫЙ / УЗКИЙ =====
             ContentRoot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             ContentRoot.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             ContentRoot.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
@@ -86,20 +81,7 @@ public partial class BookDetailPage : ContentPage
             CoverBorder.HeightRequest = coverWidth * 1.45;
             CoverBorder.HorizontalOptions = LayoutOptions.Center;
 
-            PriceActionGrid.ColumnDefinitions.Clear();
-            PriceActionGrid.RowDefinitions.Clear();
-            PriceActionGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-            PriceActionGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-            PriceActionGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-
-            Grid.SetColumn(ActionButtons, 0);
-            Grid.SetRow(ActionButtons, 1);
-            ActionButtons.HorizontalOptions = LayoutOptions.Fill;
-
-            if (width < 500)
-                SetInfoBlocksColumns(1);
-            else
-                SetInfoBlocksColumns(3);
+            SetInfoBlocksColumns(1);
         }
     }
 
@@ -126,40 +108,129 @@ public partial class BookDetailPage : ContentPage
         }
     }
 
-    // ===== Обработчики =====
     private async void OnBackTapped(object sender, TappedEventArgs e)
     {
         await Navigation.PopAsync();
     }
 
-    private async void OnCartTapped(object sender, TappedEventArgs e)
+    private async void OnReadTapped(object sender, TappedEventArgs e)
     {
-        if (SessionService.CurrentUser == null)
+        if (string.IsNullOrWhiteSpace(_book.Tekstifail))
         {
-            await DisplayAlert("Logi sisse", "Ostukorvi kasutamiseks pead olema sisse logitud.", "OK");
+            await DisplayAlert("Viga", "Sellel raamatul pole tekstifaili.", "OK");
             return;
         }
-        await Navigation.PushAsync(new CartPage(SessionService.CurrentUser.Id));
+
+        try
+        {
+            Stream bookStream;
+            var ext = System.IO.Path.GetExtension(_book.Tekstifail)?.ToLowerInvariant();
+
+            if (_book.Tekstifail.StartsWith("http"))
+            {
+                using var httpClient = new HttpClient();
+                var bytes = await httpClient.GetByteArrayAsync(_book.Tekstifail);
+                bookStream = new System.IO.MemoryStream(bytes);
+
+                if (string.IsNullOrWhiteSpace(ext) || ext.Length > 5)
+                    ext = ".epub";
+            }
+            else if (System.IO.File.Exists(_book.Tekstifail))
+            {
+                bookStream = System.IO.File.OpenRead(_book.Tekstifail);
+            }
+            else
+            {
+                await DisplayAlert("Viga", "Raamatu faili ei leitud.", "OK");
+                return;
+            }
+
+            string rawHtml;
+
+            if (ext == ".epub")
+            {
+                var epubBook = await VersOne.Epub.EpubReader.ReadBookAsync(bookStream);
+                var chapters = epubBook.ReadingOrder.Select(item =>
+                {
+                    var content = item.Content ?? "";
+                    var bodyStart = content.IndexOf("<body", StringComparison.OrdinalIgnoreCase);
+                    var bodyEnd = content.LastIndexOf("</body>", StringComparison.OrdinalIgnoreCase);
+                    if (bodyStart >= 0 && bodyEnd >= 0)
+                    {
+                        var innerStart = content.IndexOf('>', bodyStart) + 1;
+                        return content.Substring(innerStart, bodyEnd - innerStart);
+                    }
+                    return content;
+                });
+
+                rawHtml = string.Join("<hr/>", chapters);
+                rawHtml = System.Text.RegularExpressions.Regex.Replace(rawHtml, @"<img[^>]*>", "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                rawHtml = System.Text.RegularExpressions.Regex.Replace(rawHtml, @"<svg[\s\S]*?</svg>", "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                rawHtml = System.Text.RegularExpressions.Regex.Replace(rawHtml, @"<style[\s\S]*?</style>", "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            }
+            else if (ext == ".txt")
+            {
+                using var reader = new System.IO.StreamReader(bookStream);
+                var text = await reader.ReadToEndAsync();
+
+                var lines = text.Split('\n');
+                var paragraphs = new System.Text.StringBuilder();
+                var currentParagraph = new System.Text.StringBuilder();
+
+                foreach (var line in lines)
+                {
+                    var trimmed = line.Trim();
+                    if (string.IsNullOrWhiteSpace(trimmed))
+                    {
+                        if (currentParagraph.Length > 0)
+                        {
+                            paragraphs.Append($"<p>{System.Net.WebUtility.HtmlEncode(currentParagraph.ToString().Trim())}</p>");
+                            currentParagraph.Clear();
+                        }
+                    }
+                    else
+                    {
+                        if (currentParagraph.Length > 0)
+                            currentParagraph.Append(' ');
+                        currentParagraph.Append(trimmed);
+                    }
+                }
+
+                if (currentParagraph.Length > 0)
+                    paragraphs.Append($"<p>{System.Net.WebUtility.HtmlEncode(currentParagraph.ToString().Trim())}</p>");
+
+                rawHtml = paragraphs.ToString();
+            }
+            else if (ext == ".pdf")
+            {
+                await Navigation.PushAsync(new E_Raamatud.View.PdfReaderPage(
+                    _book.Pealkiri, _book.Tekstifail));
+                return;
+            }
+            else
+            {
+                await DisplayAlert("Viga", "Tundmatu failivorming.", "OK");
+                return;
+            }
+
+            await Navigation.PushAsync(new E_Raamatud.View.BookReaderPage(
+                _book.Raamat_ID, _book.Pealkiri, rawHtml, _book.Kirjeldus ?? ""));
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"OnReadTapped error: {ex.Message}");
+            await DisplayAlert("Viga", "Raamatu avamisel tekkis probleem.", "OK");
+        }
     }
 
-    // ===== Сердечко: тоггл =====
-    private void OnWishlistTapped(object sender, TappedEventArgs e)
+    private async void OnListenTapped(object sender, TappedEventArgs e)
     {
-        _isWishlisted = !_isWishlisted;
-
-        if (_isWishlisted)
+        if (string.IsNullOrWhiteSpace(_book.Audiofail))
         {
-            HeartIcon.Fill = new SolidColorBrush(Color.FromArgb("#d4537e"));
-            HeartIcon.Stroke = new SolidColorBrush(Color.FromArgb("#d4537e"));
-            WishlistBorder.BackgroundColor = Color.FromArgb("#fbeaf0");
-            WishlistBorder.Stroke = new SolidColorBrush(Color.FromArgb("#d4537e"));
+            await DisplayAlert("Viga", "Sellel raamatul pole audiofaili.", "OK");
+            return;
         }
-        else
-        {
-            HeartIcon.Fill = new SolidColorBrush(Colors.Transparent);
-            HeartIcon.Stroke = new SolidColorBrush(Color.FromArgb("#2d6e68"));
-            WishlistBorder.BackgroundColor = Colors.White;
-            WishlistBorder.Stroke = new SolidColorBrush(Color.FromArgb("#d5dfd8"));
-        }
+        await Navigation.PushAsync(new AudioPlayerPage(
+            _book.Raamat_ID, _book.Pealkiri, _book.Audiofail, _book.Pilt));
     }
 }

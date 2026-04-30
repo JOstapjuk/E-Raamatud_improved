@@ -1,5 +1,6 @@
 namespace E_Raamatud.View;
-
+using E_Raamatud.Model;
+using E_Raamatud.Services;
 using E_Raamatud.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,26 @@ using System.Linq;
 
 public partial class AddBookPage : ContentPage
 {
-    public AddBookPage()
+    public AddBookPage(Raamat existingBook = null)
     {
         InitializeComponent();
+        BindingContext = new AvaldajaViewModel(existingBook);
+        PageTitleLabel.Text = existingBook != null ? "Muuda raamatut" : "Lisa raamat";
+        SubmitButton.Text = existingBook != null ? "Salvesta muudatused" : "Lisa fail kataloogi";
+
+        if (existingBook != null && existingBook.Zanr_ID.HasValue)
+            _ = PreFillGenreLabelAsync(existingBook.Zanr_ID.Value);
+    }
+
+    private async Task PreFillGenreLabelAsync(int zanrId)
+    {
+        var genres = await DatabaseService.Instance.GetGenresAsync();
+        var genre = genres.FirstOrDefault(g => g.Zanr_ID == zanrId);
+        if (genre != null)
+        {
+            GenreLabel.Text = genre.Nimetus;
+            GenreLabel.TextColor = Color.FromArgb("#1f2e28");
+        }
     }
 
     private async void OnBackTapped(object sender, EventArgs e)
@@ -43,13 +61,13 @@ public partial class AddBookPage : ContentPage
             var result = await FilePicker.PickAsync(new PickOptions
             {
                 FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
-                {
-                    { DevicePlatform.Android, new[] { "application/epub+zip" } },
-                    { DevicePlatform.iOS, new[] { "org.idpf.epub-container" } },
-                    { DevicePlatform.WinUI, new[] { ".epub" } },
-                    { DevicePlatform.MacCatalyst, new[] { "org.idpf.epub-container" } }
-                }),
-                PickerTitle = "Vali EPUB fail"
+            {
+                { DevicePlatform.Android, new[] { "application/epub+zip", "application/pdf", "text/plain" } },
+                { DevicePlatform.iOS, new[] { "org.idpf.epub-container", "com.adobe.pdf", "public.plain-text" } },
+                { DevicePlatform.WinUI, new[] { ".epub", ".pdf", ".txt" } },
+                { DevicePlatform.MacCatalyst, new[] { "org.idpf.epub-container", "com.adobe.pdf", "public.plain-text" } }
+            }),
+                PickerTitle = "Vali raamatu fail (EPUB, PDF, TXT)"
             });
 
             if (result != null && BindingContext is AvaldajaViewModel vm)
@@ -57,7 +75,7 @@ public partial class AddBookPage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Viga", $"EPUB faili valimisel tekkis viga: {ex.Message}", "OK");
+            await DisplayAlert("Viga", $"Faili valimisel tekkis viga: {ex.Message}", "OK");
         }
     }
 
@@ -88,6 +106,24 @@ public partial class AddBookPage : ContentPage
         catch (Exception ex)
         {
             await DisplayAlert("Viga", $"Audiofailide valimisel tekkis viga: {ex.Message}", "OK");
+        }
+    }
+
+    private async void OnPickGenreTapped(object sender, EventArgs e)
+    {
+        if (BindingContext is not AvaldajaViewModel vm) return;
+
+        var genreNames = vm.Genres.Select(g => g.Nimetus).ToArray();
+        string picked = await DisplayActionSheet("Vali žanr", "Tühista", null, genreNames);
+
+        if (picked == null || picked == "Tühista") return;
+
+        var selected = vm.Genres.FirstOrDefault(g => g.Nimetus == picked);
+        if (selected != null)
+        {
+            vm.SelectedGenre = selected;
+            GenreLabel.Text = selected.Nimetus;
+            GenreLabel.TextColor = Color.FromArgb("#1f2e28");
         }
     }
 }

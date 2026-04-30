@@ -106,18 +106,6 @@ public partial class UserProfilePage : ContentPage
         await Navigation.PopAsync();
     }
 
-    private async void OnLibraryTapped(object sender, EventArgs e)
-    {
-        try { await Navigation.PushAsync(new LibraryPage()); }
-        catch (Exception ex) { await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK"); }
-    }
-
-    private async void OnPurchaseHistoryTapped(object sender, EventArgs e)
-    {
-        try { await Navigation.PushAsync(new E_Raamatud.PurchaseHistoryPage()); }
-        catch (Exception ex) { await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK"); }
-    }
-
     private async void OnUpdatesTapped(object sender, EventArgs e)
     {
         try { await Navigation.PushAsync(new UpdatesPage()); }

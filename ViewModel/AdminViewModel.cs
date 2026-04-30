@@ -10,8 +10,6 @@ namespace E_Raamatud.ViewModel
         public ObservableCollection<User> Users { get; } = new();
         public ObservableCollection<Genre> Genres { get; } = new();
         public ObservableCollection<Raamat> Books { get; } = new();
-        public ObservableCollection<Library> LibraryEntries { get; } = new();
-        public ObservableCollection<PurchaseBasket> PurchaseBasketEntries { get; } = new();
 
         public ICommand LoadDataCommand { get; }
         public ICommand LogoutCommand { get; }
@@ -30,8 +28,6 @@ namespace E_Raamatud.ViewModel
             DeleteUserCommand = new Command<int>(async (id) => await DeleteUserAsync(id));
             DeleteGenreCommand = new Command<int>(async (id) => await DeleteGenreAsync(id));
             DeleteBookCommand = new Command<int>(async (id) => await DeleteBookAsync(id));
-            DeleteLibraryEntryCommand = new Command<int>(async (id) => await DeleteLibraryEntryAsync(id));
-            DeletePurchaseBasketEntryCommand = new Command<int>(async (id) => await DeletePurchaseBasketEntryAsync(id));
         }
 
         public async Task LoadDataAsync()
@@ -45,11 +41,6 @@ namespace E_Raamatud.ViewModel
             Books.Clear();
             foreach (var b in await DatabaseService.Instance.GetBooksAsync()) Books.Add(b);
 
-            LibraryEntries.Clear();
-            foreach (var l in await DatabaseService.Instance.GetLibraryAsync()) LibraryEntries.Add(l);
-
-            PurchaseBasketEntries.Clear();
-            foreach (var p in await DatabaseService.Instance.GetAllBasketItemsAsync()) PurchaseBasketEntries.Add(p);
         }
 
         private async Task DeleteUserAsync(int id)
@@ -71,20 +62,6 @@ namespace E_Raamatud.ViewModel
             await DatabaseService.Instance.DeleteBookAsync(id);
             var book = Books.FirstOrDefault(b => b.Raamat_ID == id);
             if (book != null) Books.Remove(book);
-        }
-
-        private async Task DeleteLibraryEntryAsync(int id)
-        {
-            await DatabaseService.Instance.DeleteLibraryEntryAsync(id);
-            var entry = LibraryEntries.FirstOrDefault(e => e.Library_ID == id);
-            if (entry != null) LibraryEntries.Remove(entry);
-        }
-
-        private async Task DeletePurchaseBasketEntryAsync(int id)
-        {
-            await DatabaseService.Instance.DeleteBasketItemAsync(id);
-            var entry = PurchaseBasketEntries.FirstOrDefault(p => p.Ostukorv_ID == id);
-            if (entry != null) PurchaseBasketEntries.Remove(entry);
         }
 
         private async Task LogoutAsync()

@@ -4,7 +4,6 @@
              x:Class="E_Raamatud.View.LibraryPage"
              x:Name="LibraryPageRef"
              BackgroundColor="#FAF8F3"
-             SizeChanged="OnPageSizeChanged"
              Shell.NavBarIsVisible="False"
              Title="Minu raamatukogu">
 
@@ -65,81 +64,6 @@
                        WidthRequest="40"
                        HeightRequest="40" />
                 </Grid>
-
-                <ScrollView Orientation="Horizontal"
-                            HorizontalScrollBarVisibility="Never"
-                            Padding="0,4,0,0">
-                    <HorizontalStackLayout Spacing="8" x:Name="FiltersLayout">
-
-                        <Border x:Name="FilterAll"
-                                StrokeShape="RoundRectangle 18"
-                                Stroke="Transparent"
-                                BackgroundColor="White"
-                                Padding="16,7"
-                                HeightRequest="34">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnFilterAllTapped" />
-                            </Border.GestureRecognizers>
-                            <Label Text="Kõik raamatud"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#2d6e68"
-                                   VerticalOptions="Center" />
-                        </Border>
-
-                        <Border x:Name="FilterUnread"
-                                StrokeShape="RoundRectangle 18"
-                                Stroke="#ffffff60"
-                                StrokeThickness="1"
-                                BackgroundColor="Transparent"
-                                Padding="16,7"
-                                HeightRequest="34">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnFilterUnreadTapped" />
-                            </Border.GestureRecognizers>
-                            <Label Text="Lugemata"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   VerticalOptions="Center" />
-                        </Border>
-
-                        <Border x:Name="FilterReading"
-                                StrokeShape="RoundRectangle 18"
-                                Stroke="#ffffff60"
-                                StrokeThickness="1"
-                                BackgroundColor="Transparent"
-                                Padding="16,7"
-                                HeightRequest="34">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnFilterReadingTapped" />
-                            </Border.GestureRecognizers>
-                            <Label Text="Loen praegu"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   VerticalOptions="Center" />
-                        </Border>
-
-                        <Border x:Name="FilterAudio"
-                                StrokeShape="RoundRectangle 18"
-                                Stroke="#ffffff60"
-                                StrokeThickness="1"
-                                BackgroundColor="Transparent"
-                                Padding="16,7"
-                                HeightRequest="34">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnFilterAudioTapped" />
-                            </Border.GestureRecognizers>
-                            <Label Text="Audioraamatud"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   VerticalOptions="Center" />
-                        </Border>
-
-                    </HorizontalStackLayout>
-                </ScrollView>
             </VerticalStackLayout>
         </Border>
 
@@ -166,18 +90,19 @@
                        VerticalOptions="Center" />
                 </Border>
 
-                <Label Text="Sinu raamatukogu on tühi"
+                <Label Text="Sa ei loe hetkel ühtegi raamatut"
                        FontSize="20"
                        FontAttributes="Bold"
                        TextColor="#1f2e28"
                        HorizontalOptions="Center" />
 
-                <Label Text="Osta esimene raamat ja alusta lugemist"
+                <Label Text="Ava raamat ja alusta lugemist"
                        FontSize="13"
                        TextColor="#5f5e5a"
                        HorizontalOptions="Center" />
 
-                <Button Text="Sirvi raamatuid"
+                    <Button Text="Mine raamatulettele"
+                        WidthRequest="220"
                         Clicked="OnBackTapped"
                         BackgroundColor="#2d6e68"
                         TextColor="White"
@@ -185,7 +110,6 @@
                         FontSize="14"
                         CornerRadius="10"
                         HeightRequest="46"
-                        WidthRequest="200"
                         Margin="0,8,0,0" />
             </VerticalStackLayout>
 
@@ -201,111 +125,90 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Border StrokeShape="RoundRectangle 14"
-                                        Stroke="#e5ebe7"
-                                        StrokeThickness="1"
-                                        BackgroundColor="White"
-                                        Padding="16">
+                                    Stroke="#e5ebe7"
+                                    StrokeThickness="1"
+                                    BackgroundColor="White"
+                                    Padding="16"
+                                    Margin="0,0,0,0">
                                     <Border.Shadow>
                                         <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.06" />
                                     </Border.Shadow>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnBookTapped" />
+                                    </Border.GestureRecognizers>
 
                                     <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="16">
 
                                         <Border Grid.Column="0"
-                                                StrokeShape="RoundRectangle 8"
-                                                Stroke="Transparent"
-                                                Padding="0"
-                                                WidthRequest="80"
-                                                HeightRequest="120">
+                                            StrokeShape="RoundRectangle 8"
+                                            Stroke="Transparent"
+                                            Padding="0"
+                                            WidthRequest="80"
+                                            HeightRequest="120">
                                             <Border.Shadow>
                                                 <Shadow Brush="#000000" Offset="0,3" Radius="8" Opacity="0.18" />
                                             </Border.Shadow>
-                                            <Image Source="{Binding Pilt}" Aspect="AspectFill" />
+                                            <Image Source="{Binding PiltOrPlaceholder}" Aspect="AspectFill" />
                                         </Border>
 
                                         <VerticalStackLayout Grid.Column="1"
-                                                             Spacing="4"
-                                                             VerticalOptions="Center">
-
+                                             Spacing="4"
+                                             VerticalOptions="Center">
                                             <Border StrokeShape="RoundRectangle 6"
-                                                    Stroke="Transparent"
-                                                    BackgroundColor="#e8f0ed"
-                                                    Padding="8,3"
-                                                    HorizontalOptions="Start">
-                                                <Label Text="OSTETUD"
-                                                       FontSize="9"
-                                                       FontAttributes="Bold"
-                                                       TextColor="#0f6e56"
-                                                       CharacterSpacing="1.5" />
-                                            </Border>
-
-                                            <Label Text="{Binding Pealkiri}"
-                                                   FontSize="15"
+                                                Stroke="Transparent"
+                                                BackgroundColor="#e8f0ed"
+                                                Padding="8,3"
+                                                HorizontalOptions="Start">
+                                                <Label Text="LOEB"
+                                                   FontSize="9"
                                                    FontAttributes="Bold"
-                                                   TextColor="#1f2e28"
-                                                   LineBreakMode="TailTruncation"
-                                                   MaxLines="2" />
-
+                                                   TextColor="#0f6e56"
+                                                   CharacterSpacing="1.5" />
+                                            </Border>
+                                            <Label Text="{Binding Pealkiri}"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="#1f2e28"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="2" />
                                             <Label Text="{Binding Kirjeldus}"
+                                               FontSize="11"
+                                               TextColor="#98a8a0"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="2" />
+                                            <HorizontalStackLayout Spacing="6" Margin="0,4,0,0">
+                                                <ProgressBar Progress="{Binding ProgressValue}"
+                                                     ProgressColor="#2d6e68"
+                                                     BackgroundColor="#e8f0ed"
+                                                     HeightRequest="4"
+                                                     WidthRequest="100" />
+                                                <Label Text="{Binding ProgressText}"
                                                    FontSize="11"
-                                                   TextColor="#98a8a0"
-                                                   LineBreakMode="TailTruncation"
-                                                   MaxLines="2" />
+                                                   FontAttributes="Bold"
+                                                   TextColor="#2d6e68"
+                                                   VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
                                         </VerticalStackLayout>
 
-                                        <VerticalStackLayout Grid.Column="2"
-                                                             Spacing="6"
-                                                             VerticalOptions="Center">
+                                        <Border Grid.Column="2"
+                                            StrokeShape="RoundRectangle 20"
+                                            Stroke="Transparent"
+                                            BackgroundColor="#f0f4f2"
+                                            WidthRequest="36"
+                                            HeightRequest="36"
+                                            Padding="0"
+                                            VerticalOptions="Center">
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="OnBookMenuTapped" />
+                                            </Border.GestureRecognizers>
+                                            <Label Text="···"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="#2d6e68"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                        </Border>
 
-                                            <Border StrokeShape="RoundRectangle 8"
-                                                    Stroke="Transparent"
-                                                    BackgroundColor="#2d6e68"
-                                                    Padding="14,8"
-                                                    HeightRequest="36">
-                                                <Border.GestureRecognizers>
-                                                    <TapGestureRecognizer Tapped="OnReadTapped" />
-                                                </Border.GestureRecognizers>
-                                                <HorizontalStackLayout Spacing="6"
-                                                                       HorizontalOptions="Center"
-                                                                       VerticalOptions="Center">
-                                                    <Path Stroke="White" StrokeThickness="1.7"
-                                                          Fill="Transparent" Aspect="Uniform"
-                                                          HeightRequest="12" WidthRequest="12"
-                                                          VerticalOptions="Center"
-                                                          Data="M 4,5 L 4,19 C 4,19 7,18 12,18 C 17,18 20,19 20,19 L 20,5 C 20,5 17,4 12,4 C 7,4 4,5 4,5 Z" />
-                                                    <Label Text="Loe"
-                                                           TextColor="White"
-                                                           FontSize="12"
-                                                           FontAttributes="Bold"
-                                                           VerticalOptions="Center" />
-                                                </HorizontalStackLayout>
-                                            </Border>
-
-                                            <Border StrokeShape="RoundRectangle 8"
-                                                    Stroke="#d97a4a"
-                                                    StrokeThickness="1.5"
-                                                    BackgroundColor="#fff5e8"
-                                                    Padding="14,8"
-                                                    HeightRequest="36">
-                                                <Border.GestureRecognizers>
-                                                    <TapGestureRecognizer Tapped="OnListenTapped" />
-                                                </Border.GestureRecognizers>
-                                                <HorizontalStackLayout Spacing="6"
-                                                                       HorizontalOptions="Center"
-                                                                       VerticalOptions="Center">
-                                                    <Path Stroke="#993c1d" StrokeThickness="1.7"
-                                                          Fill="Transparent" Aspect="Uniform"
-                                                          HeightRequest="12" WidthRequest="12"
-                                                          VerticalOptions="Center"
-                                                          Data="M 8,5 L 8,19 L 19,12 Z" />
-                                                    <Label Text="Kuula"
-                                                           TextColor="#993c1d"
-                                                           FontSize="12"
-                                                           FontAttributes="Bold"
-                                                           VerticalOptions="Center" />
-                                                </HorizontalStackLayout>
-                                            </Border>
-                                        </VerticalStackLayout>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

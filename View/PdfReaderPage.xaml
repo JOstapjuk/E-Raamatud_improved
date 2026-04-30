@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pdf="clr-namespace:Maui.PDFView;assembly=Maui.PDFView"
+             x:Class="E_Raamatud.View.PdfReaderPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#FAF8F3">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <Border Grid.Row="0"
+                StrokeShape="RoundRectangle 0,0,28,28"
+                Stroke="Transparent"
+                Padding="0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#2d6e68" Offset="0.0" />
+                    <GradientStop Color="#3a7d82" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid Padding="24,50,24,20" ColumnDefinitions="Auto, *, Auto">
+                <Border Grid.Column="0"
+                        StrokeShape="RoundRectangle 20"
+                        Stroke="Transparent"
+                        BackgroundColor="#1f4f4a"
+                        WidthRequest="40" HeightRequest="40" Padding="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Path Stroke="White" StrokeThickness="2"
+                          Fill="Transparent" Aspect="Uniform"
+                          HeightRequest="16" WidthRequest="16"
+                          HorizontalOptions="Center" VerticalOptions="Center"
+                          Data="M 14,6 L 8,12 L 14,18" />
+                </Border>
+                <Label x:Name="TitleLabel"
+                       Grid.Column="1"
+                       FontSize="16" FontAttributes="Bold"
+                       TextColor="White"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       LineBreakMode="TailTruncation" />
+                <Label Grid.Column="2" WidthRequest="40" HeightRequest="40" />
+                <Border Grid.Column="2"
+                    x:Name="SummarizeButton"
+                    StrokeShape="RoundRectangle 20"
+                    Stroke="Transparent"
+                    BackgroundColor="#d97a4a"
+                    WidthRequest="40"
+                    HeightRequest="40"
+                    Padding="0"
+                    VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSummarize" />
+                    </Border.GestureRecognizers>
+                    <Label Text="✦"
+                       TextColor="White"
+                       FontSize="16"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+                </Border>
+            </Grid>
+        </Border>
+
+        <ActivityIndicator x:Name="LoadingIndicator"
+                           Grid.Row="1"
+                           IsRunning="True"
+                           IsVisible="True"
+                           Color="#2d6e68"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+
+        <pdf:PdfView x:Name="PdfViewer"
+                     Grid.Row="1"
+                     IsVisible="False">
+            <pdf:PdfView.PageAppearance>
+                <pdf:PageAppearance Margin="8,4" ShadowEnabled="True" />
+            </pdf:PdfView.PageAppearance>
+        </pdf:PdfView>
+
+    </Grid>
+</ContentPage>
