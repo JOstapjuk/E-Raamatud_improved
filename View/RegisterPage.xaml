@@ -30,11 +30,13 @@
                            FontSize="11"
                            TextColor="#a8d4c8"
                            CharacterSpacing="4" />
-                    <Label Text="Loo konto"
+                    <Label x:Name="HeroTitle"
+                           Text="Loo konto"
                            FontSize="34"
                            FontAttributes="Bold"
                            TextColor="White" />
-                    <Label Text="Alusta oma lugemisteekonda"
+                    <Label x:Name="HeroSubtitle"
+                           Text="Alusta oma lugemisteekonda"
                            FontSize="14"
                            TextColor="#c8e0dc"
                            Margin="0,4,0,0" />
@@ -46,15 +48,10 @@
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="32,36,32,32" Spacing="0">
 
-                <Label Text="UUS KASUTAJA"
-                       FontSize="11"
-                       TextColor="#98a8a0"
-                       CharacterSpacing="3"
-                       Margin="4,0,0,16" />
-
-                <!-- Username -->
-                <VerticalStackLayout Spacing="0" Margin="0,0,0,18">
-                    <Label Text="Kasutajanimi"
+                <!-- Username field -->
+                <VerticalStackLayout Spacing="0" Margin="0,0,0,20">
+                    <Label x:Name="UsernameTitleLabel"
+                           Text="Kasutajanimi"
                            FontSize="13"
                            TextColor="#3a5c52"
                            FontAttributes="Bold"
@@ -64,7 +61,8 @@
                             StrokeThickness="1.5"
                             BackgroundColor="White"
                             Padding="16,2">
-                        <Entry Placeholder="Vali kasutajanimi"
+                        <Entry x:Name="UsernameEntry"
+                               Placeholder="Sisesta kasutajanimi"
                                Text="{Binding Username}"
                                FontSize="15"
                                TextColor="#1f2e28"
@@ -74,9 +72,10 @@
                     </Border>
                 </VerticalStackLayout>
 
-                <!-- Password -->
-                <VerticalStackLayout Spacing="0" Margin="0,0,0,18">
-                    <Label Text="Parool"
+                <!-- Password field -->
+                <VerticalStackLayout Spacing="0" Margin="0,0,0,20">
+                    <Label x:Name="PasswordTitleLabel"
+                           Text="Parool"
                            FontSize="13"
                            TextColor="#3a5c52"
                            FontAttributes="Bold"
@@ -86,7 +85,8 @@
                             StrokeThickness="1.5"
                             BackgroundColor="White"
                             Padding="16,2">
-                        <Entry Placeholder="Loo tugev parool"
+                        <Entry x:Name="PasswordEntry"
+                               Placeholder="Sisesta parool"
                                IsPassword="True"
                                Text="{Binding Password}"
                                FontSize="15"
@@ -98,8 +98,9 @@
                 </VerticalStackLayout>
 
                 <!-- Role picker -->
-                <VerticalStackLayout Spacing="0" Margin="0,0,0,8">
-                    <Label Text="Roll"
+                <VerticalStackLayout Spacing="0" Margin="0,0,0,20">
+                    <Label x:Name="RoleTitleLabel"
+                           Text="Roll"
                            FontSize="13"
                            TextColor="#3a5c52"
                            FontAttributes="Bold"
@@ -109,10 +110,7 @@
                             StrokeThickness="1.5"
                             BackgroundColor="White"
                             Padding="16,2">
-                        <Picker Title="Vali roll"
-                                TitleColor="#a8b5ad"
-                                ItemsSource="{Binding Roles}"
-                                SelectedItem="{Binding SelectedRole}"
+                        <Picker SelectedItem="{Binding SelectedRole}"
                                 FontSize="15"
                                 TextColor="#1f2e28"
                                 BackgroundColor="Transparent"
@@ -120,14 +118,16 @@
                     </Border>
                 </VerticalStackLayout>
 
+                <!-- Status message -->
                 <Label Text="{Binding LoginStatus}"
                        TextColor="#c94545"
                        FontSize="13"
                        HorizontalOptions="Center"
                        Margin="0,8,0,28" />
 
-                <!-- Primary action -->
-                <Button Text="Registreeru"
+                <!-- Register button -->
+                <Button x:Name="RegisterBtn"
+                        Text="Registreeru"
                         Command="{Binding RegisterCommand}"
                         BackgroundColor="#2d6e68"
                         TextColor="White"
@@ -138,7 +138,8 @@
                         Margin="0,0,0,16" />
 
                 <!-- Back button -->
-                <Button Text="Tagasi"
+                <Button x:Name="BackBtn"
+                        Text="Tagasi"
                         Clicked="GoBack_Clicked"
                         BackgroundColor="Transparent"
                         BorderColor="#cad4ce"
@@ -152,11 +153,13 @@
 
                 <!-- Login link -->
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
-                    <Label Text="On juba konto?"
+                    <Label x:Name="HasAccountLabel"
+                           Text="On juba konto?"
                            FontSize="14"
                            TextColor="#6a7d75"
                            VerticalOptions="Center" />
-                    <Label Text="Logi sisse"
+                    <Label x:Name="LoginLabel"
+                           Text="Logi sisse"
                            FontSize="14"
                            FontAttributes="Bold"
                            TextColor="#2d6e68"

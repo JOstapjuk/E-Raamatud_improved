@@ -6,6 +6,8 @@ public partial class App : Application
 {
     public App()
     {
+        LanguageService.Initialize();
+
         InitializeComponent();
         MainPage = new NavigationPage(new LoginPage());
 

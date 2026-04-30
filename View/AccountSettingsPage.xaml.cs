@@ -1,3 +1,4 @@
+using E_Raamatud.Resources.Localization;
 using E_Raamatud.Services;
 using E_Raamatud.ViewModel;
 
@@ -10,14 +11,11 @@ public partial class AccountSettingsPage : ContentPage
         InitializeComponent();
 
         var vm = new AccountSettingsViewModel();
-
-        // Refresh the avatar image whenever the ViewModel's ProfilePictureUrl changes
         vm.PropertyChanged += (s, e) =>
         {
             if (e.PropertyName == nameof(AccountSettingsViewModel.ProfilePictureUrl))
                 UpdateProfilePreview();
         };
-
         BindingContext = vm;
     }
 
@@ -26,6 +24,18 @@ public partial class AccountSettingsPage : ContentPage
         base.OnAppearing();
         UpdateProfilePreview();
         ApplyResponsiveLayout(this.Width);
+        ApplyLocalization();
+    }
+
+    private void ApplyLocalization()
+    {
+        HeaderTitle.Text          = AppResources.AccountSettings;
+        HeaderSubtitle.Text       = AppResources.ChangePassword;
+        CurrentPasswordLabel.Text = AppResources.CurrentPassword;
+        NewPasswordLabel.Text     = AppResources.NewPassword;
+        ConfirmPasswordLabel.Text = AppResources.ConfirmPassword;
+        SaveBtn.Text              = AppResources.SaveChanges;
+        UsernameFieldLabel.Text   = AppResources.UsernameLabel;
     }
 
     private void UpdateProfilePreview()
@@ -33,13 +43,11 @@ public partial class AccountSettingsPage : ContentPage
         var user = SessionService.CurrentUser;
         if (user == null) return;
 
-        // Set initials
         if (AvatarInitial != null)
             AvatarInitial.Text = !string.IsNullOrWhiteSpace(user.Username)
                 ? user.Username.Substring(0, 1).ToUpper()
                 : "?";
 
-        // Show photo if available, otherwise show initials circle
         if (!string.IsNullOrEmpty(user.ProfilePicture))
         {
             ProfileImage.Source = ImageSource.FromUri(new Uri(user.ProfilePicture));
@@ -53,7 +61,6 @@ public partial class AccountSettingsPage : ContentPage
         }
     }
 
-    // Tapping the camera icon triggers the ViewModel's pick command
     private void OnChangeAvatarTapped(object sender, EventArgs e)
     {
         if (BindingContext is AccountSettingsViewModel vm)
@@ -75,27 +82,21 @@ public partial class AccountSettingsPage : ContentPage
 
         if (width >= 900)
         {
-            // Desktop: profile left, form right
             ContentRoot.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(320)));
             ContentRoot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             ContentRoot.RowDefinitions.Add(new RowDefinition(GridLength.Star));
 
-            Grid.SetColumn(ProfileCard, 0);
-            Grid.SetRow(ProfileCard, 0);
-            Grid.SetColumn(FormPanel, 1);
-            Grid.SetRow(FormPanel, 0);
+            Grid.SetColumn(ProfileCard, 0); Grid.SetRow(ProfileCard, 0);
+            Grid.SetColumn(FormPanel, 1);   Grid.SetRow(FormPanel, 0);
         }
         else
         {
-            // Mobile: single column, stacked
             ContentRoot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             ContentRoot.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             ContentRoot.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
-            Grid.SetColumn(ProfileCard, 0);
-            Grid.SetRow(ProfileCard, 0);
-            Grid.SetColumn(FormPanel, 0);
-            Grid.SetRow(FormPanel, 1);
+            Grid.SetColumn(ProfileCard, 0); Grid.SetRow(ProfileCard, 0);
+            Grid.SetColumn(FormPanel, 0);   Grid.SetRow(FormPanel, 1);
         }
     }
 

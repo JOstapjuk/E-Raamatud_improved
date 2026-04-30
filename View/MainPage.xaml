@@ -1,57 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:E_Raamatud.ViewModel"
              x:Class="E_Raamatud.MainPage"
-             x:Name="MainPageRef"
+             Shell.NavBarIsVisible="False"
              BackgroundColor="#FAF8F3"
-             SizeChanged="OnPageSizeChanged"
-             Shell.NavBarIsVisible="False">
+             SizeChanged="OnPageSizeChanged">
 
     <ContentPage.Resources>
-
         <Style x:Key="IconCircleStyle" TargetType="Border">
-            <Setter Property="StrokeShape">
-                <Setter.Value>
-                    <RoundRectangle CornerRadius="20" />
-                </Setter.Value>
-            </Setter>
+            <Setter Property="StrokeShape" Value="RoundRectangle 22" />
             <Setter Property="Stroke" Value="Transparent" />
-            <Setter Property="StrokeThickness" Value="0" />
             <Setter Property="BackgroundColor" Value="#1f4f4a" />
-            <Setter Property="WidthRequest" Value="40" />
-            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="WidthRequest" Value="44" />
+            <Setter Property="HeightRequest" Value="44" />
             <Setter Property="Padding" Value="0" />
         </Style>
-
-        <Style x:Key="IconCircleAccentStyle" TargetType="Border">
-            <Setter Property="StrokeShape">
-                <Setter.Value>
-                    <RoundRectangle CornerRadius="20" />
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Stroke" Value="Transparent" />
-            <Setter Property="StrokeThickness" Value="0" />
-            <Setter Property="BackgroundColor" Value="#d97a4a" />
-            <Setter Property="WidthRequest" Value="40" />
-            <Setter Property="HeightRequest" Value="40" />
-            <Setter Property="Padding" Value="0" />
-        </Style>
-
-        <Style x:Key="SearchEntryStyle" TargetType="Entry">
-            <Setter Property="BackgroundColor" Value="Transparent" />
-            <Setter Property="TextColor" Value="#1f2e28" />
-            <Setter Property="PlaceholderColor" Value="#8a9a92" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="HeightRequest" Value="46" />
-        </Style>
-
     </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout Spacing="0">
 
-            <!-- ============== HEADER ============== -->
-            <Border StrokeShape="RoundRectangle 0,0,28,28"
+            <!-- ══════ HEADER ══════ -->
+            <Border StrokeShape="RoundRectangle 0,0,32,32"
                     Stroke="Transparent"
                     Padding="0">
                 <Border.Background>
@@ -65,17 +36,18 @@
 
                     <Grid ColumnDefinitions="*, Auto">
                         <VerticalStackLayout Grid.Column="0" Spacing="4" VerticalOptions="Center">
-                            <Label Text="Tere tulemast"
+                            <Label x:Name="HeaderTitle"
+                                   Text="Tere tulemast"
                                    FontSize="26"
                                    FontAttributes="Bold"
                                    TextColor="White" />
-                            <Label Text="Avasta uusi raamatuid täna"
+                            <Label x:Name="HeaderSubtitle"
+                                   Text="Avasta uusi raamatuid täna"
                                    FontSize="13"
                                    TextColor="#c8e0dc" />
                         </VerticalStackLayout>
 
                         <HorizontalStackLayout Grid.Column="1" Spacing="10" VerticalOptions="Center">
-
                             <Border Style="{StaticResource IconCircleStyle}">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnUserTapped" />
@@ -93,47 +65,49 @@
                                 <Path Stroke="White" StrokeThickness="1.7" Fill="Transparent"
                                       Aspect="Uniform" HeightRequest="18" WidthRequest="18"
                                       HorizontalOptions="Center" VerticalOptions="Center"
-                                      Data="M 12,21 C 12,21 4,14 4,8.5 C 4,6 6,4 8.5,4 C 10.5,4 11.5,5 12,6 C 12.5,5 13.5,4 15.5,4 C 18,4 20,6 20,8.5 C 20,14 12,21 12,21 Z" />
+                                      Data="M 12,21 C 12,21 4,16 4,10 C 4,7.8 5.8,6 8,6 C 9.5,6 10.8,6.8 12,8 C 13.2,6.8 14.5,6 16,6 C 18.2,6 20,7.8 20,10 C 20,16 12,21 12,21 Z" />
                             </Border>
 
-                            <Border Style="{StaticResource IconCircleAccentStyle}">
+                            <Border Style="{StaticResource IconCircleStyle}"
+                                    BackgroundColor="#e07038">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnUploadTapped" />
                                 </Border.GestureRecognizers>
                                 <Path Stroke="White" StrokeThickness="1.7" Fill="Transparent"
-                                  Aspect="Uniform" HeightRequest="18" WidthRequest="18"
-                                  HorizontalOptions="Center" VerticalOptions="Center"
-                                  Data="M 12,4 L 12,16 M 6,10 L 12,4 L 18,10 M 4,20 L 20,20" />
+                                      Aspect="Uniform" HeightRequest="18" WidthRequest="18"
+                                      HorizontalOptions="Center" VerticalOptions="Center"
+                                      Data="M 12,4 L 12,16 M 6,10 L 12,4 L 18,10 M 4,20 L 20,20" />
                             </Border>
                         </HorizontalStackLayout>
                     </Grid>
 
-                    <Border StrokeShape="RoundRectangle 10"
+                    <!-- Search bar -->
+                    <Border StrokeShape="RoundRectangle 14"
                             Stroke="Transparent"
                             BackgroundColor="White"
-                            Padding="4"
-                            HeightRequest="54">
+                            Padding="0"
+                            HeightRequest="52">
                         <Border.Shadow>
-                            <Shadow Brush="#000000" Offset="0,4" Radius="14" Opacity="0.15" />
+                            <Shadow Brush="#000000" Offset="0,4" Radius="12" Opacity="0.12" />
                         </Border.Shadow>
-
-                        <Grid ColumnDefinitions="Auto, *, Auto">
+                        <Grid ColumnDefinitions="Auto, *, Auto" Padding="14,0" ColumnSpacing="8">
                             <Path Grid.Column="0"
-                                  Stroke="#8a9a92" StrokeThickness="2"
+                                  Stroke="#98a8a0" StrokeThickness="1.7"
                                   Fill="Transparent" Aspect="Uniform"
-                                  HeightRequest="18" WidthRequest="18"
-                                  Margin="14,0,10,0"
+                                  HeightRequest="16" WidthRequest="16"
                                   VerticalOptions="Center"
-                                  Data="M 10,4 C 13.3,4 16,6.7 16,10 C 16,13.3 13.3,16 10,16 C 6.7,16 4,13.3 4,10 C 4,6.7 6.7,4 10,4 Z M 14.5,14.5 L 19,19" />
-
-                            <Entry Grid.Column="1"
-                                   Style="{StaticResource SearchEntryStyle}"
+                                  Data="M 10,4 C 6.7,4 4,6.7 4,10 C 4,13.3 6.7,16 10,16 C 13.3,16 16,13.3 16,10 C 16,6.7 13.3,4 10,4 Z M 14.5,14.5 L 20,20" />
+                            <Entry x:Name="SearchEntry"
+                                   Grid.Column="1"
                                    Placeholder="Otsi pealkirja või žanri..."
                                    Text="{Binding SearchText}"
+                                   FontSize="14"
+                                   TextColor="#1f2e28"
+                                   PlaceholderColor="#a8b5ad"
+                                   BackgroundColor="Transparent"
                                    VerticalOptions="Center" />
-
                             <Border Grid.Column="2"
-                                    StrokeShape="RoundRectangle 7"
+                                    StrokeShape="RoundRectangle 10"
                                     Stroke="Transparent"
                                     BackgroundColor="#2d6e68"
                                     Padding="22,0">
@@ -141,7 +115,8 @@
                                     <TapGestureRecognizer Command="{Binding SearchCommand}"
                                                           CommandParameter="{Binding SearchText}" />
                                 </Border.GestureRecognizers>
-                                <Label Text="Otsi"
+                                <Label x:Name="SearchBtnLabel"
+                                       Text="Otsi"
                                        TextColor="White"
                                        FontAttributes="Bold"
                                        FontSize="13"
@@ -150,36 +125,41 @@
                             </Border>
                         </Grid>
                     </Border>
+
                 </VerticalStackLayout>
             </Border>
 
+            <!-- Welcome card -->
             <Border Margin="24,12,24,0"
-                StrokeShape="RoundRectangle 14"
-                Stroke="Transparent"
-                BackgroundColor="#e8f0ed"
-                Padding="20,16">
+                    StrokeShape="RoundRectangle 14"
+                    Stroke="Transparent"
+                    BackgroundColor="#e8f0ed"
+                    Padding="20,16">
                 <VerticalStackLayout Spacing="2">
                     <Label x:Name="WelcomeLabel"
-               FontSize="18"
-               FontAttributes="Bold"
-               TextColor="#1f2e28" />
-                    <Label Text="Siin on sinu raamatud"
-               FontSize="13"
-               TextColor="#3a5c52" />
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#1f2e28" />
+                    <Label x:Name="WelcomeSubLabel"
+                           Text="Siin on sinu raamatud"
+                           FontSize="13"
+                           TextColor="#3a5c52" />
                 </VerticalStackLayout>
             </Border>
 
-            <!-- ============== ЖАНРЫ (без конвертеров, через code-behind) ============== -->
+            <!-- Filters -->
             <VerticalStackLayout Spacing="12" Margin="0,28,0,0">
 
-                <Label Text="FILTRID"
+                <Label x:Name="FiltersLabel"
+                       Text="FILTRID"
                        FontSize="11"
                        TextColor="#98a8a0"
                        CharacterSpacing="3"
                        Margin="32,0,0,0" />
 
+                <!-- Genre chips — bind to Nimetus property of Genre object -->
                 <ScrollView Orientation="Horizontal"
-                            HorizontalScrollBarVisibility="Always"
+                            HorizontalScrollBarVisibility="Never"
                             VerticalScrollBarVisibility="Never"
                             Padding="28,0,28,8">
                     <HorizontalStackLayout x:Name="GenresLayout"
@@ -189,109 +169,122 @@
                             <DataTemplate>
                                 <Border StrokeShape="RoundRectangle 18"
                                         StrokeThickness="1"
-                                        Padding="18,8"
-                                        HeightRequest="36"
+                                        Padding="16,7"
+                                        HeightRequest="34"
                                         BackgroundColor="White"
                                         Stroke="#d5dfd8">
                                     <Border.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="OnGenreChipTapped" />
                                     </Border.GestureRecognizers>
+                                    <!-- FIX: bind to Nimetus, not the whole object -->
                                     <Label Text="{Binding Nimetus}"
-                                           FontSize="13"
+                                           FontSize="12"
                                            FontAttributes="Bold"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center"
-                                           TextColor="#3a5c52" />
+                                           TextColor="#3a5c52"
+                                           VerticalOptions="Center" />
                                 </Border>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </HorizontalStackLayout>
                 </ScrollView>
+
+                <!-- File type chips -->
+                <ScrollView Orientation="Horizontal"
+                            HorizontalScrollBarVisibility="Never"
+                            VerticalScrollBarVisibility="Never"
+                            Padding="28,0,28,8">
+                    <HorizontalStackLayout x:Name="FileTypeLayout" Spacing="8">
+
+                        <Border x:Name="FileTypeAll"
+                                StrokeShape="RoundRectangle 18"
+                                StrokeThickness="1"
+                                Padding="16,7"
+                                HeightRequest="34"
+                                BackgroundColor="#2d6e68"
+                                Stroke="#2d6e68">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnFileTypeChipTapped" />
+                            </Border.GestureRecognizers>
+                            <Label x:Name="FileTypeAllLabel"
+                                   Text="Kõik failid"
+                                   FontSize="12" FontAttributes="Bold"
+                                   TextColor="White"
+                                   VerticalOptions="Center" />
+                        </Border>
+
+                        <Border x:Name="FileTypeEpub"
+                                StrokeShape="RoundRectangle 18"
+                                StrokeThickness="1"
+                                Padding="16,7"
+                                HeightRequest="34"
+                                BackgroundColor="White"
+                                Stroke="#d5dfd8">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnFileTypeChipTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="EPUB"
+                                   FontSize="12" FontAttributes="Bold"
+                                   TextColor="#3a5c52"
+                                   VerticalOptions="Center" />
+                        </Border>
+
+                        <Border x:Name="FileTypePdf"
+                                StrokeShape="RoundRectangle 18"
+                                StrokeThickness="1"
+                                Padding="16,7"
+                                HeightRequest="34"
+                                BackgroundColor="White"
+                                Stroke="#d5dfd8">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnFileTypeChipTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="PDF"
+                                   FontSize="12" FontAttributes="Bold"
+                                   TextColor="#3a5c52"
+                                   VerticalOptions="Center" />
+                        </Border>
+
+                        <Border x:Name="FileTypeTxt"
+                                StrokeShape="RoundRectangle 18"
+                                StrokeThickness="1"
+                                Padding="16,7"
+                                HeightRequest="34"
+                                BackgroundColor="White"
+                                Stroke="#d5dfd8">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnFileTypeChipTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="TXT"
+                                   FontSize="12" FontAttributes="Bold"
+                                   TextColor="#3a5c52"
+                                   VerticalOptions="Center" />
+                        </Border>
+
+                    </HorizontalStackLayout>
+                </ScrollView>
             </VerticalStackLayout>
 
-            <ScrollView Orientation="Horizontal"
-            HorizontalScrollBarVisibility="Never"
-            VerticalScrollBarVisibility="Never"
-            Padding="28,0,28,0"
-            Margin="0,0,0,0">
-                <HorizontalStackLayout x:Name="FileTypeLayout" Spacing="8">
-
-                    <Border x:Name="FileTypeAll"
-                StrokeShape="RoundRectangle 18"
-                StrokeThickness="1"
-                Padding="16,7"
-                HeightRequest="34"
-                BackgroundColor="#2d6e68"
-                Stroke="#2d6e68">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnFileTypeChipTapped" />
-                        </Border.GestureRecognizers>
-                        <Label Text="Kõik failid"
-                   FontSize="12" FontAttributes="Bold"
-                   TextColor="White"
-                   VerticalOptions="Center" />
-                    </Border>
-
-                    <Border x:Name="FileTypeEpub"
-                StrokeShape="RoundRectangle 18"
-                StrokeThickness="1"
-                Padding="16,7"
-                HeightRequest="34"
-                BackgroundColor="White"
-                Stroke="#d5dfd8">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnFileTypeChipTapped" />
-                        </Border.GestureRecognizers>
-                        <Label Text="EPUB"
-                   FontSize="12" FontAttributes="Bold"
-                   TextColor="#3a5c52"
-                   VerticalOptions="Center" />
-                    </Border>
-
-                    <Border x:Name="FileTypePdf"
-                StrokeShape="RoundRectangle 18"
-                StrokeThickness="1"
-                Padding="16,7"
-                HeightRequest="34"
-                BackgroundColor="White"
-                Stroke="#d5dfd8">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnFileTypeChipTapped" />
-                        </Border.GestureRecognizers>
-                        <Label Text="PDF"
-                   FontSize="12" FontAttributes="Bold"
-                   TextColor="#3a5c52"
-                   VerticalOptions="Center" />
-                    </Border>
-
-                    <Border x:Name="FileTypeTxt"
-                StrokeShape="RoundRectangle 18"
-                StrokeThickness="1"
-                Padding="16,7"
-                HeightRequest="34"
-                BackgroundColor="White"
-                Stroke="#d5dfd8">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnFileTypeChipTapped" />
-                        </Border.GestureRecognizers>
-                        <Label Text="TXT"
-                   FontSize="12" FontAttributes="Bold"
-                   TextColor="#3a5c52"
-                   VerticalOptions="Center" />
-                    </Border>
-
-                </HorizontalStackLayout>
-            </ScrollView>
-
-            <!-- ============== СЕКЦИЯ КНИГ ============== -->
+            <!-- Books section -->
             <VerticalStackLayout Spacing="16" Margin="32,28,32,40">
 
                 <Grid ColumnDefinitions="*, Auto">
                     <VerticalStackLayout Grid.Column="0" Spacing="2">
-                        <Label Text="Raamatud" FontSize="22" FontAttributes="Bold" TextColor="#1f2e28" />
-                        <Label Text="Vali endale meelepärane" FontSize="12" TextColor="#98a8a0" />
+                        <Label x:Name="BooksSectionTitle"
+                               Text="Raamatud"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#1f2e28" />
+                        <Label x:Name="BooksSectionSubtitle"
+                               Text="Vali endale meelepärane"
+                               FontSize="12"
+                               TextColor="#98a8a0" />
                     </VerticalStackLayout>
-                    <Label Grid.Column="1" Text="Kõik →" FontSize="13" FontAttributes="Bold" TextColor="#2d6e68" VerticalOptions="Center" />
+                    <Label Grid.Column="1"
+                           Text="Kõik →"
+                           FontSize="13"
+                           FontAttributes="Bold"
+                           TextColor="#2d6e68"
+                           VerticalOptions="Center" />
                 </Grid>
 
                 <CollectionView x:Name="BooksCollectionView"
@@ -309,13 +302,12 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <VerticalStackLayout Spacing="10" Padding="2">
-
                                 <Grid>
                                     <Border StrokeShape="RoundRectangle 10"
-                                        Stroke="Transparent"
-                                        Padding="0"
-                                        HeightRequest="260"
-                                        HorizontalOptions="Fill">
+                                            Stroke="Transparent"
+                                            Padding="0"
+                                            HeightRequest="260"
+                                            HorizontalOptions="Fill">
                                         <Border.Shadow>
                                             <Shadow Brush="#000000" Offset="0,4" Radius="12" Opacity="0.18" />
                                         </Border.Shadow>
@@ -323,60 +315,37 @@
                                     </Border>
 
                                     <Border StrokeShape="RoundRectangle 6"
-                                        Stroke="Transparent"
-                                        BackgroundColor="{Binding StatusColor}"
-                                        Padding="8,4"
-                                        HorizontalOptions="Start"
-                                        VerticalOptions="Start"
-                                        Margin="8,8,0,0"
-                                        IsVisible="{Binding StatusLabel, Converter={StaticResource NullToBoolConverter}}">
+                                            Stroke="Transparent"
+                                            BackgroundColor="{Binding StatusColor}"
+                                            Padding="8,4"
+                                            HorizontalOptions="Start"
+                                            VerticalOptions="Start"
+                                            Margin="8,8,0,0"
+                                            IsVisible="{Binding StatusLabel, Converter={StaticResource NullToBoolConverter}}">
                                         <Label Text="{Binding StatusLabel}"
-                                           FontSize="10"
-                                           FontAttributes="Bold"
-                                           TextColor="White"
-                                           CharacterSpacing="1" />
-                                    </Border>
-
-                                    <Border StrokeShape="RoundRectangle 14"
-                                        Stroke="Transparent"
-                                        BackgroundColor="#CC000000"
-                                        WidthRequest="28"
-                                        HeightRequest="28"
-                                        Padding="0"
-                                        HorizontalOptions="End"
-                                        VerticalOptions="Start"
-                                        Margin="0,8,8,0">
-                                        <Border.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="OnBookMenuTapped" />
-                                        </Border.GestureRecognizers>
-                                        <Label Text="···"
-                                           TextColor="White"
-                                           FontSize="14"
-                                           FontAttributes="Bold"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center" />
+                                               FontSize="10"
+                                               FontAttributes="Bold"
+                                               TextColor="White" />
                                     </Border>
                                 </Grid>
 
-                                <VerticalStackLayout Spacing="3" Padding="2,0,2,0">
+                                <VerticalStackLayout Spacing="3" Padding="2,0">
                                     <Label Text="{Binding Pealkiri}"
-                                       FontSize="13"
-                                       FontAttributes="Bold"
-                                       TextColor="#1f2e28"
-                                       LineBreakMode="TailTruncation"
-                                       MaxLines="2" />
+                                           FontSize="13"
+                                           FontAttributes="Bold"
+                                           TextColor="#1f2e28"
+                                           LineBreakMode="TailTruncation"
+                                           MaxLines="2" />
                                     <Label Text="{Binding Zanr_Nimi}"
-                                       FontSize="12"
-                                       TextColor="#98a8a0" />
+                                           FontSize="11"
+                                           TextColor="#98a8a0" />
                                 </VerticalStackLayout>
-
                             </VerticalStackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
             </VerticalStackLayout>
-
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

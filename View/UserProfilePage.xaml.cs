@@ -1,4 +1,5 @@
-﻿using E_Raamatud.Model;
+using E_Raamatud.Model;
+using E_Raamatud.Resources.Localization;
 using E_Raamatud.Services;
 using E_Raamatud.ViewModel;
 
@@ -17,7 +18,10 @@ public partial class UserProfilePage : ContentPage
         base.OnAppearing();
         LoadUserData();
         ApplyResponsiveLayout(this.Width);
+        HighlightActiveLang();
     }
+
+    // ── User data ─────────────────────────────────────────────────────────────
 
     private void LoadUserData()
     {
@@ -39,13 +43,12 @@ public partial class UserProfilePage : ContentPage
         {
             RoleLabel.Text = user.Role switch
             {
-                UserRole.Admin => "ADMIN",
+                UserRole.Admin    => "ADMIN",
                 UserRole.Avaldaja => "AVALDAJA",
-                _ => "KASUTAJA"
+                _                 => "KASUTAJA"
             };
         }
 
-        // Show profile picture if one has been set, otherwise show initials circle
         if (!string.IsNullOrEmpty(user.ProfilePicture))
         {
             ProfileImage.Source = ImageSource.FromUri(new Uri(user.ProfilePicture));
@@ -58,6 +61,8 @@ public partial class UserProfilePage : ContentPage
             AvatarBorder.IsVisible = true;
         }
     }
+
+    // ── Layout ────────────────────────────────────────────────────────────────
 
     private void OnPageSizeChanged(object sender, EventArgs e)
     {
@@ -101,6 +106,8 @@ public partial class UserProfilePage : ContentPage
         }
     }
 
+    // ── Navigation ────────────────────────────────────────────────────────────
+
     private async void OnBackTapped(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
@@ -109,33 +116,64 @@ public partial class UserProfilePage : ContentPage
     private async void OnUpdatesTapped(object sender, EventArgs e)
     {
         try { await Navigation.PushAsync(new UpdatesPage()); }
-        catch (Exception ex) { await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK"); }
+        catch (Exception ex) { await DisplayAlert(AppResources.Error, $"{ex.GetType().Name}: {ex.Message}", AppResources.OK); }
     }
 
     private async void OnAccountSettingsTapped(object sender, EventArgs e)
     {
         try { await Navigation.PushAsync(new AccountSettingsPage()); }
-        catch (Exception ex) { await DisplayAlert("Viga", $"{ex.GetType().Name}: {ex.Message}", "OK"); }
+        catch (Exception ex) { await DisplayAlert(AppResources.Error, $"{ex.GetType().Name}: {ex.Message}", AppResources.OK); }
     }
 
     private async void OnRedeemGiftCardTapped(object sender, EventArgs e)
     {
-        await DisplayAlert("Kingikaart", "Funktsioon tulekul!", "OK");
+        await DisplayAlert("Kingikaart", "Funktsioon tulekul!", AppResources.OK);
     }
 
     private async void OnAddAccountTapped(object sender, EventArgs e)
     {
-        await DisplayAlert("Lisa konto", "Funktsioon tulekul!", "OK");
+        await DisplayAlert("Lisa konto", "Funktsioon tulekul!", AppResources.OK);
     }
 
     private async void OnLogoutTapped(object sender, EventArgs e)
     {
-        bool confirm = await DisplayAlert("Logi välja",
-            "Kas soovite kindlasti välja logida?", "Jah", "Ei");
+        bool confirm = await DisplayAlert(
+            AppResources.Logout,
+            "Kas soovite kindlasti välja logida?",
+            AppResources.Yes,
+            AppResources.No);
 
         if (!confirm) return;
 
         SessionService.Clear();
         Application.Current.MainPage = new NavigationPage(new E_Raamatud.LoginPage());
+    }
+
+    // ── Language picker ───────────────────────────────────────────────────────
+
+    private void OnLangEtTapped(object sender, TappedEventArgs e) => ApplyLang("et");
+    private void OnLangRuTapped(object sender, TappedEventArgs e) => ApplyLang("ru");
+    private void OnLangEnTapped(object sender, TappedEventArgs e) => ApplyLang("en");
+
+    private void ApplyLang(string code)
+    {
+        LanguageService.ChangeLanguage(code);
+        // Restart to login so every page reloads with the new language
+        Application.Current.MainPage = new NavigationPage(new E_Raamatud.LoginPage());
+    }
+
+    private void HighlightActiveLang()
+    {
+        var current = LanguageService.CurrentLanguage;
+        SetLangActive(LangEtBorder, LangEtCheck, current == "et");
+        SetLangActive(LangRuBorder, LangRuCheck, current == "ru");
+        SetLangActive(LangEnBorder, LangEnCheck, current == "en");
+    }
+
+    private static void SetLangActive(Border border, Label check, bool active)
+    {
+        border.Stroke          = active ? Color.FromArgb("#2d6e68") : Color.FromArgb("#e0e6e2");
+        border.BackgroundColor = active ? Color.FromArgb("#e8f4f2") : Color.FromArgb("#f5f7f5");
+        check.IsVisible        = active;
     }
 }

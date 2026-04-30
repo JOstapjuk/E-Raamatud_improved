@@ -12,7 +12,7 @@
 
     <Grid RowDefinitions="280, *">
 
-        <!-- Top hero area with gradient -->
+        <!-- Top hero area -->
         <Border Grid.Row="0"
                 StrokeShape="RoundRectangle 0,0,40,40"
                 Stroke="Transparent"
@@ -30,11 +30,13 @@
                            FontSize="11"
                            TextColor="#a8d4c8"
                            CharacterSpacing="4" />
-                    <Label Text="Tere tulemast"
+                    <Label x:Name="HeroTitle"
+                           Text="Tere tulemast"
                            FontSize="34"
                            FontAttributes="Bold"
                            TextColor="White" />
-                    <Label Text="Logi sisse, et jätkata lugemist"
+                    <Label x:Name="HeroSubtitle"
+                           Text="Logi sisse, et jätkata lugemist"
                            FontSize="14"
                            TextColor="#c8e0dc"
                            Margin="0,4,0,0" />
@@ -47,7 +49,8 @@
             <VerticalStackLayout Padding="32,36,32,32" Spacing="0">
 
                 <!-- Section label -->
-                <Label Text="KONTO"
+                <Label x:Name="AccountSectionLabel"
+                       Text="KONTO"
                        FontSize="11"
                        TextColor="#98a8a0"
                        CharacterSpacing="3"
@@ -55,7 +58,8 @@
 
                 <!-- Username field -->
                 <VerticalStackLayout Spacing="0" Margin="0,0,0,20">
-                    <Label Text="Kasutajanimi"
+                    <Label x:Name="UsernameTitleLabel"
+                           Text="Kasutajanimi"
                            FontSize="13"
                            TextColor="#3a5c52"
                            FontAttributes="Bold"
@@ -65,7 +69,8 @@
                             StrokeThickness="1.5"
                             BackgroundColor="White"
                             Padding="16,2">
-                        <Entry Placeholder="Sisesta kasutajanimi"
+                        <Entry x:Name="UsernameEntry"
+                               Placeholder="Sisesta kasutajanimi"
                                Text="{Binding Username}"
                                FontSize="15"
                                TextColor="#1f2e28"
@@ -77,7 +82,8 @@
 
                 <!-- Password field -->
                 <VerticalStackLayout Spacing="0" Margin="0,0,0,8">
-                    <Label Text="Parool"
+                    <Label x:Name="PasswordTitleLabel"
+                           Text="Parool"
                            FontSize="13"
                            TextColor="#3a5c52"
                            FontAttributes="Bold"
@@ -87,7 +93,8 @@
                             StrokeThickness="1.5"
                             BackgroundColor="White"
                             Padding="16,2">
-                        <Entry Placeholder="Sisesta parool"
+                        <Entry x:Name="PasswordEntry"
+                               Placeholder="Sisesta parool"
                                IsPassword="True"
                                Text="{Binding Password}"
                                FontSize="15"
@@ -105,8 +112,9 @@
                        HorizontalOptions="Center"
                        Margin="0,8,0,28" />
 
-                <!-- Primary action -->
-                <Button Text="Logi sisse"
+                <!-- Login button -->
+                <Button x:Name="LoginBtn"
+                        Text="Logi sisse"
                         Command="{Binding LoginCommand}"
                         Clicked="Login_Clicked"
                         BackgroundColor="#2d6e68"
@@ -117,20 +125,28 @@
                         HeightRequest="54"
                         Margin="0,0,0,24" />
 
-                <!-- Divider with label -->
+                <!-- Divider -->
                 <Grid ColumnDefinitions="*, Auto, *" ColumnSpacing="14" Margin="0,0,0,24">
                     <BoxView Grid.Column="0" HeightRequest="1" Color="#dde4df" VerticalOptions="Center" />
-                    <Label Grid.Column="1" Text="VÕI" FontSize="11" TextColor="#98a8a0" CharacterSpacing="2" VerticalOptions="Center" />
+                    <Label x:Name="OrLabel"
+                           Grid.Column="1"
+                           Text="VÕI"
+                           FontSize="11"
+                           TextColor="#98a8a0"
+                           CharacterSpacing="2"
+                           VerticalOptions="Center" />
                     <BoxView Grid.Column="2" HeightRequest="1" Color="#dde4df" VerticalOptions="Center" />
                 </Grid>
 
                 <!-- Register link -->
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
-                    <Label Text="Pole veel kontot?"
+                    <Label x:Name="NoAccountLabel"
+                           Text="Pole veel kontot?"
                            FontSize="14"
                            TextColor="#6a7d75"
                            VerticalOptions="Center" />
-                    <Label Text="Registreeru"
+                    <Label x:Name="RegisterLabel"
+                           Text="Registreeru"
                            FontSize="14"
                            FontAttributes="Bold"
                            TextColor="#2d6e68"

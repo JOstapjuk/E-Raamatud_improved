@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true"></xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- Login -->
+  <data name="LoginTitle" xml:space="preserve"><value>Tere tagasi</value></data>
+  <data name="LoginSubtitle" xml:space="preserve"><value>Logi sisse lugemise jätkamiseks</value></data>
+  <data name="AccountLabel" xml:space="preserve"><value>KONTO</value></data>
+  <data name="UsernameLabel" xml:space="preserve"><value>Kasutajanimi</value></data>
+  <data name="UsernamePlaceholder" xml:space="preserve"><value>Sisesta kasutajanimi</value></data>
+  <data name="PasswordLabel" xml:space="preserve"><value>Parool</value></data>
+  <data name="PasswordPlaceholder" xml:space="preserve"><value>Sisesta parool</value></data>
+  <data name="LoginButton" xml:space="preserve"><value>Logi sisse</value></data>
+  <data name="OrDivider" xml:space="preserve"><value>VÕI</value></data>
+  <data name="NoAccount" xml:space="preserve"><value>Pole veel kontot?</value></data>
+  <data name="RegisterLink" xml:space="preserve"><value>Registreeru</value></data>
+
+  <!-- Register -->
+  <data name="RegisterTitle" xml:space="preserve"><value>Loo konto</value></data>
+  <data name="RegisterSubtitle" xml:space="preserve"><value>Liitu meie lugemiskogukonnaga</value></data>
+  <data name="RoleLabel" xml:space="preserve"><value>Roll</value></data>
+  <data name="RegisterButton" xml:space="preserve"><value>Registreeru</value></data>
+  <data name="BackButton" xml:space="preserve"><value>Tagasi</value></data>
+  <data name="HasAccount" xml:space="preserve"><value>On juba konto?</value></data>
+  <data name="LoginLink" xml:space="preserve"><value>Logi sisse</value></data>
+
+  <!-- Main -->
+  <data name="WelcomeGreeting" xml:space="preserve"><value>Tere</value></data>
+  <data name="WelcomeSubtitle" xml:space="preserve"><value>Avasta uusi raamatuid täna</value></data>
+  <data name="YourBooks" xml:space="preserve"><value>Siin on sinu raamatud</value></data>
+  <data name="BooksTitle" xml:space="preserve"><value>Raamatud</value></data>
+  <data name="BooksSubtitle" xml:space="preserve"><value>Vali endale meelepärane</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Otsi pealkirja või žanri...</value></data>
+  <data name="SearchButton" xml:space="preserve"><value>Otsi</value></data>
+  <data name="FiltersLabel" xml:space="preserve"><value>FILTRID</value></data>
+  <data name="AllFiles" xml:space="preserve"><value>Kõik failid</value></data>
+  <data name="AllBooks" xml:space="preserve"><value>Kõik raamatud</value></data>
+
+  <!-- Book Detail -->
+  <data name="ReadButton" xml:space="preserve"><value>Loe</value></data>
+  <data name="ListenButton" xml:space="preserve"><value>Kuula</value></data>
+  <data name="DescriptionLabel" xml:space="preserve"><value>Kirjeldus</value></data>
+  <data name="NoTextFile" xml:space="preserve"><value>Sellel raamatul pole tekstifaili.</value></data>
+  <data name="NoAudioFile" xml:space="preserve"><value>Sellel raamatul pole audiofaili.</value></data>
+  <data name="BookLoadError" xml:space="preserve"><value>Raamatu laadimisel tekkis probleem.</value></data>
+
+  <!-- Library -->
+  <data name="LibraryTitle" xml:space="preserve"><value>Minu raamatukogu</value></data>
+  <data name="LibraryEmpty" xml:space="preserve"><value>Sa ei loe hetkel ühtegi raamatut</value></data>
+  <data name="LibraryEmptySub" xml:space="preserve"><value>Ava raamat ja alusta lugemist</value></data>
+  <data name="GoToStore" xml:space="preserve"><value>Mine raamatulettele</value></data>
+
+  <!-- Audio Player -->
+  <data name="ChapterList" xml:space="preserve"><value>Peatukkide nimekiri</value></data>
+  <data name="Chapter" xml:space="preserve"><value>PEATÜKK</value></data>
+
+  <!-- Add Book -->
+  <data name="AddBookTitle" xml:space="preserve"><value>Lisa raamat</value></data>
+  <data name="AddBookSubtitle" xml:space="preserve"><value>Loo kataloogi uus pealkiri</value></data>
+  <data name="TitleFieldLabel" xml:space="preserve"><value>PEALKIRI</value></data>
+  <data name="DescriptionFieldLabel" xml:space="preserve"><value>KIRJELDUS</value></data>
+  <data name="SaveButton" xml:space="preserve"><value>Salvesta</value></data>
+
+  <!-- Account Settings -->
+  <data name="AccountSettings" xml:space="preserve"><value>Konto seaded</value></data>
+  <data name="ChangePassword" xml:space="preserve"><value>Muuda parooli</value></data>
+  <data name="CurrentPassword" xml:space="preserve"><value>Praegune parool</value></data>
+  <data name="NewPassword" xml:space="preserve"><value>Uus parool</value></data>
+  <data name="ConfirmPassword" xml:space="preserve"><value>Kinnita uus parool</value></data>
+  <data name="SaveChanges" xml:space="preserve"><value>Salvesta muudatused</value></data>
+
+  <!-- Language -->
+  <data name="ChangeLanguage" xml:space="preserve"><value>Muuda keelt</value></data>
+  <data name="LanguageSettings" xml:space="preserve"><value>Keele seaded</value></data>
+  <data name="EnglishButton" xml:space="preserve"><value>Inglise</value></data>
+  <data name="RussianButton" xml:space="preserve"><value>Vene</value></data>
+  <data name="EstonianButton" xml:space="preserve"><value>Eesti</value></data>
+
+  <!-- Profile -->
+  <data name="Logout" xml:space="preserve"><value>Logi välja</value></data>
+  <data name="LogoutConfirm" xml:space="preserve"><value>Kas soovite kindlasti välja logida?</value></data>
+
+  <!-- General -->
+  <data name="Error" xml:space="preserve"><value>Viga</value></data>
+  <data name="OK" xml:space="preserve"><value>OK</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Tühista</value></data>
+  <data name="Yes" xml:space="preserve"><value>Jah</value></data>
+  <data name="No" xml:space="preserve"><value>Ei</value></data>
+  <data name="Delete" xml:space="preserve"><value>Kustuta</value></data>
+  <data name="ComingSoon" xml:space="preserve"><value>Tulekul!</value></data>
+</root>
