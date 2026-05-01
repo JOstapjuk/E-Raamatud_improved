@@ -1,4 +1,5 @@
 using E_Raamatud.Model;
+using E_Raamatud.Resources.Localization;
 using E_Raamatud.Services;
 using E_Raamatud.ViewModel;
 using Microsoft.Maui.Controls;
@@ -20,16 +21,13 @@ namespace E_Raamatud.View
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
             _vm.LibraryBooks.CollectionChanged -= LibraryBooks_CollectionChanged;
-
             _ = ReloadAndBind();
         }
 
         private async Task ReloadAndBind()
         {
             await _vm.ReloadAsync();
-
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 BindBooksCollection();
@@ -54,12 +52,12 @@ namespace E_Raamatud.View
 
             BooksCountLabel.Text = count switch
             {
-                0 => "Hetkel ei loe ühtegi raamatut",
+                0 => AppResources.LibraryEmpty,
                 1 => "1 raamat",
                 _ => $"{count} raamatut"
             };
 
-            EmptyView.IsVisible = count == 0;
+            EmptyView.IsVisible  = count == 0;
             BooksScroll.IsVisible = count > 0;
         }
 
@@ -76,12 +74,12 @@ namespace E_Raamatud.View
 
             var raamat = new Raamat
             {
-                Raamat_ID = book.Raamat_ID,
-                Pealkiri = book.Pealkiri,
-                Kirjeldus = book.Kirjeldus,
-                Pilt = book.Pilt,
+                Raamat_ID  = book.Raamat_ID,
+                Pealkiri   = book.Pealkiri,
+                Kirjeldus  = book.Kirjeldus,
+                Pilt       = book.Pilt,
                 Tekstifail = book.Tekstifail,
-                Audiofail = book.Audiofail
+                Audiofail  = book.Audiofail
             };
 
             await Navigation.PushAsync(new BookDetailPage(raamat, ""));
@@ -149,7 +147,7 @@ namespace E_Raamatud.View
                     BindBooksCollection();
 
                     await DisplayAlert("Suurepärane!",
-                        $"\"{book.Pealkiri}\" on märgitud loetuks!", "OK");
+                        $"\"{book.Pealkiri}\" on märgitud loetuks!", AppResources.OK);
                 }
             }
         }

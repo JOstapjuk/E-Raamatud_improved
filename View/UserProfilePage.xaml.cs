@@ -29,7 +29,7 @@ public partial class UserProfilePage : ContentPage
         if (user == null) return;
 
         if (UsernameLabel != null)
-            UsernameLabel.Text = user.Username ?? "kasutaja";
+            UsernameLabel.Text = user.Username ?? AppResources.UsernameLabel;
 
         if (EmailLabel != null)
             EmailLabel.Text = "";
@@ -127,19 +127,19 @@ public partial class UserProfilePage : ContentPage
 
     private async void OnRedeemGiftCardTapped(object sender, EventArgs e)
     {
-        await DisplayAlert("Kingikaart", "Funktsioon tulekul!", AppResources.OK);
+        await DisplayAlert(AppResources.GiftCard, AppResources.FunctionComingSoon, AppResources.OK);
     }
 
     private async void OnAddAccountTapped(object sender, EventArgs e)
     {
-        await DisplayAlert("Lisa konto", "Funktsioon tulekul!", AppResources.OK);
+        await DisplayAlert(AppResources.AddAccount, AppResources.FunctionComingSoon, AppResources.OK);
     }
 
     private async void OnLogoutTapped(object sender, EventArgs e)
     {
         bool confirm = await DisplayAlert(
             AppResources.Logout,
-            "Kas soovite kindlasti välja logida?",
+            AppResources.LogoutConfirm,
             AppResources.Yes,
             AppResources.No);
 
@@ -158,7 +158,6 @@ public partial class UserProfilePage : ContentPage
     private void ApplyLang(string code)
     {
         LanguageService.ChangeLanguage(code);
-        // Restart to login so every page reloads with the new language
         Application.Current.MainPage = new NavigationPage(new E_Raamatud.LoginPage());
     }
 

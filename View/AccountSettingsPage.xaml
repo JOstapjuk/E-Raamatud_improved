@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:E_Raamatud.Resources.Localization"
              x:Class="E_Raamatud.View.AccountSettingsPage"
              x:Name="AccountSettingsPageRef"
              BackgroundColor="#FAF8F3"
              SizeChanged="OnPageSizeChanged"
              Shell.NavBarIsVisible="False"
-             Title="Konto seaded">
+             Title="{x:Static loc:AppResources.AccountSettings}">
 
     <ContentPage.Resources>
         <Style x:Key="FieldEntryStyle" TargetType="Entry">
@@ -38,10 +39,8 @@
                         StrokeShape="RoundRectangle 20"
                         Stroke="Transparent"
                         BackgroundColor="#1f4f4a"
-                        WidthRequest="40"
-                        HeightRequest="40"
-                        Padding="0"
-                        VerticalOptions="Center">
+                        WidthRequest="40" HeightRequest="40"
+                        Padding="0" VerticalOptions="Center">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnBackTapped" />
                     </Border.GestureRecognizers>
@@ -52,20 +51,15 @@
                           Data="M 14,6 L 8,12 L 14,18" />
                 </Border>
 
-                <VerticalStackLayout Grid.Column="1"
-                                     Spacing="2"
-                                     VerticalOptions="Center"
-                                     HorizontalOptions="Center">
+                <VerticalStackLayout Grid.Column="1" Spacing="2"
+                                     VerticalOptions="Center" HorizontalOptions="Center">
                     <Label x:Name="HeaderTitle"
-                           Text="Konto seaded"
-                           FontSize="22"
-                           FontAttributes="Bold"
-                           TextColor="White"
-                           HorizontalOptions="Center" />
+                           Text="{x:Static loc:AppResources.AccountSettings}"
+                           FontSize="22" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center" />
                     <Label x:Name="HeaderSubtitle"
-                           Text="Halda oma konto andmeid ja parooli"
-                           FontSize="12"
-                           TextColor="#c8e0dc"
+                           Text="{x:Static loc:AppResources.AccountSettingsSubtitle}"
+                           FontSize="12" TextColor="#c8e0dc"
                            HorizontalOptions="Center" />
                 </VerticalStackLayout>
 
@@ -77,17 +71,14 @@
         <ScrollView Grid.Row="1">
             <Grid x:Name="ContentRoot"
                   Padding="32,28,32,32"
-                  ColumnSpacing="24"
-                  RowSpacing="24">
+                  ColumnSpacing="24" RowSpacing="24">
 
                 <!-- LEFT: Profile card -->
                 <Border x:Name="ProfileCard"
                         StrokeShape="RoundRectangle 14"
-                        Stroke="#e5ebe7"
-                        StrokeThickness="1"
+                        Stroke="#e5ebe7" StrokeThickness="1"
                         BackgroundColor="White"
-                        Padding="24"
-                        VerticalOptions="Start">
+                        Padding="24" VerticalOptions="Start">
                     <Border.Shadow>
                         <Shadow Brush="#000000" Offset="0,4" Radius="12" Opacity="0.06" />
                     </Border.Shadow>
@@ -97,55 +88,41 @@
                         <Grid WidthRequest="100" HeightRequest="100" HorizontalOptions="Center">
                             <Border x:Name="AvatarBorder"
                                     StrokeShape="RoundRectangle 50"
-                                    Stroke="Transparent"
-                                    BackgroundColor="#2d6e68"
-                                    WidthRequest="100"
-                                    HeightRequest="100"
-                                    Padding="0">
+                                    Stroke="Transparent" BackgroundColor="#2d6e68"
+                                    WidthRequest="100" HeightRequest="100" Padding="0">
                                 <Label x:Name="AvatarInitial"
                                        Text="?"
-                                       FontSize="38"
-                                       FontAttributes="Bold"
+                                       FontSize="38" FontAttributes="Bold"
                                        TextColor="White"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
+                                       HorizontalOptions="Center" VerticalOptions="Center" />
                             </Border>
 
                             <Border x:Name="AvatarImageBorder"
                                     StrokeShape="RoundRectangle 50"
                                     Stroke="Transparent"
-                                    WidthRequest="100"
-                                    HeightRequest="100"
-                                    IsVisible="False"
-                                    Padding="0">
+                                    WidthRequest="100" HeightRequest="100"
+                                    IsVisible="False" Padding="0">
                                 <Image x:Name="ProfileImage"
                                        Aspect="AspectFill"
-                                       WidthRequest="100"
-                                       HeightRequest="100" />
+                                       WidthRequest="100" HeightRequest="100" />
                             </Border>
 
                             <Border StrokeShape="RoundRectangle 16"
                                     BackgroundColor="#2d6e68"
-                                    Stroke="White"
-                                    StrokeThickness="2"
-                                    WidthRequest="32"
-                                    HeightRequest="32"
-                                    HorizontalOptions="End"
-                                    VerticalOptions="End">
+                                    Stroke="White" StrokeThickness="2"
+                                    WidthRequest="32" HeightRequest="32"
+                                    HorizontalOptions="End" VerticalOptions="End">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnChangeAvatarTapped" />
                                 </Border.GestureRecognizers>
-                                <Label Text="📷"
-                                       FontSize="14"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
+                                <Label Text="📷" FontSize="14"
+                                       HorizontalOptions="Center" VerticalOptions="Center" />
                             </Border>
                         </Grid>
 
                         <Label x:Name="ProfileName"
                                Text="{Binding Username}"
-                               FontSize="18"
-                               FontAttributes="Bold"
+                               FontSize="18" FontAttributes="Bold"
                                TextColor="#1f2e28"
                                HorizontalOptions="Center" />
 
@@ -157,10 +134,8 @@
 
                     <!-- Block 1: Username -->
                     <Border StrokeShape="RoundRectangle 14"
-                            Stroke="#e5ebe7"
-                            StrokeThickness="1"
-                            BackgroundColor="White"
-                            Padding="24">
+                            Stroke="#e5ebe7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="24">
                         <Border.Shadow>
                             <Shadow Brush="#000000" Offset="0,4" Radius="12" Opacity="0.06" />
                         </Border.Shadow>
@@ -168,42 +143,35 @@
                         <VerticalStackLayout Spacing="16">
                             <VerticalStackLayout Spacing="2">
                                 <Label x:Name="UsernameBlockTitle"
-                                       Text="Kasutajanimi"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="#1f2e28" />
+                                       Text="{x:Static loc:AppResources.UsernameLabel}"
+                                       FontSize="18" FontAttributes="Bold" TextColor="#1f2e28" />
                                 <Label x:Name="UsernameBlockSubtitle"
-                                       Text="Muuda oma kasutajanime"
-                                       FontSize="12"
-                                       TextColor="#98a8a0" />
+                                       Text="{x:Static loc:AppResources.AccountSettingsMenuSub}"
+                                       FontSize="12" TextColor="#98a8a0" />
                             </VerticalStackLayout>
 
                             <BoxView HeightRequest="1" Color="#e5ebe7" HorizontalOptions="Fill" />
 
                             <VerticalStackLayout Spacing="6">
                                 <Label x:Name="UsernameFieldLabel"
-                                       Text="Kasutajanimi"
-                                       FontSize="11"
-                                       FontAttributes="Bold"
-                                       TextColor="#3a5c52"
-                                       CharacterSpacing="0.5" />
+                                       Text="{x:Static loc:AppResources.UsernameFieldLabel}"
+                                       FontSize="11" FontAttributes="Bold"
+                                       TextColor="#3a5c52" CharacterSpacing="0.5" />
                                 <Border StrokeShape="RoundRectangle 10"
-                                        Stroke="#d5dfd8"
-                                        StrokeThickness="1"
-                                        BackgroundColor="#fafbfa"
-                                        Padding="14,2">
+                                        Stroke="#d5dfd8" StrokeThickness="1"
+                                        BackgroundColor="#fafbfa" Padding="14,2">
                                     <Grid ColumnDefinitions="Auto, *">
                                         <Path Grid.Column="0"
                                               Stroke="#8a9a92" StrokeThickness="1.7"
                                               Fill="Transparent" Aspect="Uniform"
                                               HeightRequest="16" WidthRequest="16"
-                                              Margin="0,0,10,0"
-                                              VerticalOptions="Center"
+                                              Margin="0,0,10,0" VerticalOptions="Center"
                                               Data="M 12,12 C 14.2,12 16,10.2 16,8 C 16,5.8 14.2,4 12,4 C 9.8,4 8,5.8 8,8 C 8,10.2 9.8,12 12,12 Z M 12,14 C 9.3,14 4,15.3 4,18 L 4,20 L 20,20 L 20,18 C 20,15.3 14.7,14 12,14 Z" />
-                                        <Entry Grid.Column="1"
+                                        <Entry x:Name="UsernameEntry"
+                                               Grid.Column="1"
                                                Style="{StaticResource FieldEntryStyle}"
                                                Text="{Binding Username}"
-                                               Placeholder="Kasutajanimi" />
+                                               Placeholder="{x:Static loc:AppResources.UsernameFieldPlaceholder}" />
                                     </Grid>
                                 </Border>
                             </VerticalStackLayout>
@@ -212,10 +180,8 @@
 
                     <!-- Block 2: Password -->
                     <Border StrokeShape="RoundRectangle 14"
-                            Stroke="#e5ebe7"
-                            StrokeThickness="1"
-                            BackgroundColor="White"
-                            Padding="24">
+                            Stroke="#e5ebe7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="24">
                         <Border.Shadow>
                             <Shadow Brush="#000000" Offset="0,4" Radius="12" Opacity="0.06" />
                         </Border.Shadow>
@@ -223,101 +189,89 @@
                         <VerticalStackLayout Spacing="16">
                             <VerticalStackLayout Spacing="2">
                                 <Label x:Name="PasswordBlockTitle"
-                                       Text="Vaheta parooli"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="#1f2e28" />
+                                       Text="{x:Static loc:AppResources.ChangePassword}"
+                                       FontSize="18" FontAttributes="Bold" TextColor="#1f2e28" />
                                 <Label x:Name="PasswordBlockSubtitle"
-                                       Text="Sisesta praegune ja uus parool"
-                                       FontSize="12"
-                                       TextColor="#98a8a0" />
+                                       Text="{x:Static loc:AppResources.CurrentPassword}"
+                                       FontSize="12" TextColor="#98a8a0" />
                             </VerticalStackLayout>
 
                             <BoxView HeightRequest="1" Color="#e5ebe7" HorizontalOptions="Fill" />
 
+                            <!-- Current password -->
                             <VerticalStackLayout Spacing="6">
                                 <Label x:Name="CurrentPasswordLabel"
-                                       Text="Praegune parool"
-                                       FontSize="11"
-                                       FontAttributes="Bold"
-                                       TextColor="#3a5c52"
-                                       CharacterSpacing="0.5" />
+                                       Text="{x:Static loc:AppResources.CurrentPassword}"
+                                       FontSize="11" FontAttributes="Bold"
+                                       TextColor="#3a5c52" CharacterSpacing="0.5" />
                                 <Border StrokeShape="RoundRectangle 10"
-                                        Stroke="#d5dfd8"
-                                        StrokeThickness="1"
-                                        BackgroundColor="#fafbfa"
-                                        Padding="14,2">
+                                        Stroke="#d5dfd8" StrokeThickness="1"
+                                        BackgroundColor="#fafbfa" Padding="14,2">
                                     <Grid ColumnDefinitions="Auto, *">
                                         <Path Grid.Column="0"
                                               Stroke="#8a9a92" StrokeThickness="1.7"
                                               Fill="Transparent" Aspect="Uniform"
                                               HeightRequest="16" WidthRequest="16"
-                                              Margin="0,0,10,0"
-                                              VerticalOptions="Center"
+                                              Margin="0,0,10,0" VerticalOptions="Center"
                                               Data="M 6,10 L 6,7 C 6,4.2 8.2,2 11,2 L 13,2 C 15.8,2 18,4.2 18,7 L 18,10 M 4,10 L 20,10 L 20,21 L 4,21 Z" />
-                                        <Entry Grid.Column="1"
+                                        <Entry x:Name="CurrentPasswordEntry"
+                                               Grid.Column="1"
                                                Style="{StaticResource FieldEntryStyle}"
                                                Text="{Binding CurrentPassword}"
                                                IsPassword="True"
-                                               Placeholder="Sisesta praegune parool" />
+                                               Placeholder="{x:Static loc:AppResources.CurrentPasswordPlaceholder}" />
                                     </Grid>
                                 </Border>
                             </VerticalStackLayout>
 
+                            <!-- New password -->
                             <VerticalStackLayout Spacing="6">
                                 <Label x:Name="NewPasswordLabel"
-                                       Text="Uus parool"
-                                       FontSize="11"
-                                       FontAttributes="Bold"
-                                       TextColor="#3a5c52"
-                                       CharacterSpacing="0.5" />
+                                       Text="{x:Static loc:AppResources.NewPassword}"
+                                       FontSize="11" FontAttributes="Bold"
+                                       TextColor="#3a5c52" CharacterSpacing="0.5" />
                                 <Border StrokeShape="RoundRectangle 10"
-                                        Stroke="#d5dfd8"
-                                        StrokeThickness="1"
-                                        BackgroundColor="#fafbfa"
-                                        Padding="14,2">
+                                        Stroke="#d5dfd8" StrokeThickness="1"
+                                        BackgroundColor="#fafbfa" Padding="14,2">
                                     <Grid ColumnDefinitions="Auto, *">
                                         <Path Grid.Column="0"
                                               Stroke="#8a9a92" StrokeThickness="1.7"
                                               Fill="Transparent" Aspect="Uniform"
                                               HeightRequest="16" WidthRequest="16"
-                                              Margin="0,0,10,0"
-                                              VerticalOptions="Center"
+                                              Margin="0,0,10,0" VerticalOptions="Center"
                                               Data="M 4,12 L 9,17 L 20,6" />
-                                        <Entry Grid.Column="1"
+                                        <Entry x:Name="NewPasswordEntry"
+                                               Grid.Column="1"
                                                Style="{StaticResource FieldEntryStyle}"
                                                Text="{Binding NewPassword}"
                                                IsPassword="True"
-                                               Placeholder="Sisesta uus parool" />
+                                               Placeholder="{x:Static loc:AppResources.NewPasswordPlaceholder}" />
                                     </Grid>
                                 </Border>
                             </VerticalStackLayout>
 
+                            <!-- Confirm password -->
                             <VerticalStackLayout Spacing="6">
                                 <Label x:Name="ConfirmPasswordLabel"
-                                       Text="Kinnita uus parool"
-                                       FontSize="11"
-                                       FontAttributes="Bold"
-                                       TextColor="#3a5c52"
-                                       CharacterSpacing="0.5" />
+                                       Text="{x:Static loc:AppResources.ConfirmPassword}"
+                                       FontSize="11" FontAttributes="Bold"
+                                       TextColor="#3a5c52" CharacterSpacing="0.5" />
                                 <Border StrokeShape="RoundRectangle 10"
-                                        Stroke="#d5dfd8"
-                                        StrokeThickness="1"
-                                        BackgroundColor="#fafbfa"
-                                        Padding="14,2">
+                                        Stroke="#d5dfd8" StrokeThickness="1"
+                                        BackgroundColor="#fafbfa" Padding="14,2">
                                     <Grid ColumnDefinitions="Auto, *">
                                         <Path Grid.Column="0"
                                               Stroke="#8a9a92" StrokeThickness="1.7"
                                               Fill="Transparent" Aspect="Uniform"
                                               HeightRequest="16" WidthRequest="16"
-                                              Margin="0,0,10,0"
-                                              VerticalOptions="Center"
+                                              Margin="0,0,10,0" VerticalOptions="Center"
                                               Data="M 4,12 L 9,17 L 20,6" />
-                                        <Entry Grid.Column="1"
+                                        <Entry x:Name="ConfirmPasswordEntry"
+                                               Grid.Column="1"
                                                Style="{StaticResource FieldEntryStyle}"
                                                Text="{Binding ConfirmPassword}"
                                                IsPassword="True"
-                                               Placeholder="Sisesta uus parool uuesti" />
+                                               Placeholder="{x:Static loc:AppResources.ConfirmPasswordPlaceholder}" />
                                     </Grid>
                                 </Border>
                             </VerticalStackLayout>
@@ -327,7 +281,7 @@
 
                     <!-- Save button -->
                     <Button x:Name="SaveBtn"
-                            Text="Salvesta muudatused"
+                            Text="{x:Static loc:AppResources.SaveChanges}"
                             Command="{Binding SaveCommand}"
                             BackgroundColor="#2d6e68"
                             TextColor="White"

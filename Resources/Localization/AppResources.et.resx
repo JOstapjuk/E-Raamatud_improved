@@ -69,22 +69,49 @@
 
   <!-- Account Settings -->
   <data name="AccountSettings" xml:space="preserve"><value>Konto seaded</value></data>
+  <data name="AccountSettingsSubtitle" xml:space="preserve"><value>Halda oma konto andmeid ja parooli</value></data>
   <data name="ChangePassword" xml:space="preserve"><value>Muuda parooli</value></data>
   <data name="CurrentPassword" xml:space="preserve"><value>Praegune parool</value></data>
+  <data name="CurrentPasswordPlaceholder" xml:space="preserve"><value>Sisesta praegune parool</value></data>
   <data name="NewPassword" xml:space="preserve"><value>Uus parool</value></data>
+  <data name="NewPasswordPlaceholder" xml:space="preserve"><value>Sisesta uus parool</value></data>
   <data name="ConfirmPassword" xml:space="preserve"><value>Kinnita uus parool</value></data>
+  <data name="ConfirmPasswordPlaceholder" xml:space="preserve"><value>Sisesta uus parool uuesti</value></data>
   <data name="SaveChanges" xml:space="preserve"><value>Salvesta muudatused</value></data>
+  <data name="UsernameFieldLabel" xml:space="preserve"><value>KASUTAJANIMI</value></data>
+  <data name="UsernameFieldPlaceholder" xml:space="preserve"><value>Sisesta uus kasutajanimi</value></data>
 
   <!-- Language -->
   <data name="ChangeLanguage" xml:space="preserve"><value>Muuda keelt</value></data>
   <data name="LanguageSettings" xml:space="preserve"><value>Keele seaded</value></data>
+  <data name="LanguageLabel" xml:space="preserve"><value>Keel</value></data>
   <data name="EnglishButton" xml:space="preserve"><value>Inglise</value></data>
   <data name="RussianButton" xml:space="preserve"><value>Vene</value></data>
   <data name="EstonianButton" xml:space="preserve"><value>Eesti</value></data>
 
-  <!-- Profile -->
+  <!-- Profile / User Profile Page -->
   <data name="Logout" xml:space="preserve"><value>Logi välja</value></data>
   <data name="LogoutConfirm" xml:space="preserve"><value>Kas soovite kindlasti välja logida?</value></data>
+  <data name="AccountSettingsMenuTitle" xml:space="preserve"><value>Konto seaded</value></data>
+  <data name="AccountSettingsMenuSub" xml:space="preserve"><value>Muuda kasutajanime ja parooli</value></data>
+  <data name="UpdatesMenuTitle" xml:space="preserve"><value>Uuendused</value></data>
+  <data name="UpdatesMenuSub" xml:space="preserve"><value>Vaata, mis on rakenduses uut</value></data>
+  <data name="GiftCardMenuTitle" xml:space="preserve"><value>Kingikaart</value></data>
+  <data name="GiftCardMenuSub" xml:space="preserve"><value>Lunasta kingikaart</value></data>
+  <data name="AddAccountMenuTitle" xml:space="preserve"><value>Lisa konto</value></data>
+  <data name="AddAccountMenuSub" xml:space="preserve"><value>Lisa teine kasutajakonto</value></data>
+  <data name="GiftCard" xml:space="preserve"><value>Kingikaart</value></data>
+  <data name="AddAccount" xml:space="preserve"><value>Lisa konto</value></data>
+  <data name="FunctionComingSoon" xml:space="preserve"><value>Funktsioon on tulekul!</value></data>
+
+  <!-- Updates Page -->
+  <data name="UpdatesTitle" xml:space="preserve"><value>Uuendused</value></data>
+  <data name="UpdatesSubtitle" xml:space="preserve"><value>Mis on rakenduses uut</value></data>
+  <data name="UpdateTagFix" xml:space="preserve"><value>PARANDUS</value></data>
+  <data name="UpdateTagChange" xml:space="preserve"><value>MUUTUS</value></data>
+  <data name="UpdateTagNew" xml:space="preserve"><value>UUS</value></data>
+  <data name="UpdatesHistoryTitle" xml:space="preserve"><value>Vanemate versioonide ajalugu</value></data>
+  <data name="UpdatesHistorySubtitle" xml:space="preserve"><value>Vaata kõiki rakenduse uuendusi</value></data>
 
   <!-- General -->
   <data name="Error" xml:space="preserve"><value>Viga</value></data>

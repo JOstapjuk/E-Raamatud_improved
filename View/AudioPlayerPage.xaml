@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:E_Raamatud.Resources.Localization"
              x:Class="E_Raamatud.View.AudioPlayerPage"
-             x:Name="AudioPlayerPageRef"
              BackgroundColor="#FAF8F3"
              Shell.NavBarIsVisible="False"
-             Title="Audioraamat">
+             Title="{x:Static loc:AppResources.ListenButton}">
 
     <Grid RowDefinitions="Auto, *">
 
-        <!-- ============== ШАПКА ============== -->
+        <!-- HEADER -->
         <Border Grid.Row="0"
                 StrokeShape="RoundRectangle 0,0,28,28"
                 Stroke="Transparent"
@@ -21,17 +21,14 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid Padding="20,46,20,22"
-                  ColumnDefinitions="Auto, *, Auto">
+            <Grid Padding="24,50,24,28" ColumnDefinitions="Auto, *, Auto">
 
                 <Border Grid.Column="0"
                         StrokeShape="RoundRectangle 20"
                         Stroke="Transparent"
                         BackgroundColor="#1f4f4a"
-                        WidthRequest="40"
-                        HeightRequest="40"
-                        Padding="0"
-                        VerticalOptions="Center">
+                        WidthRequest="40" HeightRequest="40"
+                        Padding="0" VerticalOptions="Center">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnBackTapped" />
                     </Border.GestureRecognizers>
@@ -42,64 +39,49 @@
                           Data="M 14,6 L 8,12 L 14,18" />
                 </Border>
 
-                <VerticalStackLayout Grid.Column="1"
-                                     Spacing="2"
-                                     VerticalOptions="Center"
-                                     HorizontalOptions="Center">
-                    <Label Text="KUULAN PRAEGU"
-                           FontSize="9"
-                           TextColor="#a8d4cf"
-                           CharacterSpacing="2"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center" />
+                <VerticalStackLayout Grid.Column="1" Spacing="2"
+                                     VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label Text="{x:Static loc:AppResources.ListenButton}"
+                           FontSize="18" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center" />
                     <Label Text="Audioraamat"
-                           FontSize="16"
-                           FontAttributes="Bold"
-                           TextColor="White"
-                           HorizontalOptions="Center" />
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center" />
                 </VerticalStackLayout>
 
-                <Label Grid.Column="2"
-                   WidthRequest="40"
-                   HeightRequest="40" />
+                <Label Grid.Column="2" WidthRequest="40" HeightRequest="40" />
             </Grid>
         </Border>
 
-        <!-- ============== КОНТЕНТ ============== -->
+        <!-- CONTENT -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="24,28,24,32" Spacing="20">
 
-                <!-- Обложка -->
+                <!-- Cover -->
                 <Border StrokeShape="RoundRectangle 16"
                         Stroke="Transparent"
                         HorizontalOptions="Center"
-                        Padding="0"
-                        HeightRequest="240"
-                        WidthRequest="240">
+                        Padding="0" HeightRequest="240" WidthRequest="240">
                     <Border.Shadow>
                         <Shadow Brush="#000000" Offset="0,8" Radius="20" Opacity="0.25" />
                     </Border.Shadow>
                     <Image x:Name="CoverImage" Aspect="AspectFill" />
                 </Border>
 
-                <!-- Название и глава -->
+                <!-- Title & chapter -->
                 <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
                     <Label x:Name="TitleLabel"
-                           FontSize="22"
-                           FontAttributes="Bold"
+                           FontSize="22" FontAttributes="Bold"
                            TextColor="#1f2e28"
                            HorizontalOptions="Center"
                            HorizontalTextAlignment="Center"
-                           MaxLines="2"
-                           LineBreakMode="TailTruncation" />
+                           MaxLines="2" LineBreakMode="TailTruncation" />
 
                     <Label x:Name="ChapterLabel"
-                           FontSize="14"
-                           TextColor="#3a5c52"
+                           FontSize="14" TextColor="#3a5c52"
                            HorizontalOptions="Center"
                            HorizontalTextAlignment="Center"
-                           MaxLines="2"
-                           LineBreakMode="TailTruncation" />
+                           MaxLines="2" LineBreakMode="TailTruncation" />
 
                     <Border StrokeShape="RoundRectangle 6"
                             Stroke="Transparent"
@@ -108,14 +90,12 @@
                             HorizontalOptions="Center"
                             Margin="0,4,0,0">
                         <Label x:Name="ChapterCountLabel"
-                               FontSize="10"
-                               FontAttributes="Bold"
-                               TextColor="#0f6e56"
-                               CharacterSpacing="1.5" />
+                               FontSize="10" FontAttributes="Bold"
+                               TextColor="#0f6e56" CharacterSpacing="1.5" />
                     </Border>
                 </VerticalStackLayout>
 
-                <!-- Прогресс и время -->
+                <!-- Progress & time -->
                 <VerticalStackLayout Spacing="6" Margin="0,10,0,0">
                     <Slider x:Name="SeekBar"
                             Minimum="0" Maximum="1" Value="0"
@@ -124,29 +104,23 @@
                             MaximumTrackColor="#e5ebe7"
                             DragCompleted="OnSeekBarDragCompleted"
                             DragStarted="OnSeekBarDragStarted" />
-
                     <Label x:Name="TimeLabel"
                            Text="0:00 / 0:00"
-                           TextColor="#5f5e5a"
-                           FontSize="12"
+                           TextColor="#5f5e5a" FontSize="12"
                            HorizontalOptions="Center" />
                 </VerticalStackLayout>
 
-                <!-- Основные кнопки управления -->
+                <!-- Playback controls -->
                 <Grid ColumnDefinitions="*, *, Auto, *, *"
-                      ColumnSpacing="8"
-                      Margin="0,8,0,0"
+                      ColumnSpacing="8" Margin="0,8,0,0"
                       HorizontalOptions="Center">
 
-                    <!-- Предыдущая глава -->
+                    <!-- Prev chapter -->
                     <Border Grid.Column="0"
-                            StrokeShape="RoundRectangle 24"
-                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 24" Stroke="Transparent"
                             BackgroundColor="#e8f0ed"
-                            WidthRequest="48"
-                            HeightRequest="48"
-                            Padding="0"
-                            VerticalOptions="Center">
+                            WidthRequest="48" HeightRequest="48"
+                            Padding="0" VerticalOptions="Center">
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnPrevChapter" />
                         </Border.GestureRecognizers>
@@ -154,93 +128,64 @@
                               Fill="#2d6e68" Aspect="Uniform"
                               HeightRequest="14" WidthRequest="14"
                               HorizontalOptions="Center" VerticalOptions="Center"
-                              Data="M 18,6 L 18,18 L 9,12 Z M 6,6 L 6,18" />
+                              Data="M 19,5 L 9,12 L 19,19 Z M 5,5 L 5,19" />
                     </Border>
 
-                    <!-- Назад на 15 сек -->
+                    <!-- Rewind 15s -->
                     <Border Grid.Column="1"
-                            StrokeShape="RoundRectangle 24"
-                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 24" Stroke="Transparent"
                             BackgroundColor="#e8f0ed"
-                            WidthRequest="48"
-                            HeightRequest="48"
-                            Padding="0"
-                            VerticalOptions="Center">
+                            WidthRequest="48" HeightRequest="48"
+                            Padding="0" VerticalOptions="Center">
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnRewind" />
                         </Border.GestureRecognizers>
-                        <Grid HorizontalOptions="Center" VerticalOptions="Center">
-                            <Path Stroke="#2d6e68" StrokeThickness="2"
-                                  Fill="Transparent" Aspect="Uniform"
-                                  HeightRequest="22" WidthRequest="22"
-                                  Data="M 12,5 C 8,5 4.5,8 4,12 C 4,16.4 7.6,20 12,20 C 16.4,20 20,16.4 20,12 M 12,5 L 9,2 M 12,5 L 9,8" />
-                            <Label Text="15"
-                                   FontSize="9"
-                                   FontAttributes="Bold"
-                                   TextColor="#2d6e68"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center"
-                                   Margin="0,3,0,0" />
-                        </Grid>
+                        <Path Stroke="#2d6e68" StrokeThickness="2"
+                              Fill="Transparent" Aspect="Uniform"
+                              HeightRequest="14" WidthRequest="14"
+                              HorizontalOptions="Center" VerticalOptions="Center"
+                              Data="M 12,4 C 8,4 5,7 5,11 C 5,15 8,18 12,18 C 16,18 19,15 19,11 M 12,4 L 9,1 M 12,4 L 15,1 M 9,11 L 12,9 L 12,13" />
                     </Border>
 
-                    <!-- PLAY/PAUSE -->
+                    <!-- Play/Pause -->
                     <Border Grid.Column="2"
-                            x:Name="PlayPauseButton"
-                            StrokeShape="RoundRectangle 36"
-                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 36" Stroke="Transparent"
                             BackgroundColor="#2d6e68"
-                            WidthRequest="72"
-                            HeightRequest="72"
-                            Padding="0"
-                            VerticalOptions="Center">
+                            WidthRequest="72" HeightRequest="72"
+                            Padding="0" VerticalOptions="Center">
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnPlayPause" />
                         </Border.GestureRecognizers>
                         <Path x:Name="PlayPauseIcon"
-                              Stroke="White" StrokeThickness="0"
+                              Stroke="White" StrokeThickness="2"
                               Fill="White" Aspect="Uniform"
-                              HeightRequest="26" WidthRequest="26"
+                              HeightRequest="24" WidthRequest="24"
                               HorizontalOptions="Center" VerticalOptions="Center"
                               Data="M 7,5 L 7,19 L 19,12 Z" />
                     </Border>
 
-                    <!-- Вперёд на 30 сек -->
+                    <!-- Fast forward 30s -->
                     <Border Grid.Column="3"
-                            StrokeShape="RoundRectangle 24"
-                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 24" Stroke="Transparent"
                             BackgroundColor="#e8f0ed"
-                            WidthRequest="48"
-                            HeightRequest="48"
-                            Padding="0"
-                            VerticalOptions="Center">
+                            WidthRequest="48" HeightRequest="48"
+                            Padding="0" VerticalOptions="Center">
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnFastForward" />
                         </Border.GestureRecognizers>
-                        <Grid HorizontalOptions="Center" VerticalOptions="Center">
-                            <Path Stroke="#2d6e68" StrokeThickness="2"
-                                  Fill="Transparent" Aspect="Uniform"
-                                  HeightRequest="22" WidthRequest="22"
-                                  Data="M 12,5 C 16,5 19.5,8 20,12 C 20,16.4 16.4,20 12,20 C 7.6,20 4,16.4 4,12 M 12,5 L 15,2 M 12,5 L 15,8" />
-                            <Label Text="30"
-                                   FontSize="9"
-                                   FontAttributes="Bold"
-                                   TextColor="#2d6e68"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center"
-                                   Margin="0,3,0,0" />
-                        </Grid>
+                        <Path Stroke="#2d6e68" StrokeThickness="2"
+                              Fill="Transparent" Aspect="Uniform"
+                              HeightRequest="14" WidthRequest="14"
+                              HorizontalOptions="Center" VerticalOptions="Center"
+                              Data="M 12,4 C 16,4 19,7 19,11 C 19,15 16,18 12,18 C 8,18 5,15 5,11 M 12,4 L 9,1 M 12,4 L 15,1 M 12,9 L 15,11 L 12,13" />
                     </Border>
 
-                    <!-- Следующая глава -->
+                    <!-- Next chapter -->
                     <Border Grid.Column="4"
-                            StrokeShape="RoundRectangle 24"
-                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 24" Stroke="Transparent"
                             BackgroundColor="#e8f0ed"
-                            WidthRequest="48"
-                            HeightRequest="48"
-                            Padding="0"
-                            VerticalOptions="Center">
+                            WidthRequest="48" HeightRequest="48"
+                            Padding="0" VerticalOptions="Center">
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnNextChapter" />
                         </Border.GestureRecognizers>
@@ -248,96 +193,16 @@
                               Fill="#2d6e68" Aspect="Uniform"
                               HeightRequest="14" WidthRequest="14"
                               HorizontalOptions="Center" VerticalOptions="Center"
-                              Data="M 6,6 L 6,18 L 15,12 Z M 18,6 L 18,18" />
+                              Data="M 5,5 L 15,12 L 5,19 Z M 19,5 L 19,19" />
                     </Border>
+
                 </Grid>
 
-                <!-- Скорость воспроизведения -->
-                <VerticalStackLayout Spacing="8" Margin="0,12,0,0">
-                    <Label Text="KIIRUS"
-                           FontSize="10"
-                           TextColor="#98a8a0"
-                           CharacterSpacing="2"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center" />
-
-                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
-                        <Border x:Name="SpeedBtn075"
-                                StrokeShape="RoundRectangle 16"
-                                Stroke="#d5dfd8"
-                                StrokeThickness="1"
-                                BackgroundColor="White"
-                                Padding="14,6"
-                                HeightRequest="32">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnSpeedTapped075" />
-                            </Border.GestureRecognizers>
-                            <Label Text="0.75x"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#3a5c52"
-                                   VerticalOptions="Center" />
-                        </Border>
-
-                        <Border x:Name="SpeedBtn100"
-                                StrokeShape="RoundRectangle 16"
-                                Stroke="Transparent"
-                                BackgroundColor="#2d6e68"
-                                Padding="14,6"
-                                HeightRequest="32">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnSpeedTapped100" />
-                            </Border.GestureRecognizers>
-                            <Label Text="1x"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   VerticalOptions="Center" />
-                        </Border>
-
-                        <Border x:Name="SpeedBtn150"
-                                StrokeShape="RoundRectangle 16"
-                                Stroke="#d5dfd8"
-                                StrokeThickness="1"
-                                BackgroundColor="White"
-                                Padding="14,6"
-                                HeightRequest="32">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnSpeedTapped150" />
-                            </Border.GestureRecognizers>
-                            <Label Text="1.5x"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#3a5c52"
-                                   VerticalOptions="Center" />
-                        </Border>
-
-                        <Border x:Name="SpeedBtn200"
-                                StrokeShape="RoundRectangle 16"
-                                Stroke="#d5dfd8"
-                                StrokeThickness="1"
-                                BackgroundColor="White"
-                                Padding="14,6"
-                                HeightRequest="32">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnSpeedTapped200" />
-                            </Border.GestureRecognizers>
-                            <Label Text="2x"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="#3a5c52"
-                                   VerticalOptions="Center" />
-                        </Border>
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-
-                <!-- Кнопка "Список глав" -->
+                <!-- Chapter list button -->
                 <Border StrokeShape="RoundRectangle 12"
-                        Stroke="#d5dfd8"
-                        StrokeThickness="1"
+                        Stroke="#d5dfd8" StrokeThickness="1"
                         BackgroundColor="White"
-                        Padding="0"
-                        HeightRequest="46"
+                        Padding="0" HeightRequest="46"
                         Margin="0,12,0,0">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnToggleChapterList" />
@@ -350,22 +215,18 @@
                               HeightRequest="16" WidthRequest="16"
                               VerticalOptions="Center"
                               Data="M 4,6 L 20,6 M 4,12 L 20,12 M 4,18 L 20,18" />
-                        <Label Text="Peatukkide nimekiri"
-                               FontSize="13"
-                               FontAttributes="Bold"
-                               TextColor="#2d6e68"
-                               VerticalOptions="Center" />
+                        <Label Text="{x:Static loc:AppResources.ChapterList}"
+                               FontSize="13" FontAttributes="Bold"
+                               TextColor="#2d6e68" VerticalOptions="Center" />
                     </HorizontalStackLayout>
                 </Border>
 
-                <!-- Список глав -->
+                <!-- Chapter list -->
                 <Border x:Name="ChapterListFrame"
                         IsVisible="False"
                         StrokeShape="RoundRectangle 14"
-                        Stroke="#e5ebe7"
-                        StrokeThickness="1"
-                        BackgroundColor="White"
-                        Padding="8">
+                        Stroke="#e5ebe7" StrokeThickness="1"
+                        BackgroundColor="White" Padding="8">
                     <CollectionView x:Name="ChapterListView"
                                     SelectionMode="Single"
                                     SelectionChanged="OnChapterSelected"
@@ -376,8 +237,7 @@
                                     <Label Grid.Column="0"
                                            Text="{Binding Index, StringFormat='{0}.'}"
                                            TextColor="#98a8a0"
-                                           FontSize="13"
-                                           FontAttributes="Bold"
+                                           FontSize="13" FontAttributes="Bold"
                                            VerticalOptions="Center" />
                                     <Label Grid.Column="1"
                                            Text="{Binding Title}"

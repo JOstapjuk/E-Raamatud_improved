@@ -24,18 +24,7 @@ public partial class AccountSettingsPage : ContentPage
         base.OnAppearing();
         UpdateProfilePreview();
         ApplyResponsiveLayout(this.Width);
-        ApplyLocalization();
-    }
-
-    private void ApplyLocalization()
-    {
-        HeaderTitle.Text          = AppResources.AccountSettings;
-        HeaderSubtitle.Text       = AppResources.ChangePassword;
-        CurrentPasswordLabel.Text = AppResources.CurrentPassword;
-        NewPasswordLabel.Text     = AppResources.NewPassword;
-        ConfirmPasswordLabel.Text = AppResources.ConfirmPassword;
-        SaveBtn.Text              = AppResources.SaveChanges;
-        UsernameFieldLabel.Text   = AppResources.UsernameLabel;
+        // No ApplyLocalization() needed — all static text is handled by {x:Static} in XAML
     }
 
     private void UpdateProfilePreview()
@@ -47,6 +36,9 @@ public partial class AccountSettingsPage : ContentPage
             AvatarInitial.Text = !string.IsNullOrWhiteSpace(user.Username)
                 ? user.Username.Substring(0, 1).ToUpper()
                 : "?";
+
+        if (ProfileName != null)
+            ProfileName.Text = user.Username ?? "";
 
         if (!string.IsNullOrEmpty(user.ProfilePicture))
         {

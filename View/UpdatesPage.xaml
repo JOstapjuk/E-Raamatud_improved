@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:E_Raamatud.Resources.Localization"
              x:Class="E_Raamatud.View.UpdatesPage"
              BackgroundColor="#FAF8F3"
              Shell.NavBarIsVisible="False"
-             Title="Uuendused">
+             Title="{x:Static loc:AppResources.UpdatesTitle}">
 
     <Grid RowDefinitions="Auto, *">
 
-        <!-- ============== ШАПКА ============== -->
+        <!-- HEADER -->
         <Border Grid.Row="0"
                 StrokeShape="RoundRectangle 0,0,28,28"
                 Stroke="Transparent"
@@ -20,17 +21,14 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid Padding="24,50,24,28"
-                  ColumnDefinitions="Auto, *, Auto">
+            <Grid Padding="24,50,24,28" ColumnDefinitions="Auto, *, Auto">
 
                 <Border Grid.Column="0"
                         StrokeShape="RoundRectangle 20"
                         Stroke="Transparent"
                         BackgroundColor="#1f4f4a"
-                        WidthRequest="40"
-                        HeightRequest="40"
-                        Padding="0"
-                        VerticalOptions="Center">
+                        WidthRequest="40" HeightRequest="40"
+                        Padding="0" VerticalOptions="Center">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnBackTapped" />
                     </Border.GestureRecognizers>
@@ -41,126 +39,87 @@
                           Data="M 14,6 L 8,12 L 14,18" />
                 </Border>
 
-                <VerticalStackLayout Grid.Column="1"
-                                     Spacing="2"
-                                     VerticalOptions="Center"
-                                     HorizontalOptions="Center">
-                    <Label Text="Uuendused"
-                           FontSize="22"
-                           FontAttributes="Bold"
-                           TextColor="White"
-                           HorizontalOptions="Center" />
-                    <Label Text="Mis on rakenduses uut"
-                           FontSize="12"
-                           TextColor="#c8e0dc"
+                <VerticalStackLayout Grid.Column="1" Spacing="2"
+                                     VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label Text="{x:Static loc:AppResources.UpdatesTitle}"
+                           FontSize="22" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center" />
+                    <Label Text="{x:Static loc:AppResources.UpdatesSubtitle}"
+                           FontSize="12" TextColor="#c8e0dc"
                            HorizontalOptions="Center" />
                 </VerticalStackLayout>
 
-                <Label Grid.Column="2"
-                   WidthRequest="40"
-                   HeightRequest="40" />
+                <Label Grid.Column="2" WidthRequest="40" HeightRequest="40" />
             </Grid>
         </Border>
 
-        <!-- ============== КОНТЕНТ ============== -->
+        <!-- CONTENT -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="24,28,24,32" Spacing="20">
 
-                <!-- ===== Версия + дата ===== -->
+                <!-- ===== v1.6.0 — CURRENT VERSION ===== -->
                 <Border StrokeShape="RoundRectangle 14"
                         Stroke="Transparent"
                         Padding="22"
                         BackgroundColor="#2d6e68">
-
                     <Grid ColumnDefinitions="*, Auto">
-
                         <VerticalStackLayout Grid.Column="0" Spacing="4">
                             <Label Text="VIIMANE VERSIOON"
-                                   FontSize="10"
-                                   TextColor="#a8d4cf"
-                                   CharacterSpacing="2"
-                                   FontAttributes="Bold" />
-                            <Label Text="v1.5.0"
-                                   FontSize="26"
-                                   FontAttributes="Bold"
-                                   TextColor="White" />
-                            <Label Text="Avaldatud 28. november 2026"
-                                   FontSize="12"
-                                   TextColor="#c8e0dc" />
+                                   FontSize="10" TextColor="#a8d4cf"
+                                   CharacterSpacing="2" FontAttributes="Bold" />
+                            <Label Text="v1.6.0"
+                                   FontSize="26" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="Avaldatud 1. mai 2026"
+                                   FontSize="12" TextColor="#c8e0dc" />
                         </VerticalStackLayout>
-
                         <Border Grid.Column="1"
                                 StrokeShape="RoundRectangle 50"
-                                Stroke="Transparent"
-                                BackgroundColor="#1f4f4a"
-                                WidthRequest="60"
-                                HeightRequest="60"
-                                Padding="0"
-                                VerticalOptions="Center">
-                            <Path Stroke="White" StrokeThickness="2"
-                                  Fill="Transparent" Aspect="Uniform"
-                                  HeightRequest="28" WidthRequest="28"
-                                  HorizontalOptions="Center" VerticalOptions="Center"
-                                  Data="M 12,3 C 8,3 6,5 6,9 L 6,14 L 4,17 L 20,17 L 18,14 L 18,9 C 18,5 16,3 12,3 Z M 10,20 C 10,21 11,22 12,22 C 13,22 14,21 14,20" />
+                                Stroke="Transparent" BackgroundColor="#1f4f4a"
+                                WidthRequest="60" HeightRequest="60"
+                                Padding="0" VerticalOptions="Center">
+                            <Label Text="📚" FontSize="26"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
                     </Grid>
                 </Border>
 
-                <!-- ===== СЕКЦИЯ: УЛУЧШЕНИЯ (зелёные) ===== -->
+                <!-- NEW features v1.6.0 -->
                 <VerticalStackLayout Spacing="12">
-
                     <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                        <Border StrokeShape="RoundRectangle 6"
-                                Stroke="Transparent"
-                                BackgroundColor="#0f6e56"
-                                Padding="10,4">
+                        <Border StrokeShape="RoundRectangle 6" Stroke="Transparent"
+                                BackgroundColor="#0f6e56" Padding="10,4">
                             <Label Text="UUS"
-                                   FontSize="10"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   CharacterSpacing="1.5" />
+                                   FontSize="10" FontAttributes="Bold"
+                                   TextColor="White" CharacterSpacing="1.5" />
                         </Border>
-                        <Label Text="Uued võimalused"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="#1f2e28"
-                               VerticalOptions="Center" />
+                        <Label Text="Uued funktsioonid"
+                               FontSize="18" FontAttributes="Bold"
+                               TextColor="#1f2e28" VerticalOptions="Center" />
                     </HorizontalStackLayout>
 
                     <Border StrokeShape="RoundRectangle 14"
-                            Stroke="#e5ebe7"
-                            StrokeThickness="1"
-                            BackgroundColor="White"
-                            Padding="0">
+                            Stroke="#e5ebe7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="0">
                         <Border.Shadow>
                             <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.05" />
                         </Border.Shadow>
-
                         <VerticalStackLayout>
 
                             <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
                                 <Border Grid.Column="0"
-                                        StrokeShape="RoundRectangle 16"
-                                        Stroke="Transparent"
-                                        BackgroundColor="#e8f0ed"
-                                        WidthRequest="32"
-                                        HeightRequest="32"
-                                        Padding="0"
-                                        VerticalOptions="Start">
-                                    <Path Stroke="#0f6e56" StrokeThickness="2.2"
-                                          Fill="Transparent" Aspect="Uniform"
-                                          HeightRequest="14" WidthRequest="14"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
                                           HorizontalOptions="Center" VerticalOptions="Center"
                                           Data="M 4,12 L 9,17 L 20,6" />
                                 </Border>
                                 <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
-                                    <Label Text="Sessioonihaldus"
-                                           FontSize="14"
-                                           FontAttributes="Bold"
-                                           TextColor="#1f2e28" />
-                                    <Label Text="Lisatud SessionService kasutaja sessiooni hoidmiseks"
-                                           FontSize="12"
-                                           TextColor="#5f5e5a" />
+                                    <Label Text="Raamatukogu ilma poeta"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Rakendus on muudetud isiklikuks raamatukoguks. Pood, ostukorv ja ostud on täielikult eemaldatud."
+                                           FontSize="12" TextColor="#5f5e5a" />
                                 </VerticalStackLayout>
                             </Grid>
 
@@ -168,27 +127,19 @@
 
                             <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
                                 <Border Grid.Column="0"
-                                        StrokeShape="RoundRectangle 16"
-                                        Stroke="Transparent"
-                                        BackgroundColor="#e8f0ed"
-                                        WidthRequest="32"
-                                        HeightRequest="32"
-                                        Padding="0"
-                                        VerticalOptions="Start">
-                                    <Path Stroke="#0f6e56" StrokeThickness="2.2"
-                                          Fill="Transparent" Aspect="Uniform"
-                                          HeightRequest="14" WidthRequest="14"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
                                           HorizontalOptions="Center" VerticalOptions="Center"
                                           Data="M 4,12 L 9,17 L 20,6" />
                                 </Border>
                                 <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
-                                    <Label Text="Kasutaja profiili leht"
-                                           FontSize="14"
-                                           FontAttributes="Bold"
-                                           TextColor="#1f2e28" />
-                                    <Label Text="Uus profiili leht koos kõigi vajalike nuppudega"
-                                           FontSize="12"
-                                           TextColor="#5f5e5a" />
+                                    <Label Text="Raamatute üleslaadimine"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Kasutajad saavad üles laadida EPUB, PDF ja TXT faile otse oma telefonist. Failid salvestatakse Supabase Storage'sse kasutajapõhistesse kaustadesse."
+                                           FontSize="12" TextColor="#5f5e5a" />
                                 </VerticalStackLayout>
                             </Grid>
 
@@ -196,27 +147,159 @@
 
                             <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
                                 <Border Grid.Column="0"
-                                        StrokeShape="RoundRectangle 16"
-                                        Stroke="Transparent"
-                                        BackgroundColor="#e8f0ed"
-                                        WidthRequest="32"
-                                        HeightRequest="32"
-                                        Padding="0"
-                                        VerticalOptions="Start">
-                                    <Path Stroke="#0f6e56" StrokeThickness="2.2"
-                                          Fill="Transparent" Aspect="Uniform"
-                                          HeightRequest="14" WidthRequest="14"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
                                           HorizontalOptions="Center" VerticalOptions="Center"
                                           Data="M 4,12 L 9,17 L 20,6" />
                                 </Border>
                                 <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
-                                    <Label Text="Logi välja funktsioon"
-                                           FontSize="14"
-                                           FontAttributes="Bold"
-                                           TextColor="#1f2e28" />
-                                    <Label Text="Logi välja puhastab sessiooni ja suunab tagasi sisselogimise lehele"
-                                           FontSize="12"
-                                           TextColor="#5f5e5a" />
+                                    <Label Text="PDF lugeja rakenduse sees"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="PDF failid avanevad nüüd otse rakenduses Vitvov.Maui.PDFView abil. Ei ole vaja väliseid rakendusi."
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,12 L 9,17 L 20,6" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="PDF kaanepildi automaatne genereerimine"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Kui PDF-il pole kaanepilti, võetakse automaatselt esimene lehekülg kaanepildiks Android platvormil."
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,12 L 9,17 L 20,6" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="AI kokkuvõtted EPUB, PDF ja TXT failidele"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Claude AI genereerib raamatu kokkuvõtte otse faili sisust. Töötab EPUB, PDF ja TXT formaatides."
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,12 L 9,17 L 20,6" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Raamatute kustutamine ja muutmine"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Iga raamatu peal on kolme punktiga nupp kustutamiseks ja muutmiseks. Kustutamisel eemaldatakse fail ka Supabase Storage'st."
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,12 L 9,17 L 20,6" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Lugemisloend ja märgi loetuks"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Raamatukogu lehel saab raamatuid eemaldada lugemisloendist või märkida loetuks. Loetud raamatud näitavad Loetud märki pearaamatul."
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,12 L 9,17 L 20,6" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Failitüübi filtrid"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Pearaamatu lehel saab nüüd filtreerida raamatuid failitüübi järgi — EPUB, PDF ja TXT."
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,12 L 9,17 L 20,6" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Kasutajapõhised kaustad Supabase'is"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Iga kasutaja failid salvestatakse eraldi kausta books/userId/ ja covers/userId/ — puhas ja turvaline."
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,12 L 9,17 L 20,6" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Uus kokkuvõte ja Uus märk pearaamatul"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Raamatu kaardil näidatakse nüüd Uus märki kui raamatut pole alustatud ja Loetud märki kui raamat on lõpetatud."
+                                           FontSize="12" TextColor="#5f5e5a" />
                                 </VerticalStackLayout>
                             </Grid>
 
@@ -224,61 +307,45 @@
                     </Border>
                 </VerticalStackLayout>
 
-                <!-- ===== СЕКЦИЯ: ИЗМЕНЕНИЯ (синие/фиолетовые) ===== -->
+                <!-- CHANGES v1.6.0 -->
                 <VerticalStackLayout Spacing="12">
-
                     <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                        <Border StrokeShape="RoundRectangle 6"
-                                Stroke="Transparent"
-                                BackgroundColor="#534ab7"
-                                Padding="10,4">
+                        <Border StrokeShape="RoundRectangle 6" Stroke="Transparent"
+                                BackgroundColor="#534ab7" Padding="10,4">
                             <Label Text="MUUTUS"
-                                   FontSize="10"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   CharacterSpacing="1.5" />
+                                   FontSize="10" FontAttributes="Bold"
+                                   TextColor="White" CharacterSpacing="1.5" />
                         </Border>
-                        <Label Text="Disain ja kasutajakogemus"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="#1f2e28"
-                               VerticalOptions="Center" />
+                        <Label Text="Muutused"
+                               FontSize="18" FontAttributes="Bold"
+                               TextColor="#1f2e28" VerticalOptions="Center" />
                     </HorizontalStackLayout>
 
                     <Border StrokeShape="RoundRectangle 14"
-                            Stroke="#e5ebe7"
-                            StrokeThickness="1"
-                            BackgroundColor="White"
-                            Padding="0">
+                            Stroke="#e5ebe7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="0">
                         <Border.Shadow>
                             <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.05" />
                         </Border.Shadow>
-
                         <VerticalStackLayout>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
 
                             <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
                                 <Border Grid.Column="0"
-                                        StrokeShape="RoundRectangle 16"
-                                        Stroke="Transparent"
-                                        BackgroundColor="#f0eaf7"
-                                        WidthRequest="32"
-                                        HeightRequest="32"
-                                        Padding="0"
-                                        VerticalOptions="Start">
-                                    <Path Stroke="#534ab7" StrokeThickness="1.7"
-                                          Fill="Transparent" Aspect="Uniform"
-                                          HeightRequest="14" WidthRequest="14"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#f0eaf7" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#534ab7" StrokeThickness="1.7" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
                                           HorizontalOptions="Center" VerticalOptions="Center"
-                                          Data="M 4,12 C 4,7.6 7.6,4 12,4 C 14.5,4 16.7,5.2 18,7 M 20,4 L 20,8 L 16,8 M 20,12 C 20,16.4 16.4,20 12,20 C 9.5,20 7.3,18.8 6,17 M 4,20 L 4,16 L 8,16" />
+                                          Data="M 4,6 L 20,6 M 4,12 L 20,12 M 4,18 L 12,18" />
                                 </Border>
                                 <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
-                                    <Label Text="Navigatsioon uuendatud"
-                                           FontSize="14"
-                                           FontAttributes="Bold"
-                                           TextColor="#1f2e28" />
-                                    <Label Text="Üleminek Shell-ist tavalisele NavigationPage struktuurile"
-                                           FontSize="12"
-                                           TextColor="#5f5e5a" />
+                                    <Label Text="Ostukorv asendatud üleslaadimisega"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Navigatsiooniribal asendati ostukorvi ikoon üleslaadimise ikooniga."
+                                           FontSize="12" TextColor="#5f5e5a" />
                                 </VerticalStackLayout>
                             </Grid>
 
@@ -286,89 +353,134 @@
 
                             <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
                                 <Border Grid.Column="0"
-                                        StrokeShape="RoundRectangle 16"
-                                        Stroke="Transparent"
-                                        BackgroundColor="#f0eaf7"
-                                        WidthRequest="32"
-                                        HeightRequest="32"
-                                        Padding="0"
-                                        VerticalOptions="Start">
-                                    <Path Stroke="#534ab7" StrokeThickness="1.7"
-                                          Fill="Transparent" Aspect="Uniform"
-                                          HeightRequest="14" WidthRequest="14"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#f0eaf7" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#534ab7" StrokeThickness="1.7" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,6 L 20,6 M 4,12 L 20,12 M 4,18 L 12,18" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Raamatukogu leht näitab praegu loetavaid"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Raamatukogu leht näitab nüüd ainult raamatuid mida parajasti loetakse. Filtrid on eemaldatud."
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#f0eaf7" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#534ab7" StrokeThickness="1.7" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,6 L 20,6 M 4,12 L 20,12 M 4,18 L 12,18" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Raamatu detailleht uuendatud"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Lisa ostukorvi nupp asendati Loe ja Kuula nuppudega. Kuula nupp on nähtav ainult kui raamatul on audiofail."
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#f0eaf7" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#534ab7" StrokeThickness="1.7" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,6 L 20,6 M 4,12 L 20,12 M 4,18 L 12,18" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Raamatu kaardi menüünupp"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Pearaamatute nimekirjas on nüüd iga raamatu peal kolme punktiga nupp kiireks kustutamiseks ja muutmiseks."
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#f0eaf7" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#534ab7" StrokeThickness="1.7" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,6 L 20,6 M 4,12 L 20,12 M 4,18 L 12,18" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Failitüübi filtrid töötavad nüüd korrektselt"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="EPUB, PDF ja TXT filtrid filtreerivad nüüd tegelikult raamatute nimekirja, mitte ei muuda ainult nupuvärvi."
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- SEPARATOR: previous version -->
+                <Border StrokeShape="RoundRectangle 10"
+                        Stroke="Transparent"
+                        BackgroundColor="#f0f4f2"
+                        Padding="16,10"
+                        Margin="0,8,0,0">
+                    <Label Text="EELMINE VERSIOON — v1.5.0"
+                           FontSize="10" FontAttributes="Bold"
+                           TextColor="#98a8a0" CharacterSpacing="2"
+                           HorizontalOptions="Center" />
+                </Border>
+
+                <!-- v1.5.0 CHANGES -->
+                <VerticalStackLayout Spacing="12">
+                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Border StrokeShape="RoundRectangle 6" Stroke="Transparent"
+                                BackgroundColor="#534ab7" Padding="10,4">
+                            <Label Text="{x:Static loc:AppResources.UpdateTagChange}"
+                                   FontSize="10" FontAttributes="Bold"
+                                   TextColor="White" CharacterSpacing="1.5" />
+                        </Border>
+                        <Label Text="Muutused"
+                               FontSize="18" FontAttributes="Bold"
+                               TextColor="#1f2e28" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <Border StrokeShape="RoundRectangle 14"
+                            Stroke="#e5ebe7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="0">
+                        <Border.Shadow>
+                            <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.05" />
+                        </Border.Shadow>
+                        <VerticalStackLayout>
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#f0eaf7" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#534ab7" StrokeThickness="1.7" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
                                           HorizontalOptions="Center" VerticalOptions="Center"
                                           Data="M 12,3 L 14,9 L 21,9 L 16,13 L 18,20 L 12,16 L 6,20 L 8,13 L 3,9 L 10,9 Z" />
                                 </Border>
                                 <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
                                     <Label Text="Ühtlustatud kujundus"
-                                           FontSize="14"
-                                           FontAttributes="Bold"
-                                           TextColor="#1f2e28" />
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
                                     <Label Text="Kõik lehed kasutavad nüüd ühtset värvigamma ja stiili"
-                                           FontSize="12"
-                                           TextColor="#5f5e5a" />
-                                </VerticalStackLayout>
-                            </Grid>
-
-                        </VerticalStackLayout>
-                    </Border>
-                </VerticalStackLayout>
-
-                <!-- ===== СЕКЦИЯ: ИСПРАВЛЕНИЯ (оранжевые) ===== -->
-                <VerticalStackLayout Spacing="12">
-
-                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                        <Border StrokeShape="RoundRectangle 6"
-                                Stroke="Transparent"
-                                BackgroundColor="#d97a4a"
-                                Padding="10,4">
-                            <Label Text="PARANDUS"
-                                   FontSize="10"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   CharacterSpacing="1.5" />
-                        </Border>
-                        <Label Text="Veaparandused"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="#1f2e28"
-                               VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-
-                    <Border StrokeShape="RoundRectangle 14"
-                            Stroke="#e5ebe7"
-                            StrokeThickness="1"
-                            BackgroundColor="White"
-                            Padding="0">
-                        <Border.Shadow>
-                            <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.05" />
-                        </Border.Shadow>
-
-                        <VerticalStackLayout>
-
-                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
-                                <Border Grid.Column="0"
-                                        StrokeShape="RoundRectangle 16"
-                                        Stroke="Transparent"
-                                        BackgroundColor="#fff5e8"
-                                        WidthRequest="32"
-                                        HeightRequest="32"
-                                        Padding="0"
-                                        VerticalOptions="Start">
-                                    <Path Stroke="#993c1d" StrokeThickness="1.7"
-                                          Fill="Transparent" Aspect="Uniform"
-                                          HeightRequest="14" WidthRequest="14"
-                                          HorizontalOptions="Center" VerticalOptions="Center"
-                                          Data="M 12,2 L 22,20 L 2,20 Z M 12,9 L 12,14 M 12,17 L 12,17.5" />
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
-                                    <Label Text="Admin-leht: kohene andmete eemaldamine"
-                                           FontSize="14"
-                                           FontAttributes="Bold"
-                                           TextColor="#1f2e28" />
-                                    <Label Text="Kustutatud andmed kaovad nüüd kohe ilma lehe värskendamiseta"
-                                           FontSize="12"
-                                           TextColor="#5f5e5a" />
+                                           FontSize="12" TextColor="#5f5e5a" />
                                 </VerticalStackLayout>
                             </Grid>
 
@@ -376,27 +488,122 @@
 
                             <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
                                 <Border Grid.Column="0"
-                                        StrokeShape="RoundRectangle 16"
-                                        Stroke="Transparent"
-                                        BackgroundColor="#fff5e8"
-                                        WidthRequest="32"
-                                        HeightRequest="32"
-                                        Padding="0"
-                                        VerticalOptions="Start">
-                                    <Path Stroke="#993c1d" StrokeThickness="1.7"
-                                          Fill="Transparent" Aspect="Uniform"
-                                          HeightRequest="14" WidthRequest="14"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#f0eaf7" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#534ab7" StrokeThickness="1.7" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
                                           HorizontalOptions="Center" VerticalOptions="Center"
-                                          Data="M 4,4 L 20,20 M 20,4 L 4,20" />
+                                          Data="M 4,6 L 20,6 M 4,12 L 20,12 M 4,18 L 12,18" />
                                 </Border>
                                 <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
-                                    <Label Text="Kustutamiskäsud optimeeritud"
-                                           FontSize="14"
-                                           FontAttributes="Bold"
-                                           TextColor="#1f2e28" />
-                                    <Label Text="Kustutamine on nüüd kiirem ja stabiilsem"
-                                           FontSize="12"
-                                           TextColor="#5f5e5a" />
+                                    <Label Text="Üleminek Shell-ist tavalisele NavigationPage struktuurile"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Navigatsioon on nüüd stabiilsem ja kiirem"
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- v1.5.0 FIXES -->
+                <VerticalStackLayout Spacing="12">
+                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Border StrokeShape="RoundRectangle 6" Stroke="Transparent"
+                                BackgroundColor="#d97a4a" Padding="10,4">
+                            <Label Text="{x:Static loc:AppResources.UpdateTagFix}"
+                                   FontSize="10" FontAttributes="Bold"
+                                   TextColor="White" CharacterSpacing="1.5" />
+                        </Border>
+                        <Label Text="Veaparandused"
+                               FontSize="18" FontAttributes="Bold"
+                               TextColor="#1f2e28" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <Border StrokeShape="RoundRectangle 14"
+                            Stroke="#e5ebe7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="0">
+                        <Border.Shadow>
+                            <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.05" />
+                        </Border.Shadow>
+                        <VerticalStackLayout>
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,12 L 9,17 L 20,6" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Logi välja funktsioon"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Logi välja puhastab sessiooni ja suunab tagasi sisselogimise lehele"
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,12 L 9,17 L 20,6" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Sessioonihaldus"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Lisatud SessionService kasutaja sessiooni hoidmiseks"
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,12 L 9,17 L 20,6" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Kasutaja profiili leht"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Uus profiili leht koos kõigi vajalike nuppudega"
+                                           FontSize="12" TextColor="#5f5e5a" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="#f0f2f0" Margin="20,0" />
+
+                            <Grid Padding="20,16" ColumnDefinitions="Auto, *" ColumnSpacing="14">
+                                <Border Grid.Column="0"
+                                        StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                        BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32"
+                                        Padding="0" VerticalOptions="Start">
+                                    <Path Stroke="#0f6e56" StrokeThickness="2.2" Fill="Transparent"
+                                          Aspect="Uniform" HeightRequest="14" WidthRequest="14"
+                                          HorizontalOptions="Center" VerticalOptions="Center"
+                                          Data="M 4,12 L 9,17 L 20,6" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="Admin-leht: kohene andmete eemaldamine"
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1f2e28" />
+                                    <Label Text="Kustutatud andmed kaovad nüüd kohe ilma lehe värskendamiseta"
+                                           FontSize="12" TextColor="#5f5e5a" />
                                 </VerticalStackLayout>
                             </Grid>
 
@@ -404,43 +611,28 @@
                     </Border>
                 </VerticalStackLayout>
 
-                <!-- ===== ССЫЛКА НА АРХИВ ===== -->
+                <!-- Version history footer -->
                 <Border StrokeShape="RoundRectangle 12"
-                        Stroke="#e5ebe7"
-                        StrokeThickness="1"
-                        BackgroundColor="White"
-                        Padding="20"
-                        Margin="0,8,0,0">
+                        Stroke="#e5ebe7" StrokeThickness="1"
+                        BackgroundColor="White" Padding="20" Margin="0,8,0,0">
                     <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
-
                         <Border Grid.Column="0"
-                                StrokeShape="RoundRectangle 16"
-                                Stroke="Transparent"
-                                BackgroundColor="#e8f0ed"
-                                WidthRequest="32"
-                                HeightRequest="32"
-                                Padding="0">
-                            <Path Stroke="#0f6e56" StrokeThickness="1.7"
-                                  Fill="Transparent" Aspect="Uniform"
-                                  HeightRequest="14" WidthRequest="14"
+                                StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                                BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32" Padding="0">
+                            <Path Stroke="#0f6e56" StrokeThickness="1.7" Fill="Transparent"
+                                  Aspect="Uniform" HeightRequest="14" WidthRequest="14"
                                   HorizontalOptions="Center" VerticalOptions="Center"
                                   Data="M 12,8 L 12,12 L 14,14 M 4,12 C 4,7.6 7.6,4 12,4 C 16.4,4 20,7.6 20,12 C 20,16.4 16.4,20 12,20 C 7.6,20 4,16.4 4,12 Z" />
                         </Border>
-
                         <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="Vanemate versioonide ajalugu"
-                                   FontSize="13"
-                                   FontAttributes="Bold"
-                                   TextColor="#1f2e28" />
-                            <Label Text="Vaata kõiki rakenduse uuendusi"
-                                   FontSize="11"
-                                   TextColor="#98a8a0" />
+                            <Label Text="{x:Static loc:AppResources.UpdatesHistoryTitle}"
+                                   FontSize="13" FontAttributes="Bold" TextColor="#1f2e28" />
+                            <Label Text="{x:Static loc:AppResources.UpdatesHistorySubtitle}"
+                                   FontSize="11" TextColor="#98a8a0" />
                         </VerticalStackLayout>
-
                         <Path Grid.Column="2"
-                              Stroke="#98a8a0" StrokeThickness="2"
-                              Fill="Transparent" Aspect="Uniform"
-                              HeightRequest="14" WidthRequest="14"
+                              Stroke="#98a8a0" StrokeThickness="2" Fill="Transparent"
+                              Aspect="Uniform" HeightRequest="14" WidthRequest="14"
                               VerticalOptions="Center"
                               Data="M 8,6 L 14,12 L 8,18" />
                     </Grid>

@@ -33,15 +33,15 @@ namespace E_Raamatud
 
         private void ApplyLocalization()
         {
-            HeaderTitle.Text          = AppResources.WelcomeGreeting + "!";
-            HeaderSubtitle.Text       = "Avasta uusi raamatuid t√§na"; // decorative, keep as-is or add resource key
-            WelcomeSubLabel.Text      = AppResources.BooksTitle;
-            BooksSectionTitle.Text    = AppResources.BooksTitle;
-            BooksSectionSubtitle.Text = "Vali endale meelep√§rane";
-            SearchEntry.Placeholder   = AppResources.SearchPlaceholder;
-            SearchBtnLabel.Text       = "Otsi";
-            FiltersLabel.Text         = "FILTRID";
-            FileTypeAllLabel.Text     = "K√µik failid";
+            HeaderTitle.Text = AppResources.WelcomeGreeting + "!";
+            HeaderSubtitle.Text = AppResources.WelcomeSubtitle;
+            WelcomeSubLabel.Text = AppResources.YourBooks;
+            BooksSectionTitle.Text = AppResources.BooksTitle;
+            BooksSectionSubtitle.Text = AppResources.BooksSubtitle;
+            SearchEntry.Placeholder = AppResources.SearchPlaceholder;
+            SearchBtnLabel.Text = AppResources.SearchButton;
+            FiltersLabel.Text = AppResources.FiltersLabel;
+            FileTypeAllLabel.Text = AppResources.AllFiles;
         }
 
         private async void OnBookSelected(object sender, SelectionChangedEventArgs e)
@@ -56,12 +56,12 @@ namespace E_Raamatud
 
                 var raamat = new Raamat
                 {
-                    Raamat_ID  = selectedBook.Raamat_ID,
-                    Pealkiri   = selectedBook.Pealkiri,
-                    Kirjeldus  = selectedBook.Kirjeldus,
-                    Pilt       = selectedBook.Pilt,
+                    Raamat_ID = selectedBook.Raamat_ID,
+                    Pealkiri = selectedBook.Pealkiri,
+                    Kirjeldus = selectedBook.Kirjeldus,
+                    Pilt = selectedBook.Pilt,
                     Tekstifail = selectedBook.Tekstifail,
-                    Audiofail  = selectedBook.Audiofail
+                    Audiofail = selectedBook.Audiofail
                 };
 
                 await Navigation.PushAsync(new BookDetailPage(raamat, selectedBook.Zanr_Nimi));
@@ -69,7 +69,57 @@ namespace E_Raamatud
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error in OnBookSelected: {ex.Message}");
-                await DisplayAlert(AppResources.Error, "Raamatu laadimisel tekkis probleem.", AppResources.OK);
+                await DisplayAlert(AppResources.Error, AppResources.BookLoadError, AppResources.OK);
+            }
+        }
+
+        private async void OnBookMenuTapped(object sender, TappedEventArgs e)
+        {
+            var border = sender as BindableObject;
+            var book = border?.BindingContext as BookWithGenre;
+            if (book == null) return;
+
+            string action = await DisplayActionSheet(
+                book.Pealkiri, AppResources.Cancel, AppResources.Delete,
+                "Muuda");
+
+            if (action == AppResources.Delete)
+            {
+                bool confirm = await DisplayAlert(
+                    AppResources.Delete,
+                    $"Kas soovid kustutada \"{book.Pealkiri}\"?",
+                    AppResources.Yes, AppResources.No);
+
+                if (confirm)
+                {
+                    try
+                    {
+                        await DatabaseService.Instance.DeleteBookAsync(book.Raamat_ID);
+                        // Refresh by creating a new BookViewModel ó it reloads in InitAsync
+                        BindingContext = new BookViewModel();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Delete error: {ex.Message}");
+                        await DisplayAlert(AppResources.Error, ex.Message, AppResources.OK);
+                    }
+                }
+            }
+            else if (action == "Muuda")
+            {
+                var raamat = new Raamat
+                {
+                    Raamat_ID = book.Raamat_ID,
+                    Pealkiri = book.Pealkiri,
+                    Kirjeldus = book.Kirjeldus,
+                    Pilt = book.Pilt,
+                    Tekstifail = book.Tekstifail,
+                    Audiofail = book.Audiofail
+                };
+                // Pass the book to AddBookPage via its code-behind
+                var page = new AddBookPage();
+                page.LoadBook(raamat);
+                await Navigation.PushAsync(page);
             }
         }
 
@@ -90,11 +140,11 @@ namespace E_Raamatud
 
             BooksGridLayout.Span = width switch
             {
-                < 500  => 2,
-                < 800  => 3,
+                < 500 => 2,
+                < 800 => 3,
                 < 1100 => 4,
                 < 1400 => 5,
-                _      => 6
+                _ => 6
             };
         }
 
@@ -102,7 +152,6 @@ namespace E_Raamatud
         {
             if (sender is not Border tapped) return;
 
-            // Reset all genre chips
             foreach (var child in GenresLayout.Children)
             {
                 if (child is Border b)
@@ -114,13 +163,11 @@ namespace E_Raamatud
                 }
             }
 
-            // Highlight selected
             tapped.BackgroundColor = Color.FromArgb("#2d6e68");
             tapped.Stroke = Color.FromArgb("#2d6e68");
             if (tapped.Content is Label tappedLbl)
                 tappedLbl.TextColor = Color.FromArgb("#FFFFFF");
 
-            // Fire command with Genre object as parameter
             if (BindingContext is BookViewModel vm && tapped.BindingContext is Genre genre)
             {
                 if (vm.SelectGenreCommand is ICommand cmd && cmd.CanExecute(genre))
@@ -147,6 +194,15 @@ namespace E_Raamatud
             tapped.Stroke = Color.FromArgb("#2d6e68");
             if (tapped.Content is Label tappedLbl2)
                 tappedLbl2.TextColor = Color.FromArgb("#FFFFFF");
+
+            if (BindingContext is BookViewModel vm)
+            {
+                string fileType = tapped.Content is Label chipLabel ? chipLabel.Text : "Kıik";
+                if (fileType == AppResources.AllFiles) fileType = "Kıik";
+
+                if (vm.SelectFileTypeCommand is ICommand cmd && cmd.CanExecute(fileType))
+                    cmd.Execute(fileType);
+            }
         }
     }
 }

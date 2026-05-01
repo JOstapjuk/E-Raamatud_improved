@@ -16,6 +16,10 @@
             <Setter Property="HeightRequest" Value="44" />
             <Setter Property="Padding" Value="0" />
         </Style>
+        <ResourceDictionary>
+            <local:NullToBoolConverter x:Key="NullToBoolConverter"
+                                       xmlns:local="clr-namespace:E_Raamatud" />
+        </ResourceDictionary>
     </ContentPage.Resources>
 
     <ScrollView>
@@ -157,7 +161,7 @@
                        CharacterSpacing="3"
                        Margin="32,0,0,0" />
 
-                <!-- Genre chips — bind to Nimetus property of Genre object -->
+                <!-- Genre chips -->
                 <ScrollView Orientation="Horizontal"
                             HorizontalScrollBarVisibility="Never"
                             VerticalScrollBarVisibility="Never"
@@ -176,7 +180,6 @@
                                     <Border.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="OnGenreChipTapped" />
                                     </Border.GestureRecognizers>
-                                    <!-- FIX: bind to Nimetus, not the whole object -->
                                     <Label Text="{Binding Nimetus}"
                                            FontSize="12"
                                            FontAttributes="Bold"
@@ -302,6 +305,8 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <VerticalStackLayout Spacing="10" Padding="2">
+
+                                <!-- Cover + status badge + three dots menu -->
                                 <Grid>
                                     <Border StrokeShape="RoundRectangle 10"
                                             Stroke="Transparent"
@@ -314,6 +319,7 @@
                                         <Image Source="{Binding PiltOrPlaceholder}" Aspect="AspectFill" />
                                     </Border>
 
+                                    <!-- Status badge (Uus / Loetud) -->
                                     <Border StrokeShape="RoundRectangle 6"
                                             Stroke="Transparent"
                                             BackgroundColor="{Binding StatusColor}"
@@ -327,8 +333,30 @@
                                                FontAttributes="Bold"
                                                TextColor="White" />
                                     </Border>
+
+                                    <!-- Three dots menu button -->
+                                    <Border StrokeShape="RoundRectangle 16"
+                                            Stroke="Transparent"
+                                            BackgroundColor="#1f4f4a"
+                                            WidthRequest="32"
+                                            HeightRequest="32"
+                                            Padding="0"
+                                            HorizontalOptions="End"
+                                            VerticalOptions="Start"
+                                            Margin="0,8,8,0">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnBookMenuTapped" />
+                                        </Border.GestureRecognizers>
+                                        <Label Text="···"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                    </Border>
                                 </Grid>
 
+                                <!-- Title + genre -->
                                 <VerticalStackLayout Spacing="3" Padding="2,0">
                                     <Label Text="{Binding Pealkiri}"
                                            FontSize="13"
@@ -340,6 +368,7 @@
                                            FontSize="11"
                                            TextColor="#98a8a0" />
                                 </VerticalStackLayout>
+
                             </VerticalStackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

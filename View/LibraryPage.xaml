@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:E_Raamatud.Resources.Localization"
              x:Class="E_Raamatud.View.LibraryPage"
              x:Name="LibraryPageRef"
              BackgroundColor="#FAF8F3"
              Shell.NavBarIsVisible="False"
-             Title="Minu raamatukogu">
+             Title="{x:Static loc:AppResources.LibraryTitle}">
 
     <Grid RowDefinitions="Auto, *">
 
-        <!-- ============== ШАПКА ============== -->
+        <!-- HEADER -->
         <Border Grid.Row="0"
                 StrokeShape="RoundRectangle 0,0,28,28"
                 Stroke="Transparent"
@@ -36,41 +37,41 @@
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnBackTapped" />
                         </Border.GestureRecognizers>
-                        <Label Text="‹"
-                           TextColor="White"
-                           FontSize="22"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center" />
+                        <Label Text="&#8249;"
+                               TextColor="White"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
                     </Border>
 
                     <VerticalStackLayout Grid.Column="1"
                                          Spacing="2"
                                          VerticalOptions="Center"
                                          HorizontalOptions="Center">
-                        <Label Text="Minu raamatukogu"
+                        <Label Text="{x:Static loc:AppResources.LibraryTitle}"
                                FontSize="22"
                                FontAttributes="Bold"
                                TextColor="White"
                                HorizontalOptions="Center" />
                         <Label x:Name="BooksCountLabel"
-                               Text="Sinu ostetud raamatud"
+                               Text="{x:Static loc:AppResources.LibraryEmpty}"
                                FontSize="12"
                                TextColor="#c8e0dc"
                                HorizontalOptions="Center" />
                     </VerticalStackLayout>
 
                     <Label Grid.Column="2"
-                       WidthRequest="40"
-                       HeightRequest="40" />
+                           WidthRequest="40"
+                           HeightRequest="40" />
                 </Grid>
             </VerticalStackLayout>
         </Border>
 
-        <!-- ============== КОНТЕНТ ============== -->
+        <!-- CONTENT -->
         <Grid Grid.Row="1">
 
-            <!-- Пустое состояние -->
+            <!-- Empty state -->
             <VerticalStackLayout x:Name="EmptyView"
                                  IsVisible="False"
                                  VerticalOptions="Center"
@@ -85,23 +86,23 @@
                         HeightRequest="120"
                         Padding="0">
                     <Label Text="📚"
-                       FontSize="48"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center" />
+                           FontSize="48"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
                 </Border>
 
-                <Label Text="Sa ei loe hetkel ühtegi raamatut"
+                <Label Text="{x:Static loc:AppResources.LibraryEmpty}"
                        FontSize="20"
                        FontAttributes="Bold"
                        TextColor="#1f2e28"
                        HorizontalOptions="Center" />
 
-                <Label Text="Ava raamat ja alusta lugemist"
+                <Label Text="{x:Static loc:AppResources.LibraryEmptySub}"
                        FontSize="13"
                        TextColor="#5f5e5a"
                        HorizontalOptions="Center" />
 
-                    <Button Text="Mine raamatulettele"
+                <Button Text="{x:Static loc:AppResources.GoToStore}"
                         WidthRequest="220"
                         Clicked="OnBackTapped"
                         BackgroundColor="#2d6e68"
@@ -113,7 +114,7 @@
                         Margin="0,8,0,0" />
             </VerticalStackLayout>
 
-            <!-- Список книг -->
+            <!-- Books list -->
             <ScrollView x:Name="BooksScroll">
                 <VerticalStackLayout Padding="24,24,24,32" Spacing="14">
 
@@ -125,11 +126,10 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Border StrokeShape="RoundRectangle 14"
-                                    Stroke="#e5ebe7"
-                                    StrokeThickness="1"
-                                    BackgroundColor="White"
-                                    Padding="16"
-                                    Margin="0,0,0,0">
+                                        Stroke="#e5ebe7"
+                                        StrokeThickness="1"
+                                        BackgroundColor="White"
+                                        Padding="16">
                                     <Border.Shadow>
                                         <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.06" />
                                     </Border.Shadow>
@@ -140,11 +140,11 @@
                                     <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="16">
 
                                         <Border Grid.Column="0"
-                                            StrokeShape="RoundRectangle 8"
-                                            Stroke="Transparent"
-                                            Padding="0"
-                                            WidthRequest="80"
-                                            HeightRequest="120">
+                                                StrokeShape="RoundRectangle 8"
+                                                Stroke="Transparent"
+                                                Padding="0"
+                                                WidthRequest="80"
+                                                HeightRequest="120">
                                             <Border.Shadow>
                                                 <Shadow Brush="#000000" Offset="0,3" Radius="8" Opacity="0.18" />
                                             </Border.Shadow>
@@ -152,61 +152,61 @@
                                         </Border>
 
                                         <VerticalStackLayout Grid.Column="1"
-                                             Spacing="4"
-                                             VerticalOptions="Center">
+                                                             Spacing="4"
+                                                             VerticalOptions="Center">
                                             <Border StrokeShape="RoundRectangle 6"
-                                                Stroke="Transparent"
-                                                BackgroundColor="#e8f0ed"
-                                                Padding="8,3"
-                                                HorizontalOptions="Start">
+                                                    Stroke="Transparent"
+                                                    BackgroundColor="#e8f0ed"
+                                                    Padding="8,3"
+                                                    HorizontalOptions="Start">
                                                 <Label Text="LOEB"
-                                                   FontSize="9"
-                                                   FontAttributes="Bold"
-                                                   TextColor="#0f6e56"
-                                                   CharacterSpacing="1.5" />
+                                                       FontSize="9"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#0f6e56"
+                                                       CharacterSpacing="1.5" />
                                             </Border>
                                             <Label Text="{Binding Pealkiri}"
-                                               FontSize="15"
-                                               FontAttributes="Bold"
-                                               TextColor="#1f2e28"
-                                               LineBreakMode="TailTruncation"
-                                               MaxLines="2" />
+                                                   FontSize="15"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#1f2e28"
+                                                   LineBreakMode="TailTruncation"
+                                                   MaxLines="2" />
                                             <Label Text="{Binding Kirjeldus}"
-                                               FontSize="11"
-                                               TextColor="#98a8a0"
-                                               LineBreakMode="TailTruncation"
-                                               MaxLines="2" />
+                                                   FontSize="11"
+                                                   TextColor="#98a8a0"
+                                                   LineBreakMode="TailTruncation"
+                                                   MaxLines="2" />
                                             <HorizontalStackLayout Spacing="6" Margin="0,4,0,0">
                                                 <ProgressBar Progress="{Binding ProgressValue}"
-                                                     ProgressColor="#2d6e68"
-                                                     BackgroundColor="#e8f0ed"
-                                                     HeightRequest="4"
-                                                     WidthRequest="100" />
+                                                             ProgressColor="#2d6e68"
+                                                             BackgroundColor="#e8f0ed"
+                                                             HeightRequest="4"
+                                                             WidthRequest="100" />
                                                 <Label Text="{Binding ProgressText}"
-                                                   FontSize="11"
-                                                   FontAttributes="Bold"
-                                                   TextColor="#2d6e68"
-                                                   VerticalOptions="Center" />
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#2d6e68"
+                                                       VerticalOptions="Center" />
                                             </HorizontalStackLayout>
                                         </VerticalStackLayout>
 
                                         <Border Grid.Column="2"
-                                            StrokeShape="RoundRectangle 20"
-                                            Stroke="Transparent"
-                                            BackgroundColor="#f0f4f2"
-                                            WidthRequest="36"
-                                            HeightRequest="36"
-                                            Padding="0"
-                                            VerticalOptions="Center">
+                                                StrokeShape="RoundRectangle 20"
+                                                Stroke="Transparent"
+                                                BackgroundColor="#f0f4f2"
+                                                WidthRequest="36"
+                                                HeightRequest="36"
+                                                Padding="0"
+                                                VerticalOptions="Center">
                                             <Border.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="OnBookMenuTapped" />
                                             </Border.GestureRecognizers>
                                             <Label Text="···"
-                                               FontSize="16"
-                                               FontAttributes="Bold"
-                                               TextColor="#2d6e68"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center" />
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#2d6e68"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
                                         </Border>
 
                                     </Grid>
@@ -216,6 +216,7 @@
                     </CollectionView>
                 </VerticalStackLayout>
             </ScrollView>
+
         </Grid>
     </Grid>
 </ContentPage>

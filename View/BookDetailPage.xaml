@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:E_Raamatud.Resources.Localization"
              x:Class="E_Raamatud.BookDetailPage"
              x:Name="BookDetailPageRef"
              BackgroundColor="#FAF8F3"
@@ -9,7 +10,6 @@
 
     <Grid RowDefinitions="Auto, *">
 
-        <!-- ============== ШАПКА ============== -->
         <Border Grid.Row="0"
                 StrokeShape="RoundRectangle 0,0,28,28"
                 Stroke="Transparent"
@@ -21,8 +21,7 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid Padding="24,50,24,28"
-                  ColumnDefinitions="Auto, *, Auto">
+            <Grid Padding="24,50,24,28" ColumnDefinitions="Auto, *, Auto">
 
                 <Border Grid.Column="0"
                         StrokeShape="RoundRectangle 20"
@@ -54,14 +53,12 @@
             </Grid>
         </Border>
 
-        <!-- ============== КОНТЕНТ ============== -->
         <ScrollView Grid.Row="1">
             <Grid x:Name="ContentRoot"
                   Padding="32,28,32,32"
                   RowSpacing="28"
                   ColumnSpacing="36">
 
-                <!-- ===== ОБЛОЖКА ===== -->
                 <Border x:Name="CoverBorder"
                         StrokeShape="RoundRectangle 12"
                         Stroke="Transparent"
@@ -77,12 +74,10 @@
                            Aspect="AspectFill" />
                 </Border>
 
-                <!-- ===== ИНФОРМАЦИЯ ===== -->
                 <VerticalStackLayout x:Name="InfoPanel"
                                      Spacing="14"
                                      VerticalOptions="Start">
 
-                    <!-- Бейдж жанра -->
                     <Border StrokeShape="RoundRectangle 6"
                             Stroke="Transparent"
                             BackgroundColor="#e8f0ed"
@@ -95,7 +90,7 @@
                                CharacterSpacing="1.5" />
                     </Border>
 
-                    <!-- Название -->
+                    <!-- Title -->
                     <Label x:Name="TitleLabel"
                            Text="{Binding Pealkiri}"
                            FontSize="32"
@@ -103,37 +98,7 @@
                            TextColor="#1f2e28"
                            LineHeight="1.15" />
 
-                    <!-- Рейтинг + статус -->
-                    <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                        <HorizontalStackLayout Spacing="2">
-                            <Label Text="★" TextColor="#d97a4a" FontSize="16" />
-                            <Label Text="★" TextColor="#d97a4a" FontSize="16" />
-                            <Label Text="★" TextColor="#d97a4a" FontSize="16" />
-                            <Label Text="★" TextColor="#d97a4a" FontSize="16" />
-                            <Label Text="★" TextColor="#d97a4a" FontSize="16" />
-                        </HorizontalStackLayout>
-                        <Label Text="5.0"
-                               FontSize="13"
-                               FontAttributes="Bold"
-                               TextColor="#1f2e28"
-                               VerticalOptions="Center" />
-                        <Label Text="•"
-                               FontSize="13"
-                               TextColor="#98a8a0"
-                               VerticalOptions="Center" />
-                        <Label Text="Hetkel saadaval"
-                               FontSize="13"
-                               TextColor="#0f6e56"
-                               FontAttributes="Bold"
-                               VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-
-                    <BoxView HeightRequest="1"
-                             Color="#e5ebe7"
-                             HorizontalOptions="Fill"
-                             Margin="0,4,0,4" />
-
-                    <!-- ===== READ / LISTEN BUTTONS ===== -->
+                    <!-- READ / LISTEN BUTTONS -->
                     <HorizontalStackLayout x:Name="ActionButtons" Spacing="12">
 
                         <Border StrokeShape="RoundRectangle 12"
@@ -147,43 +112,46 @@
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
                                 <Path Stroke="White" StrokeThickness="1.8" Fill="Transparent"
-                                  Aspect="Uniform" HeightRequest="16" WidthRequest="16"
-                                  VerticalOptions="Center"
-                                  Data="M 4,4 L 4,20 L 20,12 Z" />
-                                <Label Text="Loe" FontSize="15" FontAttributes="Bold"
-                                    TextColor="White" VerticalOptions="Center" />
+                                      Aspect="Uniform" HeightRequest="16" WidthRequest="16"
+                                      VerticalOptions="Center"
+                                      Data="M 4,4 L 4,20 L 20,12 Z" />
+                                <Label Text="{x:Static loc:AppResources.ReadButton}"
+                                       FontSize="15" FontAttributes="Bold"
+                                       TextColor="White" VerticalOptions="Center" />
                             </HorizontalStackLayout>
                         </Border>
 
                         <Border x:Name="ListenButton"
-                            StrokeShape="RoundRectangle 12"
-                            Stroke="#d5dfd8"
-                            StrokeThickness="1"
-                            BackgroundColor="White"
-                            HeightRequest="52"
-                            MinimumWidthRequest="160"
-                            Padding="0"
-                            IsVisible="False">
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="#d5dfd8"
+                                StrokeThickness="1"
+                                BackgroundColor="White"
+                                HeightRequest="52"
+                                MinimumWidthRequest="160"
+                                Padding="0"
+                                IsVisible="False">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnListenTapped" />
                             </Border.GestureRecognizers>
                             <HorizontalStackLayout Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
                                 <Path Stroke="#2d6e68" StrokeThickness="1.8" Fill="Transparent"
-                                  Aspect="Uniform" HeightRequest="16" WidthRequest="16"
-                                  VerticalOptions="Center"
-                                  Data="M 12,3 C 7,3 4,7 4,12 L 4,15 L 4,17 L 7,17 L 7,12 M 12,3 C 17,3 20,7 20,12 L 20,15 L 20,17 L 17,17 L 17,12" />
-                                <Label Text="Kuula" FontSize="15" FontAttributes="Bold"
-                                    TextColor="#2d6e68" VerticalOptions="Center" />
+                                      Aspect="Uniform" HeightRequest="16" WidthRequest="16"
+                                      VerticalOptions="Center"
+                                      Data="M 12,3 C 7,3 4,7 4,12 L 4,15 L 4,17 L 7,17 L 7,12 M 12,3 C 17,3 20,7 20,12 L 20,15 L 20,17 L 17,17 L 17,12" />
+                                <Label Text="{x:Static loc:AppResources.ListenButton}"
+                                       FontSize="15" FontAttributes="Bold"
+                                       TextColor="#2d6e68" VerticalOptions="Center" />
                             </HorizontalStackLayout>
                         </Border>
 
                     </HorizontalStackLayout>
 
-                    <BoxView HeightRequest="1" Color="#e5ebe7" HorizontalOptions="Fill" Margin="0,8,0,4" />
+                    <BoxView HeightRequest="1" Color="#e5ebe7"
+                             HorizontalOptions="Fill" Margin="0,8,0,4" />
 
-                    <!-- Описание -->
+                    <!-- Description -->
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="KIRJELDUS"
+                        <Label Text="{x:Static loc:AppResources.DescriptionFieldLabel}"
                                FontSize="10"
                                TextColor="#98a8a0"
                                CharacterSpacing="2"
@@ -193,65 +161,6 @@
                                TextColor="#3a5c52"
                                LineHeight="1.55" />
                     </VerticalStackLayout>
-
-                    <!-- ===== ИНФО-БЛОК (адаптивный) ===== -->
-                    <Grid x:Name="InfoBlocksGrid"
-                          ColumnDefinitions="*,*,*"
-                          ColumnSpacing="10"
-                          RowSpacing="10"
-                          Margin="0,16,0,0">
-
-                        <Border Grid.Column="0" Grid.Row="0"
-                                StrokeShape="RoundRectangle 10"
-                                Stroke="Transparent"
-                                BackgroundColor="#e8f0ed"
-                                Padding="14,12">
-                            <VerticalStackLayout Spacing="4">
-                                <Path Stroke="#0f6e56" StrokeThickness="1.7"
-                                  Fill="Transparent" Aspect="Uniform"
-                                  HeightRequest="20" WidthRequest="20"
-                                  HorizontalOptions="Start"
-                                  Data="M 4,5 L 4,19 L 20,19 L 20,5 Z M 4,9 L 20,9 M 8,13 L 14,13 M 8,16 L 12,16" />
-                                <Label Text="E-raamat"
-                                    FontSize="11" FontAttributes="Bold" TextColor="#1f2e28" />
-                                <Label Text="Koheselt saadaval"
-                                    FontSize="10" TextColor="#5f5e5a" />
-                            </VerticalStackLayout>
-                        </Border>
-
-                        <Border Grid.Column="1" Grid.Row="0"
-                                StrokeShape="RoundRectangle 10"
-                                Stroke="Transparent"
-                                BackgroundColor="#fff5e8"
-                                Padding="14,12">
-                            <VerticalStackLayout Spacing="4">
-                                <Path Stroke="#993c1d" StrokeThickness="1.7"
-                                  Fill="Transparent" Aspect="Uniform"
-                                  HeightRequest="20" WidthRequest="20"
-                                  HorizontalOptions="Start"
-                                  Data="M 12,3 C 7,3 4,7 4,12 L 4,15 L 4,17 L 7,17 L 7,12 M 12,3 C 17,3 20,7 20,12 L 20,15 L 20,17 L 17,17 L 17,12" />
-                                <Label Text="Audioraamat" FontSize="11" FontAttributes="Bold" TextColor="#1f2e28" />
-                                <Label x:Name="AudioAvailableLabel" Text="Pole saadaval"
-                                     FontSize="10" TextColor="#5f5e5a" />
-                            </VerticalStackLayout>
-                        </Border>
-
-                        <Border Grid.Column="2" Grid.Row="0"
-                                StrokeShape="RoundRectangle 10"
-                                Stroke="Transparent"
-                                BackgroundColor="#f0eaf7"
-                                Padding="14,12">
-                            <VerticalStackLayout Spacing="4">
-                                <Path Stroke="#534ab7" StrokeThickness="1.7"
-                                  Fill="Transparent" Aspect="Uniform"
-                                  HeightRequest="20" WidthRequest="20"
-                                  HorizontalOptions="Start"
-                                  Data="M 12,4 C 8,4 4,8 4,12 C 4,16 8,20 12,20 C 16,20 20,16 20,12 C 20,8 16,4 12,4 Z M 12,8 L 12,12 L 15,14" />
-                                <Label Text="Lugemisaeg" FontSize="11" FontAttributes="Bold" TextColor="#1f2e28" />
-                                <Label Text="Sinu tempos" FontSize="10" TextColor="#5f5e5a" />
-                            </VerticalStackLayout>
-                        </Border>
-                    </Grid>
 
                 </VerticalStackLayout>
             </Grid>

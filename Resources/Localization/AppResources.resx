@@ -69,22 +69,49 @@
 
   <!-- Account Settings -->
   <data name="AccountSettings" xml:space="preserve"><value>Account Settings</value></data>
+  <data name="AccountSettingsSubtitle" xml:space="preserve"><value>Manage your account details and password</value></data>
   <data name="ChangePassword" xml:space="preserve"><value>Change Password</value></data>
   <data name="CurrentPassword" xml:space="preserve"><value>Current Password</value></data>
+  <data name="CurrentPasswordPlaceholder" xml:space="preserve"><value>Enter current password</value></data>
   <data name="NewPassword" xml:space="preserve"><value>New Password</value></data>
+  <data name="NewPasswordPlaceholder" xml:space="preserve"><value>Enter new password</value></data>
   <data name="ConfirmPassword" xml:space="preserve"><value>Confirm New Password</value></data>
+  <data name="ConfirmPasswordPlaceholder" xml:space="preserve"><value>Re-enter new password</value></data>
   <data name="SaveChanges" xml:space="preserve"><value>Save Changes</value></data>
+  <data name="UsernameFieldLabel" xml:space="preserve"><value>USERNAME</value></data>
+  <data name="UsernameFieldPlaceholder" xml:space="preserve"><value>Enter new username</value></data>
 
   <!-- Language -->
   <data name="ChangeLanguage" xml:space="preserve"><value>Change Language</value></data>
   <data name="LanguageSettings" xml:space="preserve"><value>Language Settings</value></data>
+  <data name="LanguageLabel" xml:space="preserve"><value>Language</value></data>
   <data name="EnglishButton" xml:space="preserve"><value>English</value></data>
   <data name="RussianButton" xml:space="preserve"><value>Russian</value></data>
   <data name="EstonianButton" xml:space="preserve"><value>Estonian</value></data>
 
-  <!-- Profile -->
+  <!-- Profile / User Profile Page -->
   <data name="Logout" xml:space="preserve"><value>Log Out</value></data>
   <data name="LogoutConfirm" xml:space="preserve"><value>Are you sure you want to log out?</value></data>
+  <data name="AccountSettingsMenuTitle" xml:space="preserve"><value>Account Settings</value></data>
+  <data name="AccountSettingsMenuSub" xml:space="preserve"><value>Change username and password</value></data>
+  <data name="UpdatesMenuTitle" xml:space="preserve"><value>Updates</value></data>
+  <data name="UpdatesMenuSub" xml:space="preserve"><value>See what's new in the app</value></data>
+  <data name="GiftCardMenuTitle" xml:space="preserve"><value>Gift Card</value></data>
+  <data name="GiftCardMenuSub" xml:space="preserve"><value>Redeem a gift card</value></data>
+  <data name="AddAccountMenuTitle" xml:space="preserve"><value>Add Account</value></data>
+  <data name="AddAccountMenuSub" xml:space="preserve"><value>Add another user account</value></data>
+  <data name="GiftCard" xml:space="preserve"><value>Gift Card</value></data>
+  <data name="AddAccount" xml:space="preserve"><value>Add Account</value></data>
+  <data name="FunctionComingSoon" xml:space="preserve"><value>This feature is coming soon!</value></data>
+
+  <!-- Updates Page -->
+  <data name="UpdatesTitle" xml:space="preserve"><value>Updates</value></data>
+  <data name="UpdatesSubtitle" xml:space="preserve"><value>What's new in the app</value></data>
+  <data name="UpdateTagFix" xml:space="preserve"><value>FIX</value></data>
+  <data name="UpdateTagChange" xml:space="preserve"><value>CHANGE</value></data>
+  <data name="UpdateTagNew" xml:space="preserve"><value>NEW</value></data>
+  <data name="UpdatesHistoryTitle" xml:space="preserve"><value>Version history</value></data>
+  <data name="UpdatesHistorySubtitle" xml:space="preserve"><value>See all app updates</value></data>
 
   <!-- General -->
   <data name="Error" xml:space="preserve"><value>Error</value></data>

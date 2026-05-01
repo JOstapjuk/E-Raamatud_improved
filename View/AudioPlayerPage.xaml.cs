@@ -1,5 +1,6 @@
 using CommunityToolkit.Maui.Views;
 using E_Raamatud.Model;
+using E_Raamatud.Resources.Localization;
 using E_Raamatud.Services;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
@@ -22,7 +23,6 @@ namespace E_Raamatud.View
         private int _currentChapterIndex = 0;
         private readonly int _raamatId;
 
-        // Иконки для кнопки play/pause
         private static readonly Geometry PlayIcon = new PathGeometryConverter()
             .ConvertFromInvariantString("M 7,5 L 7,19 L 19,12 Z") as Geometry;
         private static readonly Geometry PauseIcon = new PathGeometryConverter()
@@ -44,6 +44,8 @@ namespace E_Raamatud.View
 
             _ = InitWithSavedProgressAsync();
         }
+
+        // No ApplyLocalization needed — ChapterList label uses {x:Static} in XAML
 
         private async void OnBackTapped(object sender, EventArgs e)
         {
@@ -78,57 +80,29 @@ namespace E_Raamatud.View
             try
             {
                 int userId = SessionService.CurrentUser?.Id ?? 0;
-                if (userId > 0)
+                if (userId <= 0)
                 {
-                    var saved = await DatabaseService.Instance.GetReadingProgressAsync(userId, _raamatId);
-                    if (saved != null && (saved.AudioChapter > 0 || saved.AudioPosition > 0))
-                    {
-                        LoadChapter(saved.AudioChapter, autoPlay: false);
-                        await Task.Delay(800);
-                        if (saved.AudioPosition > 0)
-                            _mediaElement.SeekTo(TimeSpan.FromSeconds(saved.AudioPosition));
-                        return;
-                    }
+                    LoadChapter(0);
+                    return;
                 }
+
+                var progress = await DatabaseService.Instance.GetReadingProgressAsync(userId, _raamatId);
+                int startChapter = progress?.AudioChapter ?? 0;
+                double startPosition = progress?.AudioPosition ?? 0;
+
+                if (startChapter >= _chapters.Count) startChapter = 0;
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    LoadChapter(startChapter);
+                    if (startPosition > 0)
+                        _mediaElement.SeekTo(TimeSpan.FromSeconds(startPosition));
+                });
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"InitWithSavedProgressAsync error: {ex.Message}");
-            }
-
-            LoadChapter(0);
-        }
-
-        private async Task SaveAudioProgressAsync()
-        {
-            try
-            {
-                int userId = SessionService.CurrentUser?.Id ?? 0;
-                if (userId <= 0) return;
-
-                var position = _mediaElement.Position.TotalSeconds;
-
-                var existing = await DatabaseService.Instance.GetReadingProgressAsync(userId, _raamatId);
-                if (existing != null)
-                {
-                    existing.AudioChapter = _currentChapterIndex;
-                    existing.AudioPosition = position;
-                    await DatabaseService.Instance.UpdateReadingProgressAsync(existing);
-                }
-                else
-                {
-                    await DatabaseService.Instance.InsertReadingProgressAsync(new ReadingProgress
-                    {
-                        Kasutaja_ID = userId,
-                        Raamat_ID = _raamatId,
-                        AudioChapter = _currentChapterIndex,
-                        AudioPosition = position
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"SaveAudioProgressAsync error: {ex.Message}");
+                MainThread.BeginInvokeOnMainThread(() => LoadChapter(0));
             }
         }
 
@@ -140,7 +114,7 @@ namespace E_Raamatud.View
             var chapter = _chapters[index];
 
             ChapterLabel.Text = chapter.Title;
-            ChapterCountLabel.Text = $"PEATUKK {index + 1} / {_chapters.Count}";
+            ChapterCountLabel.Text = $"{AppResources.Chapter} {index + 1} / {_chapters.Count}";
             TimeLabel.Text = "0:00 / 0:00";
             SeekBar.Value = 0;
             ChapterListView.SelectedItem = chapter;
@@ -249,83 +223,92 @@ namespace E_Raamatud.View
 
         private void OnChapterSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (e.CurrentSelection?.Count > 0 && e.CurrentSelection[0] is AudioChapter selected)
+            if (e.CurrentSelection?.FirstOrDefault() is AudioChapter selected)
             {
-                _ = SaveAudioProgressAsync();
-                LoadChapter(selected.Index - 1, autoPlay: true);
+                int idx = _chapters.IndexOf(selected);
+                if (idx >= 0 && idx != _currentChapterIndex)
+                {
+                    _ = SaveAudioProgressAsync();
+                    LoadChapter(idx, autoPlay: _isPlaying);
+                }
+                ChapterListFrame.IsVisible = false;
             }
         }
 
-        private void OnSeekBarDragStarted(object sender, EventArgs e) => _isDragging = true;
+        private void OnSeekBarDragStarted(object sender, EventArgs e)
+        {
+            _isDragging = true;
+        }
 
         private void OnSeekBarDragCompleted(object sender, EventArgs e)
         {
             _isDragging = false;
-            var duration = _mediaElement.Duration;
-            if (duration.TotalSeconds > 0)
-                _mediaElement.SeekTo(TimeSpan.FromSeconds(SeekBar.Value * duration.TotalSeconds));
-            _ = SaveAudioProgressAsync();
-        }
-
-        // Скорость
-        private void OnSpeedTapped075(object sender, EventArgs e) => SetSpeed(0.75, SpeedBtn075);
-        private void OnSpeedTapped100(object sender, EventArgs e) => SetSpeed(1.0, SpeedBtn100);
-        private void OnSpeedTapped150(object sender, EventArgs e) => SetSpeed(1.5, SpeedBtn150);
-        private void OnSpeedTapped200(object sender, EventArgs e) => SetSpeed(2.0, SpeedBtn200);
-
-        private void SetSpeed(double speed, Border activeBtn)
-        {
-            _mediaElement.Speed = speed;
-
-            var allBtns = new[] { SpeedBtn075, SpeedBtn100, SpeedBtn150, SpeedBtn200 };
-            foreach (var b in allBtns)
-            {
-                if (b == activeBtn)
-                {
-                    b.BackgroundColor = Color.FromArgb("#2d6e68");
-                    b.Stroke = Colors.Transparent;
-                    if (b.Content is Label lbl) lbl.TextColor = Colors.White;
-                }
-                else
-                {
-                    b.BackgroundColor = Colors.White;
-                    b.Stroke = Color.FromArgb("#d5dfd8");
-                    if (b.Content is Label lbl) lbl.TextColor = Color.FromArgb("#3a5c52");
-                }
-            }
+            var duration = _mediaElement.Duration.TotalSeconds;
+            if (duration > 0)
+                _mediaElement.SeekTo(TimeSpan.FromSeconds(SeekBar.Value * duration));
         }
 
         private void OnTimerTick(object sender, ElapsedEventArgs e)
         {
             if (_isDragging) return;
+
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                try
-                {
-                    var pos = _mediaElement.Position;
-                    var dur = _mediaElement.Duration;
-                    if (dur.TotalSeconds > 0)
-                    {
-                        SeekBar.Value = pos.TotalSeconds / dur.TotalSeconds;
-                        TimeLabel.Text = $"{FormatTime(pos)} / {FormatTime(dur)}";
-                    }
-                }
-                catch (Exception ex) { Debug.WriteLine($"Timer error: {ex.Message}"); }
+                var pos = _mediaElement.Position.TotalSeconds;
+                var dur = _mediaElement.Duration.TotalSeconds;
+
+                if (dur > 0)
+                    SeekBar.Value = pos / dur;
+
+                TimeLabel.Text = $"{FormatTime(_mediaElement.Position)} / {FormatTime(_mediaElement.Duration)}";
             });
         }
 
-        private static string FormatTime(TimeSpan t) =>
-            t.TotalHours >= 1
+        private static string FormatTime(TimeSpan t)
+        {
+            return t.TotalHours >= 1
                 ? $"{(int)t.TotalHours}:{t.Minutes:D2}:{t.Seconds:D2}"
                 : $"{t.Minutes}:{t.Seconds:D2}";
+        }
+
+        private async Task SaveAudioProgressAsync()
+        {
+            try
+            {
+                int userId = SessionService.CurrentUser?.Id ?? 0;
+                if (userId <= 0) return;
+
+                var position = _mediaElement.Position.TotalSeconds;
+
+                var existing = await DatabaseService.Instance.GetReadingProgressAsync(userId, _raamatId);
+                if (existing != null)
+                {
+                    existing.AudioChapter = _currentChapterIndex;
+                    existing.AudioPosition = position;
+                    await DatabaseService.Instance.UpdateReadingProgressAsync(existing);
+                }
+                else
+                {
+                    await DatabaseService.Instance.InsertReadingProgressAsync(new ReadingProgress
+                    {
+                        Kasutaja_ID = userId,
+                        Raamat_ID   = _raamatId,
+                        AudioChapter  = _currentChapterIndex,
+                        AudioPosition = position
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"SaveAudioProgressAsync error: {ex.Message}");
+            }
+        }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            _ = SaveAudioProgressAsync();
             _progressTimer?.Stop();
-            _progressTimer?.Dispose();
-            _mediaElement?.Stop();
+            _ = SaveAudioProgressAsync();
         }
     }
 }

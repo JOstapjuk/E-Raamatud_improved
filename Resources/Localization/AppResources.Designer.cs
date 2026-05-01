@@ -79,6 +79,60 @@ namespace E_Raamatud.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change username and password.
+        /// </summary>
+        public static string AccountSettingsMenuSub {
+            get {
+                return ResourceManager.GetString("AccountSettingsMenuSub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account Settings.
+        /// </summary>
+        public static string AccountSettingsMenuTitle {
+            get {
+                return ResourceManager.GetString("AccountSettingsMenuTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage your account details and password.
+        /// </summary>
+        public static string AccountSettingsSubtitle {
+            get {
+                return ResourceManager.GetString("AccountSettingsSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Account.
+        /// </summary>
+        public static string AddAccount {
+            get {
+                return ResourceManager.GetString("AddAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add another user account.
+        /// </summary>
+        public static string AddAccountMenuSub {
+            get {
+                return ResourceManager.GetString("AddAccountMenuSub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Account.
+        /// </summary>
+        public static string AddAccountMenuTitle {
+            get {
+                return ResourceManager.GetString("AddAccountMenuTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a new title in the catalogue.
         /// </summary>
         public static string AddBookSubtitle {
@@ -214,11 +268,29 @@ namespace E_Raamatud.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Re-enter new password.
+        /// </summary>
+        public static string ConfirmPasswordPlaceholder {
+            get {
+                return ResourceManager.GetString("ConfirmPasswordPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current Password.
         /// </summary>
         public static string CurrentPassword {
             get {
                 return ResourceManager.GetString("CurrentPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter current password.
+        /// </summary>
+        public static string CurrentPasswordPlaceholder {
+            get {
+                return ResourceManager.GetString("CurrentPasswordPlaceholder", resourceCulture);
             }
         }
         
@@ -286,6 +358,42 @@ namespace E_Raamatud.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This feature is coming soon!.
+        /// </summary>
+        public static string FunctionComingSoon {
+            get {
+                return ResourceManager.GetString("FunctionComingSoon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gift Card.
+        /// </summary>
+        public static string GiftCard {
+            get {
+                return ResourceManager.GetString("GiftCard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redeem a gift card.
+        /// </summary>
+        public static string GiftCardMenuSub {
+            get {
+                return ResourceManager.GetString("GiftCardMenuSub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gift Card.
+        /// </summary>
+        public static string GiftCardMenuTitle {
+            get {
+                return ResourceManager.GetString("GiftCardMenuTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Go to bookstore.
         /// </summary>
         public static string GoToStore {
@@ -300,6 +408,15 @@ namespace E_Raamatud.Resources.Localization {
         public static string HasAccount {
             get {
                 return ResourceManager.GetString("HasAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string LanguageLabel {
+            get {
+                return ResourceManager.GetString("LanguageLabel", resourceCulture);
             }
         }
         
@@ -408,6 +525,15 @@ namespace E_Raamatud.Resources.Localization {
         public static string NewPassword {
             get {
                 return ResourceManager.GetString("NewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter new password.
+        /// </summary>
+        public static string NewPasswordPlaceholder {
+            get {
+                return ResourceManager.GetString("NewPasswordPlaceholder", resourceCulture);
             }
         }
         
@@ -588,6 +714,105 @@ namespace E_Raamatud.Resources.Localization {
         public static string TitleFieldLabel {
             get {
                 return ResourceManager.GetString("TitleFieldLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to See all app updates.
+        /// </summary>
+        public static string UpdatesHistorySubtitle {
+            get {
+                return ResourceManager.GetString("UpdatesHistorySubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version history.
+        /// </summary>
+        public static string UpdatesHistoryTitle {
+            get {
+                return ResourceManager.GetString("UpdatesHistoryTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to See what&apos;s new in the app.
+        /// </summary>
+        public static string UpdatesMenuSub {
+            get {
+                return ResourceManager.GetString("UpdatesMenuSub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updates.
+        /// </summary>
+        public static string UpdatesMenuTitle {
+            get {
+                return ResourceManager.GetString("UpdatesMenuTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What&apos;s new in the app.
+        /// </summary>
+        public static string UpdatesSubtitle {
+            get {
+                return ResourceManager.GetString("UpdatesSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updates.
+        /// </summary>
+        public static string UpdatesTitle {
+            get {
+                return ResourceManager.GetString("UpdatesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CHANGE.
+        /// </summary>
+        public static string UpdateTagChange {
+            get {
+                return ResourceManager.GetString("UpdateTagChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FIX.
+        /// </summary>
+        public static string UpdateTagFix {
+            get {
+                return ResourceManager.GetString("UpdateTagFix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NEW.
+        /// </summary>
+        public static string UpdateTagNew {
+            get {
+                return ResourceManager.GetString("UpdateTagNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USERNAME.
+        /// </summary>
+        public static string UsernameFieldLabel {
+            get {
+                return ResourceManager.GetString("UsernameFieldLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter new username.
+        /// </summary>
+        public static string UsernameFieldPlaceholder {
+            get {
+                return ResourceManager.GetString("UsernameFieldPlaceholder", resourceCulture);
             }
         }
         

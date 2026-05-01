@@ -23,7 +23,7 @@
 
   <!-- Register -->
   <data name="RegisterTitle" xml:space="preserve"><value>Создать аккаунт</value></data>
-  <data name="RegisterSubtitle" xml:space="preserve"><value>Присоединяйтесь к нашему сообществу</value></data>
+  <data name="RegisterSubtitle" xml:space="preserve"><value>Присоединяйтесь к нашему сообществу читателей</value></data>
   <data name="RoleLabel" xml:space="preserve"><value>Роль</value></data>
   <data name="RegisterButton" xml:space="preserve"><value>Зарегистрироваться</value></data>
   <data name="BackButton" xml:space="preserve"><value>Назад</value></data>
@@ -32,11 +32,11 @@
 
   <!-- Main -->
   <data name="WelcomeGreeting" xml:space="preserve"><value>Привет</value></data>
-  <data name="WelcomeSubtitle" xml:space="preserve"><value>Откройте новые книги сегодня</value></data>
-  <data name="YourBooks" xml:space="preserve"><value>Вот ваши книги</value></data>
+  <data name="WelcomeSubtitle" xml:space="preserve"><value>Открывайте новые книги сегодня</value></data>
+  <data name="YourBooks" xml:space="preserve"><value>Ваши книги здесь</value></data>
   <data name="BooksTitle" xml:space="preserve"><value>Книги</value></data>
-  <data name="BooksSubtitle" xml:space="preserve"><value>Выберите понравившуюся</value></data>
-  <data name="SearchPlaceholder" xml:space="preserve"><value>Поиск книг...</value></data>
+  <data name="BooksSubtitle" xml:space="preserve"><value>Выберите любимую</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Поиск по названию или жанру...</value></data>
   <data name="SearchButton" xml:space="preserve"><value>Поиск</value></data>
   <data name="FiltersLabel" xml:space="preserve"><value>ФИЛЬТРЫ</value></data>
   <data name="AllFiles" xml:space="preserve"><value>Все файлы</value></data>
@@ -69,22 +69,49 @@
 
   <!-- Account Settings -->
   <data name="AccountSettings" xml:space="preserve"><value>Настройки аккаунта</value></data>
+  <data name="AccountSettingsSubtitle" xml:space="preserve"><value>Управляйте данными аккаунта и паролем</value></data>
   <data name="ChangePassword" xml:space="preserve"><value>Сменить пароль</value></data>
   <data name="CurrentPassword" xml:space="preserve"><value>Текущий пароль</value></data>
+  <data name="CurrentPasswordPlaceholder" xml:space="preserve"><value>Введите текущий пароль</value></data>
   <data name="NewPassword" xml:space="preserve"><value>Новый пароль</value></data>
+  <data name="NewPasswordPlaceholder" xml:space="preserve"><value>Введите новый пароль</value></data>
   <data name="ConfirmPassword" xml:space="preserve"><value>Подтвердите новый пароль</value></data>
+  <data name="ConfirmPasswordPlaceholder" xml:space="preserve"><value>Повторите новый пароль</value></data>
   <data name="SaveChanges" xml:space="preserve"><value>Сохранить изменения</value></data>
+  <data name="UsernameFieldLabel" xml:space="preserve"><value>ИМЯ ПОЛЬЗОВАТЕЛЯ</value></data>
+  <data name="UsernameFieldPlaceholder" xml:space="preserve"><value>Введите новое имя пользователя</value></data>
 
   <!-- Language -->
   <data name="ChangeLanguage" xml:space="preserve"><value>Сменить язык</value></data>
   <data name="LanguageSettings" xml:space="preserve"><value>Настройки языка</value></data>
+  <data name="LanguageLabel" xml:space="preserve"><value>Язык</value></data>
   <data name="EnglishButton" xml:space="preserve"><value>Английский</value></data>
   <data name="RussianButton" xml:space="preserve"><value>Русский</value></data>
   <data name="EstonianButton" xml:space="preserve"><value>Эстонский</value></data>
 
-  <!-- Profile -->
+  <!-- Profile / User Profile Page -->
   <data name="Logout" xml:space="preserve"><value>Выйти</value></data>
   <data name="LogoutConfirm" xml:space="preserve"><value>Вы действительно хотите выйти?</value></data>
+  <data name="AccountSettingsMenuTitle" xml:space="preserve"><value>Настройки аккаунта</value></data>
+  <data name="AccountSettingsMenuSub" xml:space="preserve"><value>Изменить имя пользователя и пароль</value></data>
+  <data name="UpdatesMenuTitle" xml:space="preserve"><value>Обновления</value></data>
+  <data name="UpdatesMenuSub" xml:space="preserve"><value>Узнайте, что нового в приложении</value></data>
+  <data name="GiftCardMenuTitle" xml:space="preserve"><value>Подарочная карта</value></data>
+  <data name="GiftCardMenuSub" xml:space="preserve"><value>Активировать подарочную карту</value></data>
+  <data name="AddAccountMenuTitle" xml:space="preserve"><value>Добавить аккаунт</value></data>
+  <data name="AddAccountMenuSub" xml:space="preserve"><value>Добавить другую учётную запись</value></data>
+  <data name="GiftCard" xml:space="preserve"><value>Подарочная карта</value></data>
+  <data name="AddAccount" xml:space="preserve"><value>Добавить аккаунт</value></data>
+  <data name="FunctionComingSoon" xml:space="preserve"><value>Функция скоро появится!</value></data>
+
+  <!-- Updates Page -->
+  <data name="UpdatesTitle" xml:space="preserve"><value>Обновления</value></data>
+  <data name="UpdatesSubtitle" xml:space="preserve"><value>Что нового в приложении</value></data>
+  <data name="UpdateTagFix" xml:space="preserve"><value>ИСПРАВЛЕНИЕ</value></data>
+  <data name="UpdateTagChange" xml:space="preserve"><value>ИЗМЕНЕНИЕ</value></data>
+  <data name="UpdateTagNew" xml:space="preserve"><value>НОВОЕ</value></data>
+  <data name="UpdatesHistoryTitle" xml:space="preserve"><value>История предыдущих версий</value></data>
+  <data name="UpdatesHistorySubtitle" xml:space="preserve"><value>Просмотреть все обновления приложения</value></data>
 
   <!-- General -->
   <data name="Error" xml:space="preserve"><value>Ошибка</value></data>

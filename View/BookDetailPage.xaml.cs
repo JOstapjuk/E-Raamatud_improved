@@ -1,4 +1,5 @@
 using E_Raamatud.Model;
+using E_Raamatud.Resources.Localization;
 using E_Raamatud.Services;
 using E_Raamatud.ViewModel;
 using System.Diagnostics;
@@ -25,8 +26,8 @@ public partial class BookDetailPage : ContentPage
         ListenButton.IsVisible = !string.IsNullOrWhiteSpace(selectedBook.Audiofail);
 
         AudioAvailableLabel.Text = !string.IsNullOrWhiteSpace(selectedBook.Audiofail)
-        ? "Saadaval"
-        : "Pole saadaval";
+            ? "Saadaval"
+            : "Pole saadaval";
     }
 
     protected override void OnAppearing()
@@ -38,6 +39,11 @@ public partial class BookDetailPage : ContentPage
     private void OnPageSizeChanged(object sender, EventArgs e)
     {
         ApplyResponsiveLayout(this.Width);
+    }
+
+    private async void OnBackTapped(object sender, TappedEventArgs e)
+    {
+        await Navigation.PopAsync();
     }
 
     private void ApplyResponsiveLayout(double width)
@@ -54,10 +60,8 @@ public partial class BookDetailPage : ContentPage
             ContentRoot.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             ContentRoot.RowDefinitions.Add(new RowDefinition(GridLength.Star));
 
-            Grid.SetColumn(CoverBorder, 0);
-            Grid.SetRow(CoverBorder, 0);
-            Grid.SetColumn(InfoPanel, 1);
-            Grid.SetRow(InfoPanel, 0);
+            Grid.SetColumn(CoverBorder, 0); Grid.SetRow(CoverBorder, 0);
+            Grid.SetColumn(InfoPanel, 1); Grid.SetRow(InfoPanel, 0);
 
             CoverBorder.WidthRequest = 320;
             CoverBorder.HeightRequest = 460;
@@ -71,10 +75,8 @@ public partial class BookDetailPage : ContentPage
             ContentRoot.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             ContentRoot.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
-            Grid.SetColumn(CoverBorder, 0);
-            Grid.SetRow(CoverBorder, 0);
-            Grid.SetColumn(InfoPanel, 0);
-            Grid.SetRow(InfoPanel, 1);
+            Grid.SetColumn(CoverBorder, 0); Grid.SetRow(CoverBorder, 0);
+            Grid.SetColumn(InfoPanel, 0); Grid.SetRow(InfoPanel, 1);
 
             double coverWidth = Math.Min(260, width - 80);
             CoverBorder.WidthRequest = coverWidth;
@@ -108,16 +110,11 @@ public partial class BookDetailPage : ContentPage
         }
     }
 
-    private async void OnBackTapped(object sender, TappedEventArgs e)
-    {
-        await Navigation.PopAsync();
-    }
-
     private async void OnReadTapped(object sender, TappedEventArgs e)
     {
         if (string.IsNullOrWhiteSpace(_book.Tekstifail))
         {
-            await DisplayAlert("Viga", "Sellel raamatul pole tekstifaili.", "OK");
+            await DisplayAlert(AppResources.Error, AppResources.NoTextFile, AppResources.OK);
             return;
         }
 
@@ -141,7 +138,7 @@ public partial class BookDetailPage : ContentPage
             }
             else
             {
-                await DisplayAlert("Viga", "Raamatu faili ei leitud.", "OK");
+                await DisplayAlert(AppResources.Error, AppResources.NoTextFile, AppResources.OK);
                 return;
             }
 
@@ -209,7 +206,7 @@ public partial class BookDetailPage : ContentPage
             }
             else
             {
-                await DisplayAlert("Viga", "Tundmatu failivorming.", "OK");
+                await DisplayAlert(AppResources.Error, AppResources.BookLoadError, AppResources.OK);
                 return;
             }
 
@@ -219,7 +216,7 @@ public partial class BookDetailPage : ContentPage
         catch (Exception ex)
         {
             Debug.WriteLine($"OnReadTapped error: {ex.Message}");
-            await DisplayAlert("Viga", "Raamatu avamisel tekkis probleem.", "OK");
+            await DisplayAlert(AppResources.Error, AppResources.BookLoadError, AppResources.OK);
         }
     }
 
@@ -227,7 +224,7 @@ public partial class BookDetailPage : ContentPage
     {
         if (string.IsNullOrWhiteSpace(_book.Audiofail))
         {
-            await DisplayAlert("Viga", "Sellel raamatul pole audiofaili.", "OK");
+            await DisplayAlert(AppResources.Error, AppResources.NoAudioFile, AppResources.OK);
             return;
         }
         await Navigation.PushAsync(new AudioPlayerPage(

@@ -3,15 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:E_Raamatud.ViewModel"
              xmlns:local="clr-namespace:E_Raamatud"
+             xmlns:loc="clr-namespace:E_Raamatud.Resources.Localization"
              x:Class="E_Raamatud.View.AddBookPage"
              x:Name="AddBookPageRef"
              BackgroundColor="#FAF8F3"
              Shell.NavBarIsVisible="False"
-             Title="Lisa Raamat">
+             Title="{x:Static loc:AppResources.AddBookTitle}">
+
 
     <Grid RowDefinitions="Auto, *">
 
-        <!-- ============== ШАПКА ============== -->
+        <!-- HEADER -->
         <Border Grid.Row="0"
                 StrokeShape="RoundRectangle 0,0,28,28"
                 Stroke="Transparent"
@@ -20,20 +22,17 @@
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Color="#2d6e68" Offset="0.0" />
                     <GradientStop Color="#3a7d82" Offset="1.0" />
-                </LinearGradientBrush>
+                </LinearGradientBrush> 
             </Border.Background>
 
-            <Grid Padding="24,50,24,28"
-                  ColumnDefinitions="Auto, *, Auto">
+            <Grid Padding="24,50,24,28" ColumnDefinitions="Auto, *, Auto">
 
                 <Border Grid.Column="0"
                         StrokeShape="RoundRectangle 20"
                         Stroke="Transparent"
                         BackgroundColor="#1f4f4a"
-                        WidthRequest="40"
-                        HeightRequest="40"
-                        Padding="0"
-                        VerticalOptions="Center">
+                        WidthRequest="40" HeightRequest="40"
+                        Padding="0" VerticalOptions="Center">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnBackTapped" />
                     </Border.GestureRecognizers>
@@ -44,38 +43,30 @@
                           Data="M 14,6 L 8,12 L 14,18" />
                 </Border>
 
-                <VerticalStackLayout Grid.Column="1"
-                                     Spacing="2"
-                                     VerticalOptions="Center"
-                                     HorizontalOptions="Center">
+                <VerticalStackLayout Grid.Column="1" Spacing="2"
+                                     VerticalOptions="Center" HorizontalOptions="Center">
                     <Label x:Name="PageTitleLabel"
-                           Text="Lisa fail"
-                           FontSize="18"
-                           FontAttributes="Bold"
-                           TextColor="White"
-                           HorizontalOptions="Center" />
-                    <Label Text="Loo kataloogi uus pealkiri"
-                           FontSize="12"
-                           TextColor="#c8e0dc"
+                           Text="{x:Static loc:AppResources.AddBookTitle}"
+                           FontSize="18" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center" />
+                    <Label x:Name="PageSubtitleLabel"
+                           Text="{x:Static loc:AppResources.AddBookSubtitle}"
+                           FontSize="12" TextColor="#c8e0dc"
                            HorizontalOptions="Center" />
                 </VerticalStackLayout>
 
-                <Label Grid.Column="2"
-                   WidthRequest="40"
-                   HeightRequest="40" />
+                <Label Grid.Column="2" WidthRequest="40" HeightRequest="40" />
             </Grid>
         </Border>
 
-        <!-- ============== КОНТЕНТ ============== -->
+        <!-- CONTENT -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="24,28,24,32" Spacing="18">
 
-                <!-- ===== СЕКЦИЯ 1: Базовая информация ===== -->
+                <!-- Section 1: Basic info -->
                 <Border StrokeShape="RoundRectangle 14"
-                        Stroke="#e5ebe7"
-                        StrokeThickness="1"
-                        BackgroundColor="White"
-                        Padding="20">
+                        Stroke="#e5ebe7" StrokeThickness="1"
+                        BackgroundColor="White" Padding="20">
                     <Border.Shadow>
                         <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.05" />
                     </Border.Shadow>
@@ -84,11 +75,8 @@
 
                         <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                             <Border StrokeShape="RoundRectangle 16"
-                                    Stroke="Transparent"
-                                    BackgroundColor="#e8f0ed"
-                                    WidthRequest="32"
-                                    HeightRequest="32"
-                                    Padding="0">
+                                    Stroke="Transparent" BackgroundColor="#e8f0ed"
+                                    WidthRequest="32" HeightRequest="32" Padding="0">
                                 <Path Stroke="#0f6e56" StrokeThickness="1.7"
                                       Fill="Transparent" Aspect="Uniform"
                                       HeightRequest="16" WidthRequest="16"
@@ -96,25 +84,20 @@
                                       Data="M 4,5 L 4,19 L 20,19 L 20,5 Z M 4,9 L 20,9 M 8,13 L 14,13 M 8,16 L 12,16" />
                             </Border>
                             <Label Text="Pohiandmed"
-                                   FontSize="16"
-                                   FontAttributes="Bold"
-                                   TextColor="#1f2e28"
-                                   VerticalOptions="Center" />
+                                   FontSize="16" FontAttributes="Bold"
+                                   TextColor="#1f2e28" VerticalOptions="Center" />
                         </HorizontalStackLayout>
 
-                        <!-- Pealkiri -->
+                        <!-- Title field -->
                         <VerticalStackLayout Spacing="6">
-                            <Label Text="PEALKIRI"
-                                   FontSize="10"
-                                   TextColor="#98a8a0"
-                                   CharacterSpacing="2"
-                                   FontAttributes="Bold" />
+                            <Label x:Name="TitleSectionLabel"
+                                   Text="{x:Static loc:AppResources.TitleFieldLabel}"
+                                   FontSize="10" TextColor="#98a8a0"
+                                   CharacterSpacing="2" FontAttributes="Bold" />
                             <Border StrokeShape="RoundRectangle 10"
-                                    Stroke="#e5ebe7"
-                                    StrokeThickness="1"
-                                    BackgroundColor="#fafbfa"
-                                    Padding="14,0">
-                                <Entry Placeholder="Sisesta faili pealkiri"
+                                    Stroke="#e5ebe7" StrokeThickness="1"
+                                    BackgroundColor="#fafbfa" Padding="14,0">
+                                <Entry Placeholder="{x:Static loc:AppResources.UsernamePlaceholder}"
                                        Text="{Binding Pealkiri}"
                                        FontSize="14"
                                        BackgroundColor="Transparent"
@@ -124,19 +107,16 @@
                             </Border>
                         </VerticalStackLayout>
 
-                        <!-- Kirjeldus -->
+                        <!-- Description field -->
                         <VerticalStackLayout Spacing="6">
-                            <Label Text="KIRJELDUS"
-                                   FontSize="10"
-                                   TextColor="#98a8a0"
-                                   CharacterSpacing="2"
-                                   FontAttributes="Bold" />
+                            <Label x:Name="DescSectionLabel"
+                                   Text="{x:Static loc:AppResources.DescriptionFieldLabel}"
+                                   FontSize="10" TextColor="#98a8a0"
+                                   CharacterSpacing="2" FontAttributes="Bold" />
                             <Border StrokeShape="RoundRectangle 10"
-                                    Stroke="#e5ebe7"
-                                    StrokeThickness="1"
-                                    BackgroundColor="#fafbfa"
-                                    Padding="14,8">
-                                <Editor Placeholder="Lisa raamatu lühikkirjeldus..."
+                                    Stroke="#e5ebe7" StrokeThickness="1"
+                                    BackgroundColor="#fafbfa" Padding="14,8">
+                                <Editor Placeholder="{x:Static loc:AppResources.DescriptionLabel}"
                                         Text="{Binding Kirjeldus}"
                                         HeightRequest="100"
                                         FontSize="14"
@@ -146,79 +126,53 @@
                             </Border>
                         </VerticalStackLayout>
 
-                        <!-- Žanr -->
+                        <!-- Genre picker -->
                         <Grid ColumnDefinitions="*" ColumnSpacing="12">
-
-                            <VerticalStackLayout Grid.Column="1" Spacing="6">
-                                <Label Text="ZANR"
-                                       FontSize="10"
-                                       TextColor="#98a8a0"
-                                       CharacterSpacing="2"
-                                       FontAttributes="Bold" />
-                                <Border StrokeShape="RoundRectangle 10"
-                                    Stroke="#e5ebe7"
-                                    StrokeThickness="1"
-                                    BackgroundColor="#fafbfa"
-                                    Padding="14,0">
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="OnPickGenreTapped" />
-                                    </Border.GestureRecognizers>
-                                    <Grid ColumnDefinitions="*, Auto" HeightRequest="46">
-                                        <Label x:Name="GenreLabel"
-                                           Text="Vali žanr..."
-                                           FontSize="14"
-                                           TextColor="#98a8a0"
-                                           VerticalOptions="Center" />
-                                        <Path Grid.Column="1"
-                                          Stroke="#8a9a92" StrokeThickness="1.5"
-                                          Fill="Transparent" Aspect="Uniform"
-                                          HeightRequest="10" WidthRequest="10"
-                                          VerticalOptions="Center"
-                                          Data="M 4,8 L 12,16 L 20,8" />
-                                    </Grid>
-                                </Border>
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Žanr"
+                                       FontSize="10" TextColor="#98a8a0"
+                                       CharacterSpacing="2" FontAttributes="Bold" />
+                                <Picker ItemsSource="{Binding Genres}"
+                                        SelectedItem="{Binding SelectedGenre}"
+                                        ItemDisplayBinding="{Binding Nimetus}"
+                                        FontSize="14"
+                                        TextColor="#1f2e28" />
                             </VerticalStackLayout>
                         </Grid>
+
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- ===== СЕКЦИЯ 2: Kaanepilt ===== -->
+                <!-- Section 2: Cover image -->
                 <Border StrokeShape="RoundRectangle 14"
-                        Stroke="#e5ebe7"
-                        StrokeThickness="1"
-                        BackgroundColor="White"
-                        Padding="20">
+                        Stroke="#e5ebe7" StrokeThickness="1"
+                        BackgroundColor="White" Padding="20">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.05" />
+                    </Border.Shadow>
 
                     <VerticalStackLayout Spacing="14">
 
                         <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                             <Border StrokeShape="RoundRectangle 16"
-                                    Stroke="Transparent"
-                                    BackgroundColor="#fff5e8"
-                                    WidthRequest="32"
-                                    HeightRequest="32"
-                                    Padding="0">
-                                <Path Stroke="#993c1d" StrokeThickness="1.7"
+                                    Stroke="Transparent" BackgroundColor="#e8f0ed"
+                                    WidthRequest="32" HeightRequest="32" Padding="0">
+                                <Path Stroke="#0f6e56" StrokeThickness="1.7"
                                       Fill="Transparent" Aspect="Uniform"
                                       HeightRequest="16" WidthRequest="16"
                                       HorizontalOptions="Center" VerticalOptions="Center"
-                                      Data="M 4,5 L 20,5 L 20,19 L 4,19 Z M 4,15 L 9,11 L 13,15 L 16,12 L 20,16 M 9,9 C 9.5,9 10,8.5 10,8 C 10,7.5 9.5,7 9,7 C 8.5,7 8,7.5 8,8 C 8,8.5 8.5,9 9,9 Z" />
+                                      Data="M 4,4 L 20,4 L 20,20 L 4,20 Z M 4,14 L 8,10 L 12,14 L 16,9 L 20,14 M 8,8 C 8,9.1 7.1,10 6,10 C 4.9,10 4,9.1 4,8" />
                             </Border>
                             <Label Text="Kaanepilt"
-                                   FontSize="16"
-                                   FontAttributes="Bold"
-                                   TextColor="#1f2e28"
-                                   VerticalOptions="Center" />
+                                   FontSize="16" FontAttributes="Bold"
+                                   TextColor="#1f2e28" VerticalOptions="Center" />
                         </HorizontalStackLayout>
 
                         <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
-
                             <Border Grid.Column="0"
                                     StrokeShape="RoundRectangle 10"
-                                    Stroke="#e5ebe7"
-                                    StrokeThickness="1"
-                                    BackgroundColor="#fafbfa"
-                                    Padding="14,0">
+                                    Stroke="#e5ebe7" StrokeThickness="1"
+                                    BackgroundColor="#fafbfa" Padding="14,0">
                                 <Entry Placeholder="Pilt valimata"
                                        Text="{Binding Pilt}"
                                        IsReadOnly="True"
@@ -228,14 +182,10 @@
                                        PlaceholderColor="#98a8a0"
                                        HeightRequest="46" />
                             </Border>
-
                             <Border Grid.Column="1"
                                     StrokeShape="RoundRectangle 10"
-                                    Stroke="Transparent"
-                                    BackgroundColor="#2d6e68"
-                                    HeightRequest="46"
-                                    WidthRequest="100"
-                                    Padding="0">
+                                    Stroke="Transparent" BackgroundColor="#2d6e68"
+                                    HeightRequest="46" WidthRequest="100" Padding="0">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnPickImageClicked" />
                                 </Border.GestureRecognizers>
@@ -248,53 +198,44 @@
                                           VerticalOptions="Center"
                                           Data="M 12,4 L 12,16 M 6,10 L 12,16 L 18,10 M 4,20 L 20,20" />
                                     <Label Text="Vali"
-                                           FontSize="13"
-                                           FontAttributes="Bold"
-                                           TextColor="White"
-                                           VerticalOptions="Center" />
+                                           FontSize="13" FontAttributes="Bold"
+                                           TextColor="White" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                             </Border>
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- ===== СЕКЦИЯ 3: Tekstifail (EPUB) ===== -->
+                <!-- Section 3: Text file (EPUB) -->
                 <Border StrokeShape="RoundRectangle 14"
-                        Stroke="#e5ebe7"
-                        StrokeThickness="1"
-                        BackgroundColor="White"
-                        Padding="20">
+                        Stroke="#e5ebe7" StrokeThickness="1"
+                        BackgroundColor="White" Padding="20">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.05" />
+                    </Border.Shadow>
 
                     <VerticalStackLayout Spacing="14">
 
                         <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
                             <Border StrokeShape="RoundRectangle 16"
-                                    Stroke="Transparent"
-                                    BackgroundColor="#f0eaf7"
-                                    WidthRequest="32"
-                                    HeightRequest="32"
-                                    Padding="0">
-                                <Path Stroke="#534ab7" StrokeThickness="1.7"
+                                    Stroke="Transparent" BackgroundColor="#e8f0ed"
+                                    WidthRequest="32" HeightRequest="32" Padding="0">
+                                <Path Stroke="#0f6e56" StrokeThickness="1.7"
                                       Fill="Transparent" Aspect="Uniform"
                                       HeightRequest="16" WidthRequest="16"
                                       HorizontalOptions="Center" VerticalOptions="Center"
                                       Data="M 6,3 L 14,3 L 18,7 L 18,21 L 6,21 Z M 14,3 L 14,7 L 18,7 M 8,12 L 16,12 M 8,16 L 16,16" />
                             </Border>
                             <Label Text="Tekstifail (EPUB)"
-                                   FontSize="16"
-                                   FontAttributes="Bold"
-                                   TextColor="#1f2e28"
-                                   VerticalOptions="Center" />
+                                   FontSize="16" FontAttributes="Bold"
+                                   TextColor="#1f2e28" VerticalOptions="Center" />
                         </HorizontalStackLayout>
 
                         <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
-
                             <Border Grid.Column="0"
                                     StrokeShape="RoundRectangle 10"
-                                    Stroke="#e5ebe7"
-                                    StrokeThickness="1"
-                                    BackgroundColor="#fafbfa"
-                                    Padding="14,0">
+                                    Stroke="#e5ebe7" StrokeThickness="1"
+                                    BackgroundColor="#fafbfa" Padding="14,0">
                                 <Entry Placeholder="EPUB fail valimata"
                                        Text="{Binding Tekstifail}"
                                        IsReadOnly="True"
@@ -304,14 +245,10 @@
                                        PlaceholderColor="#98a8a0"
                                        HeightRequest="46" />
                             </Border>
-
                             <Border Grid.Column="1"
                                     StrokeShape="RoundRectangle 10"
-                                    Stroke="Transparent"
-                                    BackgroundColor="#2d6e68"
-                                    HeightRequest="46"
-                                    WidthRequest="100"
-                                    Padding="0">
+                                    Stroke="Transparent" BackgroundColor="#2d6e68"
+                                    HeightRequest="46" WidthRequest="100" Padding="0">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnPickTextFileClicked" />
                                 </Border.GestureRecognizers>
@@ -324,33 +261,29 @@
                                           VerticalOptions="Center"
                                           Data="M 12,4 L 12,16 M 6,10 L 12,16 L 18,10 M 4,20 L 20,20" />
                                     <Label Text="Vali"
-                                           FontSize="13"
-                                           FontAttributes="Bold"
-                                           TextColor="White"
-                                           VerticalOptions="Center" />
+                                           FontSize="13" FontAttributes="Bold"
+                                           TextColor="White" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                             </Border>
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- ===== СЕКЦИЯ 4: Audioraamat ===== -->
+                <!-- Section 4: Audiobook -->
                 <Border StrokeShape="RoundRectangle 14"
-                        Stroke="#e5ebe7"
-                        StrokeThickness="1"
-                        BackgroundColor="White"
-                        Padding="20">
+                        Stroke="#e5ebe7" StrokeThickness="1"
+                        BackgroundColor="White" Padding="20">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.05" />
+                    </Border.Shadow>
 
                     <VerticalStackLayout Spacing="14">
 
                         <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="10">
                             <Border Grid.Column="0"
                                     StrokeShape="RoundRectangle 16"
-                                    Stroke="Transparent"
-                                    BackgroundColor="#fff5e8"
-                                    WidthRequest="32"
-                                    HeightRequest="32"
-                                    Padding="0">
+                                    Stroke="Transparent" BackgroundColor="#fff5e8"
+                                    WidthRequest="32" HeightRequest="32" Padding="0">
                                 <Path Stroke="#d97a4a" StrokeThickness="1.7"
                                       Fill="Transparent" Aspect="Uniform"
                                       HeightRequest="16" WidthRequest="16"
@@ -359,34 +292,26 @@
                             </Border>
                             <Label Grid.Column="1"
                                    Text="Audioraamat"
-                                   FontSize="16"
-                                   FontAttributes="Bold"
-                                   TextColor="#1f2e28"
-                                   VerticalOptions="Center" />
+                                   FontSize="16" FontAttributes="Bold"
+                                   TextColor="#1f2e28" VerticalOptions="Center" />
                             <Border Grid.Column="2"
                                     StrokeShape="RoundRectangle 6"
-                                    Stroke="Transparent"
-                                    BackgroundColor="#f0f2f0"
-                                    Padding="8,3"
-                                    VerticalOptions="Center">
+                                    Stroke="Transparent" BackgroundColor="#f0f2f0"
+                                    Padding="8,3" VerticalOptions="Center">
                                 <Label Text="VALIKULINE"
-                                       FontSize="9"
-                                       FontAttributes="Bold"
-                                       TextColor="#5f5e5a"
-                                       CharacterSpacing="1.5" />
+                                       FontSize="9" FontAttributes="Bold"
+                                       TextColor="#5f5e5a" CharacterSpacing="1.5" />
                             </Border>
                         </Grid>
 
                         <Label Text="{Binding AudioFileSummary}"
-                               FontSize="12"
-                               TextColor="#5f5e5a" />
+                               FontSize="12" TextColor="#5f5e5a" />
 
+                        <!-- Add audio files button -->
                         <Border StrokeShape="RoundRectangle 10"
-                                Stroke="#d97a4a"
-                                StrokeThickness="1.5"
+                                Stroke="#d97a4a" StrokeThickness="1.5"
                                 BackgroundColor="#fff5e8"
-                                HeightRequest="46"
-                                Padding="0">
+                                HeightRequest="46" Padding="0">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnPickAudioFilesClicked" />
                             </Border.GestureRecognizers>
@@ -399,21 +324,18 @@
                                       VerticalOptions="Center"
                                       Data="M 12,4 L 12,20 M 4,12 L 20,12" />
                                 <Label Text="Lisa audiofailid"
-                                       FontSize="13"
-                                       FontAttributes="Bold"
-                                       TextColor="#993c1d"
-                                       VerticalOptions="Center" />
+                                       FontSize="13" FontAttributes="Bold"
+                                       TextColor="#993c1d" VerticalOptions="Center" />
                             </HorizontalStackLayout>
                         </Border>
 
-                        <!-- Список аудиофайлов -->
+                        <!-- Audio file list -->
                         <VerticalStackLayout BindableLayout.ItemsSource="{Binding AudioFiles}" Spacing="6">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
                                     <Border StrokeShape="RoundRectangle 8"
                                             Stroke="Transparent"
-                                            BackgroundColor="#fafbfa"
-                                            Padding="12,8">
+                                            BackgroundColor="#fafbfa" Padding="12,8">
                                         <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="10">
                                             <Path Grid.Column="0"
                                                   Stroke="#d97a4a" StrokeThickness="1.7"
@@ -423,14 +345,12 @@
                                                   Data="M 9,18 V 6 L 21,3 V 15 M 9,18 C 9,19.7 7.7,21 6,21 C 4.3,21 3,19.7 3,18 C 3,16.3 4.3,15 6,15 C 7.7,15 9,16.3 9,18 Z M 21,15 C 21,16.7 19.7,18 18,18 C 16.3,18 15,16.7 15,15 C 15,13.3 16.3,12 18,12 C 19.7,12 21,13.3 21,15 Z" />
                                             <Label Grid.Column="1"
                                                    Text="{Binding ., Converter={x:Static local:FileNameConverter.Instance}}"
-                                                   TextColor="#1f2e28"
-                                                   FontSize="12"
+                                                   TextColor="#1f2e28" FontSize="12"
                                                    LineBreakMode="MiddleTruncation"
                                                    VerticalOptions="Center" />
                                             <Button Grid.Column="2"
                                                     Text="X"
-                                                    FontSize="12"
-                                                    FontAttributes="Bold"
+                                                    FontSize="12" FontAttributes="Bold"
                                                     BackgroundColor="Transparent"
                                                     TextColor="#d63030"
                                                     WidthRequest="32" HeightRequest="32"
@@ -443,45 +363,37 @@
                             </BindableLayout.ItemTemplate>
                         </VerticalStackLayout>
 
-                        <!-- Прогресс загрузки -->
-                        <VerticalStackLayout Spacing="6"
-                                             IsVisible="{Binding IsUploading}">
+                        <!-- Upload progress -->
+                        <VerticalStackLayout Spacing="6" IsVisible="{Binding IsUploading}">
                             <Label Text="{Binding UploadProgress}"
-                                   FontSize="12"
-                                   TextColor="#5f5e5a"
+                                   FontSize="12" TextColor="#5f5e5a"
                                    HorizontalOptions="Center" />
-                            <ActivityIndicator IsRunning="{Binding IsUploading}"
-                                               Color="#2d6e68" />
+                            <ActivityIndicator IsRunning="{Binding IsUploading}" Color="#2d6e68" />
                         </VerticalStackLayout>
+
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- ===== Кнопка Salvesta ===== -->
+                <!-- Submit button -->
                 <Border StrokeShape="RoundRectangle 14"
-                        Stroke="Transparent"
-                        BackgroundColor="#2d6e68"
-                        HeightRequest="56"
-                        Padding="0"
-                        Margin="0,8,0,0"
+                        Stroke="Transparent" BackgroundColor="#2d6e68"
+                        HeightRequest="56" Padding="0" Margin="0,8,0,0"
                         IsEnabled="{Binding IsUploading, Converter={x:Static local:InverseBoolConverter.Instance}}">
                     <Border.Shadow>
                         <Shadow Brush="#000000" Offset="0,4" Radius="12" Opacity="0.18" />
                     </Border.Shadow>
                     <Button x:Name="SubmitButton"
-                        Text="Lisa fail kataloogi"
-                        Command="{Binding AddBookCommand}"
-                        FontAttributes="Bold"
-                        FontSize="15"
-                        BackgroundColor="Transparent"
-                        TextColor="White" />
+                            Text="{x:Static loc:AppResources.SaveButton}"
+                            Command="{Binding AddBookCommand}"
+                            FontAttributes="Bold" FontSize="15"
+                            BackgroundColor="Transparent"
+                            TextColor="White" />
                 </Border>
 
-                <!-- Status -->
+                <!-- Status message -->
                 <Label Text="{Binding StatusMessage}"
-                       TextColor="#0f6e56"
-                       FontAttributes="Bold"
-                       FontSize="13"
-                       HorizontalOptions="Center"
+                       TextColor="#0f6e56" FontAttributes="Bold"
+                       FontSize="13" HorizontalOptions="Center"
                        Margin="0,4,0,0" />
 
             </VerticalStackLayout>
