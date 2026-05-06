@@ -226,7 +226,7 @@
                                       HorizontalOptions="Center" VerticalOptions="Center"
                                       Data="M 6,3 L 14,3 L 18,7 L 18,21 L 6,21 Z M 14,3 L 14,7 L 18,7 M 8,12 L 16,12 M 8,16 L 16,16" />
                             </Border>
-                            <Label Text="Tekstifail (EPUB)"
+                            <Label Text="Tekstifail"
                                    FontSize="16" FontAttributes="Bold"
                                    TextColor="#1f2e28" VerticalOptions="Center" />
                         </HorizontalStackLayout>

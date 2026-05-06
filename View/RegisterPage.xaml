@@ -97,27 +97,6 @@
                     </Border>
                 </VerticalStackLayout>
 
-                <!-- Role picker -->
-                <VerticalStackLayout Spacing="0" Margin="0,0,0,20">
-                    <Label x:Name="RoleTitleLabel"
-                           Text="Roll"
-                           FontSize="13"
-                           TextColor="#3a5c52"
-                           FontAttributes="Bold"
-                           Margin="4,0,0,8" />
-                    <Border StrokeShape="RoundRectangle 12"
-                            Stroke="#e0e6e2"
-                            StrokeThickness="1.5"
-                            BackgroundColor="White"
-                            Padding="16,2">
-                        <Picker SelectedItem="{Binding SelectedRole}"
-                                FontSize="15"
-                                TextColor="#1f2e28"
-                                BackgroundColor="Transparent"
-                                HeightRequest="50" />
-                    </Border>
-                </VerticalStackLayout>
-
                 <!-- Status message -->
                 <Label Text="{Binding LoginStatus}"
                        TextColor="#c94545"

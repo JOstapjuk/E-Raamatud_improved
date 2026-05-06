@@ -611,33 +611,6 @@
                     </Border>
                 </VerticalStackLayout>
 
-                <!-- Version history footer -->
-                <Border StrokeShape="RoundRectangle 12"
-                        Stroke="#e5ebe7" StrokeThickness="1"
-                        BackgroundColor="White" Padding="20" Margin="0,8,0,0">
-                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
-                        <Border Grid.Column="0"
-                                StrokeShape="RoundRectangle 16" Stroke="Transparent"
-                                BackgroundColor="#e8f0ed" WidthRequest="32" HeightRequest="32" Padding="0">
-                            <Path Stroke="#0f6e56" StrokeThickness="1.7" Fill="Transparent"
-                                  Aspect="Uniform" HeightRequest="14" WidthRequest="14"
-                                  HorizontalOptions="Center" VerticalOptions="Center"
-                                  Data="M 12,8 L 12,12 L 14,14 M 4,12 C 4,7.6 7.6,4 12,4 C 16.4,4 20,7.6 20,12 C 20,16.4 16.4,20 12,20 C 7.6,20 4,16.4 4,12 Z" />
-                        </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="{x:Static loc:AppResources.UpdatesHistoryTitle}"
-                                   FontSize="13" FontAttributes="Bold" TextColor="#1f2e28" />
-                            <Label Text="{x:Static loc:AppResources.UpdatesHistorySubtitle}"
-                                   FontSize="11" TextColor="#98a8a0" />
-                        </VerticalStackLayout>
-                        <Path Grid.Column="2"
-                              Stroke="#98a8a0" StrokeThickness="2" Fill="Transparent"
-                              Aspect="Uniform" HeightRequest="14" WidthRequest="14"
-                              VerticalOptions="Center"
-                              Data="M 8,6 L 14,12 L 8,18" />
-                    </Grid>
-                </Border>
-
             </VerticalStackLayout>
         </ScrollView>
     </Grid>

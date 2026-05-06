@@ -21,6 +21,9 @@ namespace E_Raamatud.View
         private string _bookTitle;
         private string _bookDescription;
 
+        private bool _isFirstLoad = true;
+        private double _reloadProportion = 0;
+
         public BookReaderPage(int raamatId, string title, string htmlContent, string description = "")
         {
             InitializeComponent();
@@ -29,8 +32,46 @@ namespace E_Raamatud.View
             _htmlContent = htmlContent;
             _bookTitle = title;
             _bookDescription = description;
+
+            BookWebView.Navigated += OnWebViewNavigated;
+
             LoadBook(htmlContent);
-            _ = InitializeAfterLoad();
+        }
+
+        private async void OnWebViewNavigated(object sender, WebNavigatedEventArgs e)
+        {
+            if (e.Result != WebNavigationResult.Success) return;
+
+            await Task.Delay(300);
+
+            var totalResult = await BookWebView.EvaluateJavaScriptAsync("initPaging()");
+            if (int.TryParse(totalResult, out int total))
+                _totalPages = Math.Max(1, total);
+
+            if (_isFirstLoad)
+            {
+                _isFirstLoad = false;
+                int userId = SessionService.CurrentUser?.Id ?? 0;
+                if (userId > 0)
+                {
+                    var progress = await DatabaseService.Instance.GetReadingProgressAsync(userId, _raamatId);
+                    if (progress != null && progress.CurrentPage > 0)
+                    {
+                        _currentPage = Math.Min(progress.CurrentPage, _totalPages - 1);
+                        await Task.Delay(100);
+                        await BookWebView.EvaluateJavaScriptAsync($"goToPage({_currentPage})");
+                    }
+                }
+            }
+            else
+            {
+                _currentPage = (int)Math.Round(_reloadProportion * (_totalPages - 1));
+                _currentPage = Math.Max(0, Math.Min(_currentPage, _totalPages - 1));
+                await Task.Delay(100);
+                await BookWebView.EvaluateJavaScriptAsync($"goToPage({_currentPage})");
+            }
+
+            MainThread.BeginInvokeOnMainThread(() => UpdatePageLabel());
         }
 
         private async void OnBackTapped(object sender, EventArgs e)
@@ -72,48 +113,17 @@ namespace E_Raamatud.View
             BookWebView.Source = new HtmlWebViewSource { Html = pagedHtml };
         }
 
-        private async Task InitializeAfterLoad()
-        {
-            await Task.Delay(2000);
-
-            var totalResult = await BookWebView.EvaluateJavaScriptAsync("initPaging()");
-            if (int.TryParse(totalResult, out int total))
-                _totalPages = Math.Max(1, total);
-
-            int userId = SessionService.CurrentUser?.Id ?? 0;
-            if (userId > 0)
-            {
-                var progress = await DatabaseService.Instance.GetReadingProgressAsync(userId, _raamatId);
-                if (progress != null && progress.CurrentPage > 0)
-                {
-                    _currentPage = Math.Min(progress.CurrentPage, _totalPages - 1);
-                    await BookWebView.EvaluateJavaScriptAsync($"goToPage({_currentPage})");
-                }
-            }
-
-            MainThread.BeginInvokeOnMainThread(() => UpdatePageLabel());
-        }
-
         private async Task ReloadWithSettings()
         {
-            double proportion = _totalPages > 1 ? (double)_currentPage / (_totalPages - 1) : 0;
+            _reloadProportion = _totalPages > 1 ? (double)_currentPage / (_totalPages - 1) : 0;
+            _isFirstLoad = false;
 
             BookWebView.Source = new HtmlWebViewSource
             {
                 Html = BuildHtml(_htmlContent, _fontSize, _isDarkMode)
             };
 
-            await Task.Delay(2000);
-
-            var totalResult = await BookWebView.EvaluateJavaScriptAsync("initPaging()");
-            if (int.TryParse(totalResult, out int total))
-                _totalPages = Math.Max(1, total);
-
-            _currentPage = (int)Math.Round(proportion * (_totalPages - 1));
-            _currentPage = Math.Max(0, Math.Min(_currentPage, _totalPages - 1));
-
-            await BookWebView.EvaluateJavaScriptAsync($"goToPage({_currentPage})");
-            MainThread.BeginInvokeOnMainThread(() => UpdatePageLabel());
+            await Task.CompletedTask;
         }
 
         private string BuildHtml(string htmlContent, int fontSize, bool darkMode)

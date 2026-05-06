@@ -42,6 +42,16 @@
   <data name="AllFiles" xml:space="preserve"><value>Kõik failid</value></data>
   <data name="AllBooks" xml:space="preserve"><value>Kõik raamatud</value></data>
 
+  <!-- Genres -->
+  <data name="Genre_Romaan" xml:space="preserve"><value>Romaan</value></data>
+  <data name="Genre_Fantaasia" xml:space="preserve"><value>Fantaasia</value></data>
+  <data name="Genre_Klassika" xml:space="preserve"><value>Klassika</value></data>
+  <data name="Genre_Ajalugu" xml:space="preserve"><value>Ajalugu</value></data>
+  <data name="Genre_Ulme" xml:space="preserve"><value>Ulme</value></data>
+  <data name="Genre_Noorteraamat" xml:space="preserve"><value>Noorteraamat</value></data>
+  <data name="Genre_Seiklus" xml:space="preserve"><value>Seiklus</value></data>
+  <data name="Genre_Unknown" xml:space="preserve"><value>Tundmatu</value></data>
+
   <!-- Book Detail -->
   <data name="ReadButton" xml:space="preserve"><value>Loe</value></data>
   <data name="ListenButton" xml:space="preserve"><value>Kuula</value></data>

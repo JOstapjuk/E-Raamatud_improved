@@ -42,6 +42,16 @@
   <data name="AllFiles" xml:space="preserve"><value>All files</value></data>
   <data name="AllBooks" xml:space="preserve"><value>All books</value></data>
 
+  <!-- Genres -->
+  <data name="Genre_Romaan" xml:space="preserve"><value>Novel</value></data>
+  <data name="Genre_Fantaasia" xml:space="preserve"><value>Fantasy</value></data>
+  <data name="Genre_Klassika" xml:space="preserve"><value>Classics</value></data>
+  <data name="Genre_Ajalugu" xml:space="preserve"><value>History</value></data>
+  <data name="Genre_Ulme" xml:space="preserve"><value>Sci-Fi</value></data>
+  <data name="Genre_Noorteraamat" xml:space="preserve"><value>Young Adult</value></data>
+  <data name="Genre_Seiklus" xml:space="preserve"><value>Adventure</value></data>
+  <data name="Genre_Unknown" xml:space="preserve"><value>Unknown</value></data>
+
   <!-- Book Detail -->
   <data name="ReadButton" xml:space="preserve"><value>Read</value></data>
   <data name="ListenButton" xml:space="preserve"><value>Listen</value></data>

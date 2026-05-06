@@ -25,9 +25,6 @@ public partial class BookDetailPage : ContentPage
 
         ListenButton.IsVisible = !string.IsNullOrWhiteSpace(selectedBook.Audiofail);
 
-        AudioAvailableLabel.Text = !string.IsNullOrWhiteSpace(selectedBook.Audiofail)
-            ? "Saadaval"
-            : "Pole saadaval";
     }
 
     protected override void OnAppearing()
@@ -66,8 +63,6 @@ public partial class BookDetailPage : ContentPage
             CoverBorder.WidthRequest = 320;
             CoverBorder.HeightRequest = 460;
             CoverBorder.HorizontalOptions = LayoutOptions.Start;
-
-            SetInfoBlocksColumns(3);
         }
         else
         {
@@ -83,30 +78,6 @@ public partial class BookDetailPage : ContentPage
             CoverBorder.HeightRequest = coverWidth * 1.45;
             CoverBorder.HorizontalOptions = LayoutOptions.Center;
 
-            SetInfoBlocksColumns(1);
-        }
-    }
-
-    private void SetInfoBlocksColumns(int columns)
-    {
-        if (InfoBlocksGrid == null) return;
-        if (InfoBlocksGrid.Children.Count < 3) return;
-
-        InfoBlocksGrid.ColumnDefinitions.Clear();
-        InfoBlocksGrid.RowDefinitions.Clear();
-
-        for (int i = 0; i < columns; i++)
-            InfoBlocksGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-
-        int rows = (int)Math.Ceiling(3.0 / columns);
-        for (int i = 0; i < rows; i++)
-            InfoBlocksGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-
-        for (int i = 0; i < InfoBlocksGrid.Children.Count && i < 3; i++)
-        {
-            var child = (Microsoft.Maui.Controls.View)InfoBlocksGrid.Children[i];
-            Grid.SetColumn(child, i % columns);
-            Grid.SetRow(child, i / columns);
         }
     }
 
@@ -216,7 +187,8 @@ public partial class BookDetailPage : ContentPage
         catch (Exception ex)
         {
             Debug.WriteLine($"OnReadTapped error: {ex.Message}");
-            await DisplayAlert(AppResources.Error, AppResources.BookLoadError, AppResources.OK);
+            // Change this line:
+            await DisplayAlert("Viga", ex.Message, "OK");  // show real error
         }
     }
 

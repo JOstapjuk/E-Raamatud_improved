@@ -23,7 +23,7 @@
 
   <!-- Register -->
   <data name="RegisterTitle" xml:space="preserve"><value>Создать аккаунт</value></data>
-  <data name="RegisterSubtitle" xml:space="preserve"><value>Присоединяйтесь к нашему сообществу читателей</value></data>
+  <data name="RegisterSubtitle" xml:space="preserve"><value>Присоединяйтесь к нашему читательскому сообществу</value></data>
   <data name="RoleLabel" xml:space="preserve"><value>Роль</value></data>
   <data name="RegisterButton" xml:space="preserve"><value>Зарегистрироваться</value></data>
   <data name="BackButton" xml:space="preserve"><value>Назад</value></data>
@@ -32,8 +32,8 @@
 
   <!-- Main -->
   <data name="WelcomeGreeting" xml:space="preserve"><value>Привет</value></data>
-  <data name="WelcomeSubtitle" xml:space="preserve"><value>Открывайте новые книги сегодня</value></data>
-  <data name="YourBooks" xml:space="preserve"><value>Ваши книги здесь</value></data>
+  <data name="WelcomeSubtitle" xml:space="preserve"><value>Откройте новые книги сегодня</value></data>
+  <data name="YourBooks" xml:space="preserve"><value>Вот ваши книги</value></data>
   <data name="BooksTitle" xml:space="preserve"><value>Книги</value></data>
   <data name="BooksSubtitle" xml:space="preserve"><value>Выберите любимую</value></data>
   <data name="SearchPlaceholder" xml:space="preserve"><value>Поиск по названию или жанру...</value></data>
@@ -41,6 +41,16 @@
   <data name="FiltersLabel" xml:space="preserve"><value>ФИЛЬТРЫ</value></data>
   <data name="AllFiles" xml:space="preserve"><value>Все файлы</value></data>
   <data name="AllBooks" xml:space="preserve"><value>Все книги</value></data>
+
+  <!-- Genres -->
+  <data name="Genre_Romaan" xml:space="preserve"><value>Роман</value></data>
+  <data name="Genre_Fantaasia" xml:space="preserve"><value>Фэнтези</value></data>
+  <data name="Genre_Klassika" xml:space="preserve"><value>Классика</value></data>
+  <data name="Genre_Ajalugu" xml:space="preserve"><value>История</value></data>
+  <data name="Genre_Ulme" xml:space="preserve"><value>Фантастика</value></data>
+  <data name="Genre_Noorteraamat" xml:space="preserve"><value>Молодёжная</value></data>
+  <data name="Genre_Seiklus" xml:space="preserve"><value>Приключения</value></data>
+  <data name="Genre_Unknown" xml:space="preserve"><value>Неизвестно</value></data>
 
   <!-- Book Detail -->
   <data name="ReadButton" xml:space="preserve"><value>Читать</value></data>

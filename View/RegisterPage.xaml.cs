@@ -23,7 +23,6 @@ public partial class RegisterPage : ContentPage
         UsernameEntry.Placeholder = AppResources.UsernamePlaceholder;
         PasswordTitleLabel.Text = AppResources.PasswordLabel;
         PasswordEntry.Placeholder = AppResources.PasswordPlaceholder;
-        RoleTitleLabel.Text    = AppResources.RoleLabel;
         RegisterBtn.Text       = AppResources.RegisterButton;
         BackBtn.Text           = AppResources.BackButton;
         HasAccountLabel.Text   = AppResources.HasAccount;

@@ -23,6 +23,9 @@ namespace E_Raamatud.View
         private int _currentChapterIndex = 0;
         private readonly int _raamatId;
 
+        private readonly float[] _speeds = { 0.75f, 1f, 1.25f, 1.5f, 2f };
+        private int _speedIndex = 1;
+
         private static readonly Geometry PlayIcon = new PathGeometryConverter()
             .ConvertFromInvariantString("M 7,5 L 7,19 L 19,12 Z") as Geometry;
         private static readonly Geometry PauseIcon = new PathGeometryConverter()
@@ -44,8 +47,6 @@ namespace E_Raamatud.View
 
             _ = InitWithSavedProgressAsync();
         }
-
-        // No ApplyLocalization needed — ChapterList label uses {x:Static} in XAML
 
         private async void OnBackTapped(object sender, EventArgs e)
         {
@@ -130,6 +131,8 @@ namespace E_Raamatud.View
             else
                 _mediaElement.Source = MediaSource.FromUri(new Uri(path));
 
+            _mediaElement.Speed = _speeds[_speedIndex];
+
             if (autoPlay)
             {
                 _mediaElement.Play();
@@ -193,6 +196,14 @@ namespace E_Raamatud.View
                 _ = SaveAudioProgressAsync();
                 LoadChapter(_currentChapterIndex + 1, autoPlay: _isPlaying);
             }
+        }
+
+        private void OnSpeedTapped(object sender, EventArgs e)
+        {
+            _speedIndex = (_speedIndex + 1) % _speeds.Length;
+            var speed = _speeds[_speedIndex];
+            _mediaElement.Speed = speed;
+            SpeedLabel.Text = speed == 1f ? "1×" : $"{speed}×";
         }
 
         private void OnMediaEnded(object sender, EventArgs e)

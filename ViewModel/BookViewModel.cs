@@ -1,4 +1,5 @@
-﻿using E_Raamatud.Model;
+using E_Raamatud.Model;
+using E_Raamatud.Resources.Localization;
 using E_Raamatud.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -65,17 +66,38 @@ namespace E_Raamatud.ViewModel
             _ = InitAsync();
         }
 
+        private static string TranslateGenre(string estonianName)
+        {
+            return estonianName?.ToLower() switch
+            {
+                "romaan"       => AppResources.Genre_Romaan,
+                "fantaasia"    => AppResources.Genre_Fantaasia,
+                "klassika"     => AppResources.Genre_Klassika,
+                "ajalugu"      => AppResources.Genre_Ajalugu,
+                "ulme"         => AppResources.Genre_Ulme,
+                "noorteraamat" => AppResources.Genre_Noorteraamat,
+                "seiklus"      => AppResources.Genre_Seiklus,
+                _              => estonianName // fallback: show as-is
+            };
+        }
+
         private async Task InitAsync()
         {
             int userId = SessionService.CurrentUser?.Id ?? 0;
             if (userId == 0) return;
 
             Genres.Clear();
-            Genres.Add(new Genre { Zanr_ID = 0, Nimetus = "Kõik raamatud" });
+            Genres.Add(new Genre { Zanr_ID = 0, Nimetus = AppResources.AllBooks });
 
             _allGenres = await DatabaseService.Instance.GetGenresAsync();
             foreach (var genre in _allGenres)
-                Genres.Add(genre);
+            {
+                Genres.Add(new Genre
+                {
+                    Zanr_ID = genre.Zanr_ID,
+                    Nimetus = TranslateGenre(genre.Nimetus)
+                });
+            }
 
             _allBooks = await DatabaseService.Instance.GetBooksByUserAsync(userId);
 
@@ -94,7 +116,7 @@ namespace E_Raamatud.ViewModel
                     Raamat_ID = b.Raamat_ID,
                     Pealkiri = b.Pealkiri,
                     Kirjeldus = b.Kirjeldus,
-                    Zanr_Nimi = genre?.Nimetus ?? "Tundmatu",
+                    Zanr_Nimi = TranslateGenre(genre?.Nimetus) ?? AppResources.Genre_Unknown,
                     Pilt = b.Pilt,
                     Tekstifail = b.Tekstifail,
                     Audiofail = b.Audiofail,
@@ -131,7 +153,7 @@ namespace E_Raamatud.ViewModel
                     Raamat_ID = b.Raamat_ID,
                     Pealkiri = b.Pealkiri,
                     Kirjeldus = b.Kirjeldus,
-                    Zanr_Nimi = genre?.Nimetus ?? "Tundmatu",
+                    Zanr_Nimi = TranslateGenre(genre?.Nimetus) ?? AppResources.Genre_Unknown,
                     Pilt = b.Pilt,
                     Tekstifail = b.Tekstifail,
                     Audiofail = b.Audiofail
@@ -168,7 +190,7 @@ namespace E_Raamatud.ViewModel
                     Raamat_ID = b.Raamat_ID,
                     Pealkiri = b.Pealkiri,
                     Kirjeldus = b.Kirjeldus,
-                    Zanr_Nimi = genre?.Nimetus ?? "Tundmatu",
+                    Zanr_Nimi = TranslateGenre(genre?.Nimetus) ?? AppResources.Genre_Unknown,
                     Pilt = b.Pilt,
                     Tekstifail = b.Tekstifail,
                     Audiofail = b.Audiofail

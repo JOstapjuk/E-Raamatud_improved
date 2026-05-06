@@ -111,7 +111,7 @@
                 </VerticalStackLayout>
 
                 <!-- Playback controls -->
-                <Grid ColumnDefinitions="*, *, Auto, *, *"
+                <Grid ColumnDefinitions="*, *, Auto, *, *, *"
                       ColumnSpacing="8" Margin="0,8,0,0"
                       HorizontalOptions="Center">
 
@@ -194,6 +194,23 @@
                               HeightRequest="14" WidthRequest="14"
                               HorizontalOptions="Center" VerticalOptions="Center"
                               Data="M 5,5 L 15,12 L 5,19 Z M 19,5 L 19,19" />
+                    </Border>
+
+                    <!-- Speed Button -->
+                    <Border Grid.Column="5"
+                            StrokeShape="RoundRectangle 24" Stroke="Transparent"
+                            BackgroundColor="#e8f0ed"
+                            WidthRequest="48" HeightRequest="48"
+                            Padding="0" VerticalOptions="Center">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSpeedTapped" />
+                        </Border.GestureRecognizers>
+                        <Label x:Name="SpeedLabel"
+                               Text="1×"
+                               FontSize="13" FontAttributes="Bold"
+                               TextColor="#2d6e68"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
                     </Border>
 
                 </Grid>
